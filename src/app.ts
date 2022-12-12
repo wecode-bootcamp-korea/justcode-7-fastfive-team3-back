@@ -1,7 +1,7 @@
 import express, { Express, NextFunction, Request, Response } from 'express';
 import cors from 'cors';
 import router from './routes';
-
+import { morganCustomFormat } from './utils/util';
 import morgan from 'morgan';
 
 let corsOptions = {
@@ -13,7 +13,7 @@ const createApp = () => {
   const app: Express = express();
   app.use(cors(corsOptions));
 
-  app.use(morgan('combined'));
+  app.use(morgan(morganCustomFormat));
   app.use(express.json());
   app.use(router);
 
