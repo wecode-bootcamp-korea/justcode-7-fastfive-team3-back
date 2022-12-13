@@ -5,7 +5,7 @@ CREATE TABLE `users` (
                          `nickname` varchar(50) NOT NULL,
                          `password` varchar(100) NOT NULL,
                          `email` varchar(50) UNIQUE NOT NULL,
-                         `sort_id` int NOT NULL,
+                         `sort_id` int NOT NULL DEFAULT (2),
                          `is_admin` tinyint NOT NULL DEFAULT (0),
                          `created_at` datetime NOT NULL DEFAULT (now()),
                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'

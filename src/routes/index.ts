@@ -1,9 +1,11 @@
 import { Router } from 'express';
 const router = Router();
 
-// 예시
-// import userRouter from './user.router'
+import userRouter from './userRouter';
+import { errHandler } from '../utils/util';
 
-// router.use('/user', userRouter);
+router.use('/user', userRouter);
+
+router.use(errHandler);
 
 export default router;
