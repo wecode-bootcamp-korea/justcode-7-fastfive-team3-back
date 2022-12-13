@@ -32,9 +32,9 @@ const login = async (req: Request, res: Response) => {
     password,
   };
   checkRequireKeys(REQUIRED_KEYS);
-  const token = await usersService.logIn(email, password);
+  const token: any = await usersService.logIn(email, password);
 
-  res.status(200).json({ message: 'login success', token: token });
+  res.status(200).json(token);
 };
 
 export default { signUp, login };

@@ -19,13 +19,13 @@ const signUp = async (
 const logIn = async (email: string) => {
   const [result] = await myDataSource.query(
     `
-    SELECT * FROM
-      users 
-    WHERE
-      email = ?
+        SELECT *
+        FROM users
+        WHERE email = ?
     `,
     [email]
   );
+  console.log('result =', result);
   return result;
 };
 

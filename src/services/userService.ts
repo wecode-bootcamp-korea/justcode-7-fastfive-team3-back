@@ -1,6 +1,7 @@
 import usersDao from '../models/userDao';
 import bcrypt from 'bcryptjs';
 import jwt from 'jsonwebtoken';
+
 const jwtSecret = process.env.SECRET_KEY;
 
 const signUp = async (
@@ -30,7 +31,16 @@ const logIn = async (email: string, password: string) => {
     throw error;
   }
   const token = jwt.sign({ id: userInfo.id }, jwtSecret);
-  return token;
+  console.log('userInfo =', userInfo);
+  const authInfo = {
+    token: token,
+    id: userInfo.id,
+    nickname: userInfo.nickname,
+    email: userInfo.email,
+    sort_id: userInfo.sort_id,
+    is_admin: userInfo.is_admin,
+  };
+  return { authInfo };
 };
 
 export default { signUp, logIn };
