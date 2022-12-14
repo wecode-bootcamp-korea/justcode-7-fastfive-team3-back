@@ -89,5 +89,79 @@ insert into branch_location (location_id, branch_id) values ('10', '32');
 insert into branch_location (location_id, branch_id) values ('10', '33');
 insert into branch_location (location_id, branch_id) values ('10', '34');
 
+insert into category (id, category) values ('1', 'IT');
+insert into category (id, category) values ('2', '광고, 마케팅');
+insert into category (id, category) values ('3', '콘텐츠');
+insert into category (id, category) values ('4', '개발');
+insert into category (id, category) values ('5', '디자인');
+insert into category (id, category) values ('6', '기획, 컨설팅');
+insert into category (id, category) values ('7', '법률');
+insert into category (id, category) values ('8', '세무, 회계');
+insert into category (id, category) values ('9', '교육');
+insert into category (id, category) values ('10', '금융');
+insert into category (id, category) values ('11', '온라인');
+insert into category (id, category) values ('12', '기타');
+
+
+insert into category (high_rank_id, category) values ('1', '인공지능(AI)');
+insert into category (high_rank_id, category) values ('1', '데이터분석가');
+insert into category (high_rank_id, category) values ('1', '딥러닝');
+insert into category (high_rank_id, category) values ('1', 'QA');
+insert into category (high_rank_id, category) values ('1', '시스템 엔지니어');
+insert into category (high_rank_id, category) values ('1', '정보보안');
+
+insert into category (high_rank_id, category) values ('2', '마케터');
+insert into category (high_rank_id, category) values ('2', '디지털 마케터');
+insert into category (high_rank_id, category) values ('2', '퍼포먼스 마케터');
+insert into category (high_rank_id, category) values ('2', '광고 기획자(AE)');
+insert into category (high_rank_id, category) values ('2', '마켓 리서처');
+
+insert into category (high_rank_id, category) values ('3', '콘텐츠 크리에이터');
+insert into category (high_rank_id, category) values ('3', '영상 편집가');
+insert into category (high_rank_id, category) values ('3', 'PD');
+insert into category (high_rank_id, category) values ('3', '에디터');
+insert into category (high_rank_id, category) values ('3', '연예-엔터테인먼트');
+insert into category (high_rank_id, category) values ('3', '통번역');
+insert into category (high_rank_id, category) values ('3', '작가');
+
+insert into category (high_rank_id, category) values ('4', '웹개발자');
+insert into category (high_rank_id, category) values ('4', '서버 개발자');
+insert into category (high_rank_id, category) values ('4', '안드로이드 개발자');
+insert into category (high_rank_id, category) values ('4', 'IOS 개발자');
+insert into category (high_rank_id, category) values ('4', '게임 개발자');
+
+insert into category (high_rank_id, category) values ('5', 'UX 디자이너');
+insert into category (high_rank_id, category) values ('5', '웹 디자이너');
+insert into category (high_rank_id, category) values ('5', '그래픽 디자이너');
+insert into category (high_rank_id, category) values ('5', '모바일 디자이너');
+insert into category (high_rank_id, category) values ('5', '제품 디자이너');
+
+insert into category (high_rank_id, category) values ('6', '서비스 기획자');
+insert into category (high_rank_id, category) values ('6', '사업개발 기획자');
+insert into category (high_rank_id, category) values ('6', '전략 기획자');
+insert into category (high_rank_id, category) values ('6', '컨설턴트');
+insert into category (high_rank_id, category) values ('6', '상품기획자');
+insert into category (high_rank_id, category) values ('6', '세미나/포럼');
+
+insert into category (high_rank_id, category) values ('7', '변호사');
+insert into category (high_rank_id, category) values ('7', '변리사');
+insert into category (high_rank_id, category) values ('7', '수사관');
+insert into category (high_rank_id, category) values ('7', '법무관');
+insert into category (high_rank_id, category) values ('7', '법무사');
+insert into category (high_rank_id, category) values ('7', '법무사');
+
+insert into category (high_rank_id, category) values ('8', '공인회계사');
+insert into category (high_rank_id, category) values ('8', '세무사');
+
+insert into category (high_rank_id, category) values ('9', '교재-교육기획');
+insert into category (high_rank_id, category) values ('9', '유아교육');
+insert into category (high_rank_id, category) values ('9', '전문강사');
+
+insert into category (high_rank_id, category) values ('10', '투자-증권');
+insert into category (high_rank_id, category) values ('10', '애널리스트');
+insert into category (high_rank_id, category) values ('10', '자산관리사');
+insert into category (high_rank_id, category) values ('10', '감정평가사');
+
+
 -- migrate:down
 
