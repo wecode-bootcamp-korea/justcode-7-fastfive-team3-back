@@ -25,7 +25,6 @@ const logIn = async (email: string) => {
     `,
     [email]
   );
-  console.log('result =', result);
   return result;
 };
 

@@ -31,7 +31,6 @@ const logIn = async (email: string, password: string) => {
     throw error;
   }
   const token = jwt.sign({ id: userInfo.id }, jwtSecret);
-  console.log('userInfo =', userInfo);
   const authInfo = {
     token: token,
     id: userInfo.id,
