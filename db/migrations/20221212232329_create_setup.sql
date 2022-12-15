@@ -89,19 +89,19 @@ insert into branch_location (location_id, branch_id) values ('10', '32');
 insert into branch_location (location_id, branch_id) values ('10', '33');
 insert into branch_location (location_id, branch_id) values ('10', '34');
 
-# TODO 카테고리 소개글 제대로 넣기
-insert into category (id, category, introduction) values ('1', 'IT', '이것은 IT 카테고리입니다.');
-insert into category (id, category, introduction) values ('2', '광고, 마케팅', '이것은 광고, 마케팅입니다.');
-insert into category (id, category, introduction) values ('3', '콘텐츠', '이것은 콘텐츠 입니다.');
-insert into category (id, category, introduction) values ('4', '개발', '이것은 개발입니다.');
-insert into category (id, category, introduction) values ('5', '디자인', '이것은 디자인입니다.');
-insert into category (id, category, introduction) values ('6', '기획, 컨설팅', '이건 기획이랑 컨설팅이에요');
-insert into category (id, category, introduction) values ('7', '법률', '법률이라면 이쪽으로');
-insert into category (id, category, introduction) values ('8', '세무, 회계', '세금이 문제입니까?!');
-insert into category (id, category, introduction) values ('9', '교육', '교육계통 환영해요');
-insert into category (id, category, introduction) values ('10', '금융', '돈! 돈! 돈!');
-insert into category (id, category, introduction) values ('11', '온라인', '온라인의 모든것!!');
-insert into category (id, category, introduction) values ('12', '기타', '잘 모르겠다구요?!');
+# TODO 카테고리 소개글, img_url 제대로 넣기
+insert into category (id, category, introduction, category_img_url) values ('1', 'IT', '이것은 IT 카테고리입니다.', 'http://dummyimage.com/925x443.png/ff4444/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('2', '광고, 마케팅', '이것은 광고, 마케팅입니다.', 'http://dummyimage.com/623x504.png/dddddd/000000');
+insert into category (id, category, introduction, category_img_url) values ('3', '콘텐츠', '이것은 콘텐츠 입니다.', 'http://dummyimage.com/608x598.png/5fa2dd/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('4', '개발', '이것은 개발입니다.','http://dummyimage.com/269x518.png/5fa2dd/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('5', '디자인', '이것은 디자인입니다.','http://dummyimage.com/1562x1009.png/ff4444/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('6', '기획, 컨설팅', '이건 기획이랑 컨설팅이에요','http://dummyimage.com/1809x493.png/cc0000/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('7', '법률', '법률이라면 이쪽으로','http://dummyimage.com/484x268.png/ff4444/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('8', '세무, 회계', '세금이 문제입니까?!','http://dummyimage.com/984x928.png/dddddd/000000');
+insert into category (id, category, introduction, category_img_url) values ('9', '교육', '교육계통 환영해요','http://dummyimage.com/417x1054.png/5fa2dd/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('10', '금융', '돈! 돈! 돈!','http://dummyimage.com/778x111.png/dddddd/000000');
+insert into category (id, category, introduction, category_img_url) values ('11', '온라인', '온라인의 모든것!!','http://dummyimage.com/698x369.png/5fa2dd/ffffff');
+insert into category (id, category, introduction, category_img_url) values ('12', '기타', '잘 모르겠다구요?!','http://dummyimage.com/343x956.png/5fa2dd/ffffff');
 
 
 insert into category (parent_category_id, category) values ('1', '인공지능(AI)');
