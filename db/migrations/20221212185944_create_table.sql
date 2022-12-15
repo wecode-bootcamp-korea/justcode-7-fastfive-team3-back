@@ -1,6 +1,6 @@
 -- migrate:up
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
                          `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                          `nickname` varchar(50) NOT NULL,
                          `password` varchar(100) NOT NULL,
@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `user_group` (
 CREATE TABLE IF NOT EXISTS `feeds` (
                          `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                          `user_id` int NOT NULL,
+                         `category_id` int NOT NULL,
                          `title` varchar(100) NOT NULL,
                          `logo_img` varchar(100) NOT NULL,
                          `introduction` varchar(100) NOT NULL,
@@ -40,14 +41,6 @@ CREATE TABLE IF NOT EXISTS `feed_status` (
                                `status` varchar(50) NOT NULL,
                                `created_at` datetime NOT NULL DEFAULT (now()),
                                `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
-);
-
-CREATE TABLE IF NOT EXISTS `feed_category` (
-                                 `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                                 `feed_id` int NOT NULL,
-                                 `category_id` int NOT NULL,
-                                 `created_at` datetime NOT NULL DEFAULT (now()),
-                                 `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `main_field` (
@@ -102,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `category` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `category` varchar(50) NOT NULL,
                             `introduction` varchar(250),
-                            `high_rank_id` int,
+                            `parent_category_id` int,
                             `created_at` datetime NOT NULL DEFAULT (now()),
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
@@ -111,13 +104,11 @@ ALTER TABLE `users` ADD FOREIGN KEY (`sort_id`) REFERENCES `user_group` (`id`);
 
 ALTER TABLE `feeds` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
+ALTER TABLE `feeds` ADD FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
+
 ALTER TABLE `feeds` ADD FOREIGN KEY (`use_branch_id`) REFERENCES `branch` (`id`);
 
 ALTER TABLE `feeds` ADD FOREIGN KEY (`status_id`) REFERENCES `feed_status` (`id`);
-
-ALTER TABLE `feed_category` ADD FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`);
-
-ALTER TABLE `feed_category` ADD FOREIGN KEY (`category_id`) REFERENCES `category` (`id`);
 
 ALTER TABLE `feeds_main_fields` ADD FOREIGN KEY (`feeds_id`) REFERENCES `feeds` (`id`);
 
@@ -133,7 +124,7 @@ ALTER TABLE `comments` ADD FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`);
 
 ALTER TABLE `comments` ADD FOREIGN KEY (`reply_id`) REFERENCES `comments` (`id`);
 
-ALTER TABLE `category` ADD FOREIGN KEY (`high_rank_id`) REFERENCES `category` (`id`);
+ALTER TABLE `category` ADD FOREIGN KEY (`parent_category_id`) REFERENCES `category` (`id`);
 
 
 -- migrate:down
@@ -144,7 +135,6 @@ DROP TABLE users;
 DROP TABLE user_group;
 DROP TABLE feeds;
 DROP TABLE feed_status;
-DROP TABLE feed_category;
 DROP TABLE main_field;
 DROP TABLE feeds_main_fields;
 DROP TABLE branch;
