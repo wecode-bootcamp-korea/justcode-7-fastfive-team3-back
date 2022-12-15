@@ -89,18 +89,19 @@ insert into branch_location (location_id, branch_id) values ('10', '32');
 insert into branch_location (location_id, branch_id) values ('10', '33');
 insert into branch_location (location_id, branch_id) values ('10', '34');
 
-insert into category (id, category) values ('1', 'IT');
-insert into category (id, category) values ('2', '광고, 마케팅');
-insert into category (id, category) values ('3', '콘텐츠');
-insert into category (id, category) values ('4', '개발');
-insert into category (id, category) values ('5', '디자인');
-insert into category (id, category) values ('6', '기획, 컨설팅');
-insert into category (id, category) values ('7', '법률');
-insert into category (id, category) values ('8', '세무, 회계');
-insert into category (id, category) values ('9', '교육');
-insert into category (id, category) values ('10', '금융');
-insert into category (id, category) values ('11', '온라인');
-insert into category (id, category) values ('12', '기타');
+# TODO 카테고리 소개글 제대로 넣기
+insert into category (id, category, introduction) values ('1', 'IT', '이것은 IT 카테고리입니다.');
+insert into category (id, category, introduction) values ('2', '광고, 마케팅', '이것은 광고, 마케팅입니다.');
+insert into category (id, category, introduction) values ('3', '콘텐츠', '이것은 콘텐츠 입니다.');
+insert into category (id, category, introduction) values ('4', '개발', '이것은 개발입니다.');
+insert into category (id, category, introduction) values ('5', '디자인', '이것은 디자인입니다.');
+insert into category (id, category, introduction) values ('6', '기획, 컨설팅', '이건 기획이랑 컨설팅이에요');
+insert into category (id, category, introduction) values ('7', '법률', '법률이라면 이쪽으로');
+insert into category (id, category, introduction) values ('8', '세무, 회계', '세금이 문제입니까?!');
+insert into category (id, category, introduction) values ('9', '교육', '교육계통 환영해요');
+insert into category (id, category, introduction) values ('10', '금융', '돈! 돈! 돈!');
+insert into category (id, category, introduction) values ('11', '온라인', '온라인의 모든것!!');
+insert into category (id, category, introduction) values ('12', '기타', '잘 모르겠다구요?!');
 
 
 insert into category (parent_category_id, category) values ('1', '인공지능(AI)');
