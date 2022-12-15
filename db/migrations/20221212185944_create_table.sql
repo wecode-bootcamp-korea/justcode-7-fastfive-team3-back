@@ -94,6 +94,7 @@ CREATE TABLE IF NOT EXISTS `comments` (
 CREATE TABLE IF NOT EXISTS `category` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `category` varchar(50) NOT NULL,
+                            `category_img_url` varchar(250),
                             `introduction` varchar(250),
                             `parent_category_id` int,
                             `created_at` datetime NOT NULL DEFAULT (now()),
