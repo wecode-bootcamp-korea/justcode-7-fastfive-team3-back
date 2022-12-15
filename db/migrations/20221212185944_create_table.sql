@@ -1,6 +1,6 @@
 -- migrate:up
 
-CREATE TABLE `users` (
+CREATE TABLE IF NOT EXISTS `users` (
                          `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                          `company_name` varchar(50) NOT NULL,
                          `nickname` varchar(50) NOT NULL,
@@ -12,14 +12,14 @@ CREATE TABLE `users` (
                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `user_group` (
+CREATE TABLE IF NOT EXISTS `user_group` (
                               `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                               `sort` varchar(250) NOT NULL,
                               `created_at` datetime NOT NULL DEFAULT (now()),
                               `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `feeds` (
+CREATE TABLE IF NOT EXISTS `feeds` (
                          `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                          `user_id` int NOT NULL,
                          `category_id` int NOT NULL,
@@ -36,21 +36,21 @@ CREATE TABLE `feeds` (
                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `feed_status` (
+CREATE TABLE IF NOT EXISTS `feed_status` (
                                `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                `status` varchar(50) NOT NULL,
                                `created_at` datetime NOT NULL DEFAULT (now()),
                                `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `main_field` (
+CREATE TABLE IF NOT EXISTS `main_field` (
                               `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                               `field_name` varchar(500) NOT NULL,
                               `created_at` datetime NOT NULL DEFAULT (now()),
                               `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `feeds_main_fields` (
+CREATE TABLE IF NOT EXISTS `feeds_main_fields` (
                                      `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                      `feeds_id` int NOT NULL,
                                      `main_field_id` int NOT NULL,
@@ -58,21 +58,21 @@ CREATE TABLE `feeds_main_fields` (
                                      `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `branch` (
+CREATE TABLE IF NOT EXISTS `branch` (
                           `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                           `branch_name` varchar(50) NOT NULL,
                           `created_at` datetime NOT NULL DEFAULT (now()),
                           `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `location` (
+CREATE TABLE IF NOT EXISTS `location` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `location` varchar(50) NOT NULL,
                             `created_at` datetime NOT NULL DEFAULT (now()),
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `branch_location` (
+CREATE TABLE IF NOT EXISTS `branch_location` (
                                    `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                    `location_id` int NOT NULL,
                                    `branch_id` int NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `branch_location` (
                                    `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `comments` (
+CREATE TABLE IF NOT EXISTS `comments` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `user_id` int NOT NULL,
                             `feed_id` int NOT NULL,
@@ -91,7 +91,7 @@ CREATE TABLE `comments` (
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `category` (
+CREATE TABLE IF NOT EXISTS `category` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `category` varchar(50) NOT NULL,
                             `introduction` varchar(250),
@@ -100,7 +100,7 @@ CREATE TABLE `category` (
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE `company_file` (
+CREATE TABLE IF NOT EXISTS `company_file` (
                                 `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                 `feed_id` int NOT NULL,
                                 `file_name` varchar(100) NOT NULL,
