@@ -92,7 +92,7 @@ table comments as c {
 table category as ca {
   id int [pk, increment, not null]
   category varchar(50) [not null]
-  category_img_url varchar(250) [not null]
+  category_img_url varchar(250)
   introduction varchar(250) [not null]
   parent_category_id int [ref: > ca.id]
   created_at datetime [not null, default: `now()`]
