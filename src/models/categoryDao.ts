@@ -3,7 +3,7 @@ import myDataSource from './index';
 const getParentCategoryList = async () => {
   return await myDataSource.query(
     `
-        SELECT id,
+        SELECT id AS category_id,
                category,
                introduction,
                IFNULL(parent_category_id, "상위 카테고리") AS parent_category_id
