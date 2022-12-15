@@ -2,6 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS `users` (
                          `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                         `company_name` varchar(50) NOT NULL,
                          `nickname` varchar(50) NOT NULL,
                          `password` varchar(100) NOT NULL,
                          `email` varchar(50) UNIQUE NOT NULL,
@@ -29,7 +30,6 @@ CREATE TABLE IF NOT EXISTS `feeds` (
                          `detail_introduction` varchar(1000),
                          `member_benefit` varchar(100),
                          `contact` varchar(50) NOT NULL,
-                         `company_file` varchar(100),
                          `use_branch_id` int NOT NULL,
                          `status_id` int NOT NULL DEFAULT (1),
                          `created_at` datetime NOT NULL DEFAULT (now()),
@@ -100,6 +100,15 @@ CREATE TABLE IF NOT EXISTS `category` (
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
+CREATE TABLE IF NOT EXISTS `company_file` (
+                                `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
+                                `feed_id` int NOT NULL,
+                                `file_name` varchar(100) NOT NULL,
+                                `file_link` varchar(250) NOT NULL,
+                                `created_at` datetime NOT NULL DEFAULT (now()),
+                                `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
+);
+
 ALTER TABLE `users` ADD FOREIGN KEY (`sort_id`) REFERENCES `user_group` (`id`);
 
 ALTER TABLE `feeds` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
@@ -126,6 +135,8 @@ ALTER TABLE `comments` ADD FOREIGN KEY (`reply_id`) REFERENCES `comments` (`id`)
 
 ALTER TABLE `category` ADD FOREIGN KEY (`parent_category_id`) REFERENCES `category` (`id`);
 
+ALTER TABLE `company_file` ADD FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`);
+
 
 -- migrate:down
 
@@ -142,5 +153,6 @@ DROP TABLE location;
 DROP TABLE branch_location;
 DROP TABLE comments;
 DROP TABLE category;
+DROP TABLE company_file;
 
 SET foreign_key_checks = 1;
