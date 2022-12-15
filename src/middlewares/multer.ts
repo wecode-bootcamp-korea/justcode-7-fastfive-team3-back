@@ -9,8 +9,8 @@ const upload = multer({
   storage: multerS3({
     s3: new S3Client({
       credentials: {
-        accessKeyId: process.env.S3_Access_Key_Id as string,
-        secretAccessKey: process.env.S3_Secret_AccessKey as string,
+        accessKeyId: process.env.S3_Access_Key_Id,
+        secretAccessKey: process.env.S3_Secret_AccessKey,
       },
       region: process.env.S3_Region,
     }),

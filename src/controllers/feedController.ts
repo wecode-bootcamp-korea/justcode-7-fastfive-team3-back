@@ -5,10 +5,11 @@ import { Feed } from '../types/feed';
 
 const createFeed = async (req: Request, res: Response) => {
   const files = req.files as Express.MulterS3.File[];
-  const path = files.map(path => path.location);
-  const logo = path[0];
-  const file = path[1];
-
+  const locationPath = files.map(path => path.location);
+  const namePath = files.map(path => path.originalname);
+  const logo = locationPath[0];
+  const file = locationPath[1];
+  const fileName = namePath[1];
   const {
     category,
     title,
@@ -31,7 +32,6 @@ const createFeed = async (req: Request, res: Response) => {
     contact,
     branch,
   ];
-
   checkRequireKeys(REQUIRE_KEYS);
 
   await feedService.createFeed(
@@ -47,10 +47,11 @@ const createFeed = async (req: Request, res: Response) => {
     hompage,
     detail_introduction,
     member_benefit,
-    file
+    file,
+    fileName
   );
 
-  res.status(201).json({ message: 'Create Feed!', path });
+  res.status(201).json({ message: 'Create Feed!', locationPath });
 };
 
 export default { createFeed };

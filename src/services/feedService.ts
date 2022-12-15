@@ -6,18 +6,24 @@ const createFeed = async (
   title: string,
   logo: string,
   introduction: string,
-  main_field: string[],
-  contact: string[] | string,
+  main_field: string,
+  contact: string,
   branch: string,
   detail_category?: string,
   hompage?: string,
   detail_introduction?: string,
-  member_benefit?: string | string[],
-  file?: string
-): Promise<void> => {
+  member_benefit?: string,
+  file?: string,
+  fileName?: string
+) => {
+  const mainFieldArray = main_field.split(',');
   const branchId: number = await feedDao.findBranchId(branch);
+  // TODO 디테일 카테고리가 없는 경우는 어떻게 할지..
+  let categoryId = await feedDao.findDetailCategoryId(detail_category);
+
   await feedDao.createFeed(
     //userId
+    categoryId,
     title,
     logo,
     introduction,
@@ -25,21 +31,16 @@ const createFeed = async (
     detail_introduction,
     member_benefit,
     contact,
-    file,
     branchId
   );
-
-  // TODO 상세 카테고리는 어떻게 집어 넣어야 할까
   const feedId: number = await feedDao.findFeedId(title);
-  //TODO id가 한개 들어올 경우는?
-  const categoryId: number[] = await feedDao.findCategoryId(category);
-  await feedDao.insertFeedIdcategoryId(feedId, categoryId);
-
-  await feedDao.insertMainField(main_field);
+  await feedDao.insertMainField(mainFieldArray);
+  await feedDao.foreignKeySetZero();
   await feedDao.deleteOverlapMainField();
-  //TODO id가 한개 들어올 경우는?
-  const mainFieldId: number[] = await feedDao.findMainFieldId(main_field);
+  await feedDao.foreignKeySetOne();
+  const mainFieldId: number[] = await feedDao.findMainFieldId(mainFieldArray);
   await feedDao.insertMainFieldId(feedId, mainFieldId);
+  await feedDao.insertFile(feedId, fileName, file);
 };
 
 export default { createFeed };

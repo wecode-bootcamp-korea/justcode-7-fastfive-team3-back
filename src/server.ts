@@ -2,8 +2,6 @@ import dotenv from 'dotenv';
 dotenv.config();
 import { createApp } from './app';
 
-import { createApp } from './app';
-
 const startServer = async () => {
   const app = createApp();
   const port = process.env.PORT;

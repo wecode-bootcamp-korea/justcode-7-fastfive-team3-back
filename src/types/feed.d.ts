@@ -2,11 +2,11 @@ export type Feed = {
   category: string;
   title: string;
   introduction: string;
-  main_field: string[];
-  contact: string[] | string;
+  main_field: string;
+  contact: string;
   branch: string;
   detail_category?: string;
   hompage?: string;
   detail_introduction?: string;
-  member_benefit?: string | string[];
+  member_benefit?: string;
 };
