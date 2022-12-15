@@ -208,8 +208,6 @@ insert into comments (user_id, feed_id, comment, reply_id, status) values (1, 1,
 insert into comments (user_id, feed_id, comment, reply_id, status) values (6, 1, 'ac', 7, 0);
 insert into comments (user_id, feed_id, comment, reply_id, status) values (6, 1, 'enim leo rhoncus', 7, 1);
 insert into comments (user_id, feed_id, comment, reply_id, status) values (6, 1, 'sapien cum', 7,0);
-insert into comments (user_id, feed_id, comment, reply_id, status) values (3, 1, 'sit',353, 0);
-insert into comments (user_id, feed_id, comment, reply_id, status) values (4, 1, 'euismod scelerisque', 320, 1);
 
 -- migrate:down
 
