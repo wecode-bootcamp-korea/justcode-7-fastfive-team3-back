@@ -14,4 +14,24 @@ const getSubhomeList = async () => {
   );
 };
 
-export default { getSubhomeList };
+const getSubhome2List = async (category_id: number) => {
+  return await myDataSource.query(
+    `
+        SELECT f.id AS feed_id,
+               u.company_name,
+               f.logo_img,
+               f.introduction,
+               c.category,
+               SUBSTRING(f.created_at, 1, 16) AS created_at
+        FROM feeds AS f
+                 LEFT JOIN category AS c ON
+            f.category_id = c.id
+                 LEFT JOIN users AS u ON
+            f.user_id = u.id
+        WHERE c.parent_category_id IS NULL
+            ${category_id}
+    `
+  );
+};
+
+export default { getSubhomeList, getSubhome2List };
