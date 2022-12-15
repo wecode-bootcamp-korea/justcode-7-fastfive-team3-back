@@ -1,19 +1,6 @@
-import { DataSource } from 'typeorm';
+import myDataSource from './index';
 
-const myDataSource = new DataSource({
-  type: process.env.TYPEORM_CONNECTION,
-  host: process.env.TYPEORM_HOST,
-  port: process.env.TYPEORM_PORT,
-  username: process.env.TYPEORM_USERNAME,
-  password: process.env.TYPEORM_PASSWORD,
-  database: process.env.TYPEORM_DATABASE,
-});
-
-myDataSource.initialize().then(() => {
-  console.log('Data Source has been initialized!');
-});
-
-export const findBranchId = async (branch: string) => {
+const findBranchId = async (branch: string) => {
   let [branchId] = await myDataSource.query(`
     SELECT
         id
@@ -27,7 +14,7 @@ export const findBranchId = async (branch: string) => {
   return branchId;
 };
 
-export const createFeed = async (
+const createFeed = async (
   //userId
   title: string,
   image: string,
@@ -47,7 +34,7 @@ export const createFeed = async (
   `);
 };
 
-export const findFeedId = async (title: string) => {
+const findFeedId = async (title: string) => {
   let [feedId] = await myDataSource.query(`
     SELECT
         id
@@ -61,7 +48,7 @@ export const findFeedId = async (title: string) => {
   return feedId;
 };
 
-export const findCategoryId = async (category: string | string[]) => {
+const findCategoryId = async (category: string | string[]) => {
   let [categoryId] = await myDataSource.query(`
     SELECT
         high_rank_id, id
@@ -75,10 +62,7 @@ export const findCategoryId = async (category: string | string[]) => {
   return categoryId;
 };
 
-export const insertFeedIdcategoryId = async (
-  feedId: number,
-  categoryId: number[]
-) => {
+const insertFeedIdcategoryId = async (feedId: number, categoryId: number[]) => {
   for (let i = 0; i < categoryId.length; i++) {
     await myDataSource.query(`
       INSERT INTO feed_category
@@ -89,7 +73,7 @@ export const insertFeedIdcategoryId = async (
   }
 };
 
-export const insertMainField = async (main_field: string[]) => {
+const insertMainField = async (main_field: string[]) => {
   for (let i = 0; i < main_field.length; i++) {
     await myDataSource.query(`
       INSERT INTO feeds_main_fields
@@ -100,7 +84,7 @@ export const insertMainField = async (main_field: string[]) => {
   }
 };
 
-export const deleteOverlapMainField = async () => {
+const deleteOverlapMainField = async () => {
   await myDataSource.query(`
     DELETE
         a
@@ -111,7 +95,7 @@ export const deleteOverlapMainField = async () => {
   `);
 };
 
-export const findMainFieldId = async (main_field: string[]) => {
+const findMainFieldId = async (main_field: string[]) => {
   const mainFieldArray: number[] = [];
 
   for (let i = 0; i < main_field.length; i++) {
@@ -129,10 +113,7 @@ export const findMainFieldId = async (main_field: string[]) => {
   return mainFieldArray;
 };
 
-export const insertMainFieldId = async (
-  feedId: number,
-  mainFieldId: number[]
-) => {
+const insertMainFieldId = async (feedId: number, mainFieldId: number[]) => {
   for (let i = 0; i < mainFieldId.length; i++) {
     await myDataSource.query(`
       INSERT INTO feeds_main_fields
@@ -141,4 +122,16 @@ export const insertMainFieldId = async (
           ('${feedId}', '${mainFieldId[i]}')
     `);
   }
+};
+
+export default {
+  findBranchId,
+  createFeed,
+  findFeedId,
+  findCategoryId,
+  insertFeedIdcategoryId,
+  insertMainField,
+  deleteOverlapMainField,
+  findMainFieldId,
+  insertMainFieldId,
 };

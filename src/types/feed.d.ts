@@ -1,4 +1,4 @@
-export interface Feed {
+export type Feed = {
   category: string;
   title: string;
   introduction: string;
@@ -9,4 +9,4 @@ export interface Feed {
   hompage?: string;
   detail_introduction?: string;
   member_benefit?: string | string[];
-}
+};

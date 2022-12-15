@@ -1,6 +1,6 @@
-import * as feedDao from '../models/feedDao';
+import feedDao from '../models/feedDao';
 
-export const createFeed = async (
+const createFeed = async (
   //userId
   category: string,
   title: string,
@@ -41,3 +41,5 @@ export const createFeed = async (
   const mainFieldId: number[] = await feedDao.findMainFieldId(main_field);
   await feedDao.insertMainFieldId(feedId, mainFieldId);
 };
+
+export default { createFeed };
