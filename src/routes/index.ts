@@ -4,9 +4,11 @@ const router = Router();
 import { errHandler } from '../utils/util';
 import userRouter from './userRouter';
 import categoryRouter from './categoryRouter';
+import subhomeRouter from './subhomeRouter';
 
 router.use('/user', userRouter);
 router.use('/category', categoryRouter);
+router.use('/subhome', subhomeRouter);
 
 router.use(errHandler);
 
