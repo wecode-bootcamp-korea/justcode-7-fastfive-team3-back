@@ -4,15 +4,16 @@ const signUp = async (
   nickname: string,
   hashedPw: string,
   email: string,
+  company_name: string,
   sort_id: number,
   is_admin: number
 ) => {
   await myDataSource.query(
     `
-        INSERT INTO users (nickname, password, email, sort_id, is_admin)
-        VALUES (?, ?, ?, ?, ?)
+        INSERT INTO users (nickname, password, email, company_name, sort_id, is_admin)
+        VALUES (?, ?, ?, ?, ?, ?)
     `,
-    [nickname, hashedPw, email, sort_id, is_admin]
+    [nickname, hashedPw, email, company_name, sort_id, is_admin]
   );
 };
 

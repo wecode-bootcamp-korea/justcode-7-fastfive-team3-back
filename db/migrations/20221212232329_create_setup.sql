@@ -1,11 +1,12 @@
 -- migrate:up
-insert into user_group (sort) values ('admin');
-insert into user_group (sort) values ('normal member');
-insert into user_group (sort) values ('resident member');
-insert into user_group (sort) values ('exit member');
+insert into user_group (id, sort) values ('1','admin');
+insert into user_group (id, sort) values ('2', 'normal member');
+insert into user_group (id, sort) values ('3', 'resident member');
+insert into user_group (id, sort) values ('4', 'exit member');
 
-insert into feed_status (status) values ('open');
-insert into feed_status (status) values ('close');
+insert into feed_status (id, status) values ('1','open');
+insert into feed_status (id, status) values ('2', 'close');
+insert into feed_status (id, status) values ('3', 'temporary');
 
 
 insert into branch (branch_name) values ('강남1호점');
