@@ -6,21 +6,31 @@ type requireKeys = {
   email: string;
   password: string;
   nickname?: string;
+  company_name?: string;
   sort_id?: number;
   is_admin?: number;
 };
 
 const signUp = async (req: Request, res: Response) => {
-  const { nickname, password, email, sort_id, is_admin } = req.body;
+  const { nickname, password, email, company_name, sort_id, is_admin } =
+    req.body;
   const REQUIRED_KEYS: requireKeys = {
     nickname,
     password,
     email,
+    company_name,
     sort_id,
     is_admin,
   };
   checkRequireKeys(REQUIRED_KEYS);
-  await usersService.signUp(nickname, password, email, sort_id, is_admin);
+  await usersService.signUp(
+    nickname,
+    password,
+    email,
+    company_name,
+    sort_id,
+    is_admin
+  );
 
   res.status(201).json({ message: `${email} signup success` });
 };

@@ -8,12 +8,20 @@ const signUp = async (
   nickname: string,
   password: string,
   email: string,
+  company_name: string,
   sort_id: number,
   is_admin: number
 ) => {
   const salt = await bcrypt.genSalt();
   const hashedPw = bcrypt.hashSync(password, salt);
-  await usersDao.signUp(nickname, hashedPw, email, sort_id, is_admin);
+  await usersDao.signUp(
+    nickname,
+    hashedPw,
+    email,
+    company_name,
+    sort_id,
+    is_admin
+  );
 };
 
 const logIn = async (email: string, password: string) => {
