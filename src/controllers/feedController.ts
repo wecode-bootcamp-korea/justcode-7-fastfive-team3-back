@@ -4,12 +4,17 @@ import { checkRequireKeys } from '../utils/util';
 import { Feed } from '../types/feed';
 
 const createFeed = async (req: Request, res: Response) => {
+  const userId = req.userInfo.id;
   const files = req.files as Express.MulterS3.File[];
   const locationPath = files.map(path => path.location);
   const namePath = files.map(path => path.originalname);
+  const sizePath = files.map(path => path.size);
   const logo = locationPath[0];
   const file = locationPath[1];
   const fileName = namePath[1];
+  const logoSize = sizePath[0];
+  const fileSize = sizePath[1];
+
   const {
     category,
     title,
@@ -17,12 +22,11 @@ const createFeed = async (req: Request, res: Response) => {
     main_field,
     contact,
     branch,
-    detail_category,
     hompage,
     detail_introduction,
     member_benefit,
   }: Feed = req.body;
-  //TODO 유저아이디 받아와야함 const userId =req.userId
+
   const REQUIRE_KEYS = [
     category,
     title,
@@ -35,20 +39,21 @@ const createFeed = async (req: Request, res: Response) => {
   checkRequireKeys(REQUIRE_KEYS);
 
   await feedService.createFeed(
-    //userId
+    userId,
     category,
     title,
     logo,
+    logoSize,
     introduction,
     main_field,
     contact,
     branch,
-    detail_category,
     hompage,
     detail_introduction,
     member_benefit,
     file,
-    fileName
+    fileName,
+    fileSize
   );
 
   res.status(201).json({ message: 'Create Feed!', locationPath });

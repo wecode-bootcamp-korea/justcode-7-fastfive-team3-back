@@ -1,5 +1,21 @@
 import myDataSource from './index';
 
+const findUserAuth = async (userId: number) => {
+  let [userAuth] = await myDataSource.query(`
+  SELECT
+      sort_id, is_admin
+  FROM
+      users
+  WHERE
+      id = '${userId}';
+  `);
+
+  const userSortId = userAuth.sort_id;
+  const userAdminId = userAuth.is_admin;
+  userAuth = { userSortId, userAdminId };
+  return userAuth;
+};
+
 const findBranchId = async (branch: string) => {
   let [branchId] = await myDataSource.query(`
     SELECT
@@ -28,22 +44,8 @@ const findCategoryId = async (category: string) => {
   return categoryId;
 };
 
-const findDetailCategoryId = async (detail_category: string) => {
-  let [categoryId] = await myDataSource.query(`
-    SELECT
-        id
-    FROM
-        category
-    WHERE
-        category = '${detail_category}'
-`);
-
-  categoryId = categoryId.id;
-  return categoryId;
-};
-
 const createFeed = async (
-  //userId
+  userId: number,
   categoryId: number,
   title: string,
   image: string,
@@ -58,7 +60,7 @@ const createFeed = async (
     INSERT INTO feeds
         (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
     VALUES
-        ('1', '${categoryId}', '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', '${branchId}', '1')
+        ('${userId}', '${categoryId}', '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', '${branchId}', '1')
   `);
 };
 
@@ -149,9 +151,9 @@ const insertFile = async (feedId: number, fileName: string, file: string) => {
 };
 
 export default {
+  findUserAuth,
   findBranchId,
   findCategoryId,
-  findDetailCategoryId,
   createFeed,
   findFeedId,
   insertMainField,

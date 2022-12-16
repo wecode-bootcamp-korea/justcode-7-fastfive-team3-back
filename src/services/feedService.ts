@@ -1,28 +1,63 @@
 import feedDao from '../models/feedDao';
 
 const createFeed = async (
-  //userId
+  userId: number,
   category: string,
   title: string,
   logo: string,
+  logoSize: number,
   introduction: string,
   main_field: string,
   contact: string,
   branch: string,
-  detail_category?: string,
   hompage?: string,
   detail_introduction?: string,
   member_benefit?: string,
   file?: string,
-  fileName?: string
+  fileName?: string,
+  fileSize?: number
 ) => {
+  const userAuth: { userSortId: number; userAdminId: number } =
+    await feedDao.findUserAuth(userId);
+
+  if (
+    !(
+      userAuth.userSortId === 1 ||
+      userAuth.userSortId === 3 ||
+      userAuth.userAdminId === 1
+    )
+  ) {
+    const error = new Error(' Your Not Authorization! ');
+    error.status = 403;
+    throw error;
+  }
+
+  if (logoSize > 10000000) {
+    const error = new Error(' Logo Size too Big! ');
+    error.status = 400;
+    throw error;
+  }
+
+  if (fileSize > 30000000) {
+    const error = new Error(' File Size too Big! ');
+    error.status = 400;
+    throw error;
+  }
+
+  const categoryArray = category.split(',');
+  const categoryNameArray: string[] = [];
+  if (categoryArray.length === 1) {
+    categoryNameArray.push(categoryArray[0]);
+  } else {
+    categoryNameArray.push(categoryArray[1]);
+  }
+  const categoryName = categoryNameArray[0];
   const mainFieldArray = main_field.split(',');
   const branchId: number = await feedDao.findBranchId(branch);
-  // TODO 디테일 카테고리가 없는 경우는 어떻게 할지..
-  let categoryId = await feedDao.findDetailCategoryId(detail_category);
+  const categoryId: number = await feedDao.findCategoryId(categoryName);
 
   await feedDao.createFeed(
-    //userId
+    userId,
     categoryId,
     title,
     logo,
