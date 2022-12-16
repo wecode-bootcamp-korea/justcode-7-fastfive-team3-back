@@ -13,4 +13,11 @@ router.post(
   catchMiddleware(feedController.createFeed)
 );
 
+router.put(
+  '/upload',
+  authMiddleware,
+  uplad.array('file', 4),
+  catchMiddleware(feedController.updateFeed)
+);
+
 export default router;

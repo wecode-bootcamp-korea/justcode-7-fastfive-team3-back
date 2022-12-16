@@ -104,6 +104,12 @@ const insertMainField = async (mainFieldArray: string[]) => {
   }
 };
 
+const foreignKeySetZero = async () => {
+  await myDataSource.query(`
+      SET foreign_key_checks = 0
+  `);
+};
+
 const deleteOverlapMainField = async () => {
   await myDataSource.query(`
     DELETE
@@ -115,9 +121,9 @@ const deleteOverlapMainField = async () => {
   `);
 };
 
-const foreignKeySetZero = async () => {
+const foreignKeySetOne = async () => {
   await myDataSource.query(`
-      SET foreign_key_checks = 0
+      SET foreign_key_checks = 1
   `);
 };
 
@@ -139,17 +145,12 @@ const findMainFieldId = async (mainFieldArray: string[]) => {
   return mainFieldIdArray;
 };
 
-const foreignKeySetOne = async () => {
-  await myDataSource.query(`
-      SET foreign_key_checks = 1
-  `);
-};
-
 const insertMainFieldId = async (feedId: number, mainFieldId: number[]) => {
   for (let i = 0; i < mainFieldId.length; i++) {
     await myDataSource.query(`
-      INSERT INTO feeds_main_fields
-          (feeds_id, main_field_id)
+      UPDAET feeds_main_fields
+      SET
+        feeds_id, main_field_id)
       VALUES
           ('${feedId}', '${mainFieldId[i]}')
     `);
@@ -162,6 +163,62 @@ const insertFile = async (feedId: number, fileName: string, file: string) => {
       (feed_id, file_name, file_link)
     VALUES
       ('${feedId}', '${fileName}', '${file}')
+  `);
+};
+
+const updateFeed = async (
+  userId: number,
+  categoryId: number,
+  title: string,
+  image: string,
+  introduction: string,
+  hompage: string,
+  detail_introduction: string,
+  member_benefit: string | string[],
+  contact: string | string[],
+  branchId: number
+) => {
+  await myDataSource.query(`
+    UPDATE feeds
+    SET
+        user_id = '${userId}',
+        category_id = '${categoryId}',
+        title = '${title}',
+        logo_img = '${image}',
+        introduction = '${introduction}',
+        website_url = '${hompage}',
+        detail_introduction = '${detail_introduction}',
+        member_benefit = '${member_benefit}',
+        contact = '${contact}',
+        use_branch_id = '${branchId}',
+        status_id = '1'
+    WHERE
+        id = '${userId}'
+  `);
+};
+
+const updateMainFieldId = async (feedId: number, mainFieldId: number[]) => {
+  for (let i = 0; i < mainFieldId.length; i++) {
+    await myDataSource.query(`
+      UPDATE feeds_main_fields
+      SET
+          feeds_id = '${feedId}',
+          main_field_id = '${mainFieldId[i]}'
+      WHERE
+          feeds_id = '${feedId}'
+    `);
+  }
+};
+
+const updateFile = async (feedId: number, fileName: string, file: string) => {
+  await myDataSource.query(`
+    UPDATE company_file
+    SET
+        feed_id = '${feedId}',
+        file_name = '${fileName}',
+        file_link= '${file}'
+    WHERE
+        feed_id = '${feedId}'
   `);
 };
 
@@ -179,4 +236,7 @@ export default {
   findMainFieldId,
   insertMainFieldId,
   insertFile,
+  updateFeed,
+  updateMainFieldId,
+  updateFile,
 };
