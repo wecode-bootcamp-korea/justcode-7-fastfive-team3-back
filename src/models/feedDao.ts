@@ -2,18 +2,33 @@ import myDataSource from './index';
 
 const findUserAuth = async (userId: number) => {
   let [userAuth] = await myDataSource.query(`
-  SELECT
-      sort_id, is_admin
-  FROM
-      users
-  WHERE
-      id = '${userId}';
+    SELECT
+        sort_id, is_admin
+    FROM
+        users
+    WHERE
+        id = '${userId}'
   `);
 
   const userSortId = userAuth.sort_id;
   const userAdminId = userAuth.is_admin;
   userAuth = { userSortId, userAdminId };
   return userAuth;
+};
+
+const isExistFeed = async (userId: number) => {
+  let [feed] = await myDataSource.query(`
+  SELECT
+      title
+  FROM
+      feeds
+  WHERE
+      user_id = '${userId}'
+  `);
+
+  const feedTitle = feed.title;
+  feed = feedTitle;
+  return feed;
 };
 
 const findBranchId = async (branch: string) => {
@@ -152,6 +167,7 @@ const insertFile = async (feedId: number, fileName: string, file: string) => {
 
 export default {
   findUserAuth,
+  isExistFeed,
   findBranchId,
   findCategoryId,
   createFeed,

@@ -32,6 +32,13 @@ const createFeed = async (
     throw error;
   }
 
+  const existFeed = feedDao.isExistFeed(userId);
+  if (!!existFeed) {
+    const error = new Error(' Exist User Feed! ');
+    error.status = 400;
+    throw error;
+  }
+
   if (logoSize > 10000000) {
     const error = new Error(' Logo Size too Big! ');
     error.status = 400;
