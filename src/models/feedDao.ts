@@ -148,9 +148,8 @@ const findMainFieldId = async (mainFieldArray: string[]) => {
 const insertMainFieldId = async (feedId: number, mainFieldId: number[]) => {
   for (let i = 0; i < mainFieldId.length; i++) {
     await myDataSource.query(`
-      UPDAET feeds_main_fields
-      SET
-        feeds_id, main_field_id)
+      INSERT INTO feeds_main_fields
+          (feeds_id, main_field_id)
       VALUES
           ('${feedId}', '${mainFieldId[i]}')
     `);

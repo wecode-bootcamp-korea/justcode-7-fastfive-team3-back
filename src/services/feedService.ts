@@ -32,8 +32,9 @@ const createFeed = async (
     throw error;
   }
 
-  const existFeed = feedDao.isExistFeed(userId);
-  if (!!existFeed) {
+  const existFeed = await feedDao.isExistFeed(userId);
+
+  if (existFeed.length === 1) {
     const error = new Error(' Exist User Feed! ');
     error.status = 400;
     throw error;
