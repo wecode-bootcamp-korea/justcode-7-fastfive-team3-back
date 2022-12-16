@@ -4,7 +4,7 @@ import { checkRequireKeys } from '../utils/util';
 import { Feed } from '../types/feed';
 
 const createFeed = async (req: Request, res: Response) => {
-  const userId = req.userInfo.id;
+  const userId: number = req.userInfo.id;
   const files = req.files as Express.MulterS3.File[];
   const locationPath = files.map(path => path.location);
   const namePath = files.map(path => path.originalname);
@@ -60,7 +60,7 @@ const createFeed = async (req: Request, res: Response) => {
 };
 
 const updateFeed = async (req: Request, res: Response) => {
-  const userId = req.userInfo.id;
+  const userId: number = req.userInfo.id;
   const files = req.files as Express.MulterS3.File[];
   const locationPath = files.map(path => path.location);
   const namePath = files.map(path => path.originalname);
@@ -115,4 +115,11 @@ const updateFeed = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Update Feed!', locationPath });
 };
 
-export default { createFeed, updateFeed };
+const getFeed = async (req: Request, res: Response) => {
+  const userId: number = req.userInfo.id;
+  const result = await feedService.getFeed(userId);
+
+  res.status(200).json(result);
+};
+
+export default { createFeed, updateFeed, getFeed };

@@ -163,4 +163,11 @@ const updateFeed = async (
   await feedDao.updateFile(feedId, fileName, file);
 };
 
-export default { createFeed, updateFeed };
+const getFeed = async (userId: number) => {
+  const title: string = await feedDao.findtitle(userId);
+  const feedId: number = await feedDao.findFeedId(title);
+  const result: any = await feedDao.getFeed(feedId);
+  return result;
+};
+
+export default { createFeed, updateFeed, getFeed };

@@ -17,7 +17,7 @@ const findUserAuth = async (userId: number) => {
 };
 
 const isExistFeed = async (userId: number) => {
-  let [feed] = await myDataSource.query(`
+  let feed = await myDataSource.query(`
   SELECT
       title
   FROM
@@ -26,8 +26,6 @@ const isExistFeed = async (userId: number) => {
       user_id = '${userId}'
   `);
 
-  const feedTitle = feed.title;
-  feed = feedTitle;
   return feed;
 };
 
@@ -221,6 +219,78 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
   `);
 };
 
+const findtitle = async (userId: number) => {
+  let [feedTitle] = await myDataSource.query(`
+    SELECT
+        title
+    FROM
+        feeds
+    WHERE
+        user_id = '${userId}'
+  `);
+
+  feedTitle = feedTitle.title;
+  return feedTitle;
+};
+
+const getFeed = async (feedId: number) => {
+  let feeds = await myDataSource.query(`
+    SELECT
+        f.id,
+        c.category,
+        c3.category AS parent_category,
+        f.title,
+        f.logo_img,
+        f.introduction,
+        f.website_url,
+        fi.field_name,
+        f.detail_introduction,
+        f.member_benefit,
+        f.contact,
+        cf.file_name,
+        cf.file_link,
+        b.branch_name
+    FROM
+        feeds AS f
+            LEFT JOIN
+        category AS c ON c.id = f.category_id
+            LEFT JOIN
+        (SELECT
+            c1.id, c1.category AS detail, c2.category
+        FROM
+            category AS c1
+        INNER JOIN category AS c2 ON c2.id = c1.parent_category_id) AS c3 ON c3.id = c.id
+            LEFT JOIN
+        (SELECT
+            feeds_id,
+                JSON_ARRAYAGG(JSON_OBJECT('id', main_field.id, 'main_field', main_field.field_name)) AS field_name
+        FROM
+            feeds_main_fields
+        JOIN main_field ON feeds_main_fields.main_field_id = main_field.id
+        GROUP BY feeds_id) AS fi ON fi.feeds_id = f.id
+            LEFT JOIN
+        (SELECT
+            feed_id, file_name, file_link
+        FROM
+            company_file) AS cf ON cf.feed_id = f.id
+            LEFT JOIN
+        (SELECT
+            id, branch_name
+        FROM
+            branch) AS b ON b.id = f.use_branch_id
+        WHERE f.id = '${feedId}';
+  `);
+
+  feeds = [...feeds].map(item => {
+    return {
+      ...item,
+      field_name: JSON.parse(item.field_name),
+    };
+  });
+
+  return feeds;
+};
+
 export default {
   findUserAuth,
   isExistFeed,
@@ -238,4 +308,6 @@ export default {
   updateFeed,
   updateMainFieldId,
   updateFile,
+  findtitle,
+  getFeed,
 };

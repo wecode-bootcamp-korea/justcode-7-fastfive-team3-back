@@ -20,4 +20,6 @@ router.put(
   catchMiddleware(feedController.updateFeed)
 );
 
+router.get('/upload', authMiddleware, catchMiddleware(feedController.getFeed));
+
 export default router;
