@@ -5,7 +5,7 @@ const getFeedList = async (
   category_id?: number,
   sub_category_id?: number
 ) => {
-  let selectFilters: string | null;
+  let selectFilters: string;
 
   if (location_id && category_id && sub_category_id) {
     selectFilters = `

@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
                          `nickname` varchar(50) NOT NULL,
                          `password` varchar(100) NOT NULL,
                          `email` varchar(50) UNIQUE NOT NULL,
-                         `sort_id` int NOT NULL DEFAULT (2),
+                         `group_id` int NOT NULL DEFAULT (2),
                          `is_admin` tinyint NOT NULL DEFAULT (0),
                          `created_at` datetime NOT NULL DEFAULT (now()),
                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
@@ -110,7 +110,7 @@ CREATE TABLE IF NOT EXISTS `company_file` (
                                 `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-ALTER TABLE `users` ADD FOREIGN KEY (`sort_id`) REFERENCES `user_group` (`id`);
+ALTER TABLE `users` ADD FOREIGN KEY (`group_id`) REFERENCES `user_group` (`id`);
 
 ALTER TABLE `feeds` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 

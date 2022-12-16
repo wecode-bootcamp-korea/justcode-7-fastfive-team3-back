@@ -14,7 +14,7 @@ const getSubhomeList = async () => {
   );
 };
 
-const getSubhome2List = async (category_id: number) => {
+const getSubhome2List = async (category_id: string) => {
   return await myDataSource.query(
     `
         SELECT f.id AS feed_id,
