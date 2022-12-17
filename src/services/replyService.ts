@@ -40,4 +40,20 @@ const updateReply = async (
   return await replyDao.updateReply(reply_id, comment);
 };
 
-export default { getListOfRepliesByFeed, crateReply, updateReply };
+const deleteReply = async (user_id: number, reply_id: number) => {
+  const [isReply] = await replyDao.findReply(reply_id);
+  console.log('isReply =', isReply);
+  if (!isReply) {
+    throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
+    return;
+  }
+
+  if (isReply.user_id !== user_id) {
+    throw { status: 400, message: 'ONLY_WRITER_CAN_DELETE' };
+    return;
+  }
+
+  return await replyDao.deleteReply(reply_id);
+};
+
+export default { getListOfRepliesByFeed, crateReply, updateReply, deleteReply };

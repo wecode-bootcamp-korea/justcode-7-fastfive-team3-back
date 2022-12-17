@@ -14,6 +14,11 @@ router.patch(
   catchMiddleware(authMiddleware),
   catchMiddleware(replyController.updateReply)
 );
+router.delete(
+  '',
+  catchMiddleware(authMiddleware),
+  catchMiddleware(replyController.deleteReply)
+);
 router.get(
   '/:feed_id',
   catchMiddleware(replyController.getListOfRepliesByFeed)

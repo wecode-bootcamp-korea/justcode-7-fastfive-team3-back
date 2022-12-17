@@ -53,4 +53,24 @@ const updateReply = async (req: Request, res: Response) => {
 
   res.status(200).json(result);
 };
-export default { getListOfRepliesByFeed, createReply, updateReply };
+
+const deleteReply = async (req: Request, res: Response) => {
+  let user_id: number = req.userInfo.id;
+  let reply_id: number = Number(req.body.reply_id);
+
+  const REQUIRED_KEYS: requireKeys = {
+    reply_id,
+  };
+
+  checkRequireKeys(REQUIRED_KEYS);
+
+  await replyService.deleteReply(user_id, reply_id);
+
+  res.status(200).json({ message: 'SUCCESSFULLY_DELETED_REPLY' });
+};
+export default {
+  getListOfRepliesByFeed,
+  createReply,
+  updateReply,
+  deleteReply,
+};

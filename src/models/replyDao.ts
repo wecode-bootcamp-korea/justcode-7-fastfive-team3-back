@@ -141,4 +141,20 @@ const updateReply = async (reply_id: number, comment: string) => {
   );
 };
 
-export default { getListOfRepliesByFeed, createReply, findReply, updateReply };
+const deleteReply = async (reply_id: number) => {
+  return await myDataSource.query(
+    `
+        DELETE
+        FROM replies
+        WHERE id = ?
+    `,
+    [reply_id]
+  );
+};
+export default {
+  getListOfRepliesByFeed,
+  createReply,
+  findReply,
+  updateReply,
+  deleteReply,
+};
