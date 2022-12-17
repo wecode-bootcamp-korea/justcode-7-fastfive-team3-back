@@ -10,8 +10,9 @@ const getListOfRepliesByFeed = async (req: Request, res: Response) => {
 };
 
 type requireKeys = {
-  feed_id: number;
-  comment: string;
+  feed_id?: number;
+  comment?: string;
+  reply_id?: number;
 };
 const createReply = async (req: Request, res: Response) => {
   let user_id: number = req.userInfo.id;
@@ -35,4 +36,21 @@ const createReply = async (req: Request, res: Response) => {
 
   res.status(200).json(result);
 };
-export default { getListOfRepliesByFeed, createReply };
+
+const updateReply = async (req: Request, res: Response) => {
+  let user_id: number = req.userInfo.id;
+  let reply_id: number = Number(req.body.reply_id);
+  let comment: string = String(req.body.comment);
+
+  const REQUIRED_KEYS: requireKeys = {
+    reply_id,
+    comment,
+  };
+
+  checkRequireKeys(REQUIRED_KEYS);
+
+  const result = await replyService.updateReply(user_id, reply_id, comment);
+
+  res.status(200).json(result);
+};
+export default { getListOfRepliesByFeed, createReply, updateReply };

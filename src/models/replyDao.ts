@@ -99,4 +99,46 @@ const createReply = async (
   );
 };
 
-export default { getListOfRepliesByFeed, createReply };
+const findReply = async (reply_id: number) => {
+  return await myDataSource.query(
+    `
+        SELECT *
+        FROM replies r
+        WHERE id = ?
+    `,
+    [reply_id]
+  );
+};
+const updateReply = async (reply_id: number, comment: string) => {
+  await myDataSource.query(
+    `
+    UPDATE
+      replies SET
+      comment = '${comment}'
+    WHERE
+      id = ${reply_id}
+    `
+  );
+  return await myDataSource.query(
+    `
+        SELECT r.id,
+               r.user_id,
+               u.company_name,
+               u.nickname,
+               u.email,
+               u.position_name,
+               r.feed_id,
+               r.comment,
+               r.parent_reply_id,
+               r.status,
+               SUBSTRING(r.created_at, 1, 16) AS created_at
+        FROM replies r
+                 JOIN users u ON
+            r.user_id = u.id
+        WHERE r.id = ${reply_id}
+    `,
+    [reply_id]
+  );
+};
+
+export default { getListOfRepliesByFeed, createReply, findReply, updateReply };
