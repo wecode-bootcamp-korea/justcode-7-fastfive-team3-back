@@ -6,6 +6,7 @@ CREATE TABLE IF NOT EXISTS `users` (
                          `nickname` varchar(50) NOT NULL,
                          `password` varchar(100) NOT NULL,
                          `email` varchar(50) UNIQUE NOT NULL,
+                         `position_name` varchar(50) NOT NULL,
                          `group_id` int NOT NULL DEFAULT (2),
                          `is_admin` tinyint NOT NULL DEFAULT (0),
                          `created_at` datetime NOT NULL DEFAULT (now()),
