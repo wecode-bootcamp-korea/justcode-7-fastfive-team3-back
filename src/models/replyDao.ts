@@ -59,4 +59,44 @@ const getListOfRepliesByFeed = async (feed_id: number) => {
     });
 };
 
-export default { getListOfRepliesByFeed };
+const createReply = async (
+  user_id: number,
+  feed_id: number,
+  comment: string,
+  parent_reply_id?: number
+) => {
+  await myDataSource.query(
+    `
+    INSERT
+      replies SET
+      user_id = ${user_id},
+      feed_id = ${feed_id},
+      comment = '${comment}',
+      parent_reply_id = ${parent_reply_id}
+    `
+  );
+  return await myDataSource.query(
+    `
+        SELECT r.id,
+               r.user_id,
+               u.company_name,
+               u.nickname,
+               u.email,
+               u.position_name,
+               r.feed_id,
+               r.comment,
+               r.parent_reply_id,
+               r.status,
+               SUBSTRING(r.created_at, 1, 16) AS created_at
+        FROM replies r
+                 JOIN users u ON
+            r.user_id = u.id
+        WHERE r.user_id = ? AND r.feed_id = ?
+        ORDER BY created_at DESC
+        LIMIT 1
+    `,
+    [user_id, feed_id]
+  );
+};
+
+export default { getListOfRepliesByFeed, createReply };
