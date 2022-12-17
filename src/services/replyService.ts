@@ -1,7 +1,29 @@
 import replyDao from '../models/replyDao';
 
-const getListOfRepliesByFeed = async (feed_id: number) => {
-  return await replyDao.getListOfRepliesByFeed(feed_id);
+const getListOfRepliesByFeed = async (
+  user_id: number,
+  feed_id: number,
+  page: number
+) => {
+  let limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
+
+  if (!page) {
+    page = 1;
+  }
+  let pageOffset: number = (page - 1) * limit;
+  let pagenation = `
+  LIMIT ${pageOffset}, ${limit}
+  `;
+
+  const [replyCnt] = await replyDao.getCountOfAllComments(feed_id);
+  const replyPageCnt = Math.ceil(replyCnt.reply_cnt / limit);
+  const result = await replyDao.getListOfRepliesByFeed(
+    user_id,
+    feed_id,
+    pagenation
+  );
+
+  return { replyPageCnt, result };
 };
 
 const crateReply = async (

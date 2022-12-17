@@ -1,47 +1,67 @@
 import myDataSource from './index';
 
-const getListOfRepliesByFeed = async (feed_id: number) => {
+const getCountOfAllComments = async (feed_id: number) => {
+  return await myDataSource.query(
+    `
+        SELECT COUNT(*) AS reply_cnt
+        FROM replies r
+        WHERE feed_id = ?
+    `,
+    [feed_id]
+  );
+};
+
+const getListOfRepliesByFeed = async (
+  user_id: number,
+  feed_id: number,
+  pagenation?: string
+) => {
   return await myDataSource
     .query(
       `
-        SELECT t2.*,
-               u.company_name,
-               u.nickname,
-               u.email,
-               u.position_name,
-               u.group_id,
-               u.is_admin
-        FROM (SELECT *
-              FROM (SELECT r.id,
-                           r.status,
-                           r.user_id,
-                           r.feed_id,
-                           r.comment,
-                           r.parent_reply_id,
-                           SUBSTRING(r.created_at, 1, 16) AS created_at,
-                           RANK() OVER (PARTITION BY parent_reply_id
-                               ORDER BY
-                                   id ASC) AS rnk
-                    FROM replies r
-                    WHERE feed_id = 1
-                      AND parent_reply_id) AS t1
-              UNION ALL
-
-              (SELECT r2.id,
-                      r2.status,
-                      r2.user_id,
-                      r2.feed_id,
-                      r2.comment,
-                      r2.parent_reply_id,
-                      SUBSTRING(r2.created_at, 1, 16) AS create_at,
-                      r2.id AS rnk
-               FROM replies r2
-               WHERE r2.feed_id = 1
-                 AND r2.parent_reply_id = 0
-               ORDER BY r2.id ASC)) AS t2
-                 INNER JOIN users u ON
-            t2.user_id = u.id
-    `
+          SELECT t2.*,
+                 u.company_name,
+                 u.nickname,
+                 u.email,
+                 u.position_name,
+                 u.group_id,
+                 u.is_admin
+          FROM (SELECT *
+                FROM (SELECT r.id,
+                             r.status,
+                             r.user_id,
+                             r.feed_id,
+                             r.comment,
+                             r.parent_reply_id,
+                             r.created_at,
+                             RANK() OVER (PARTITION BY parent_reply_id
+                                 ORDER BY
+                                     id ASC)   AS rnk,
+                             r.parent_reply_id AS reply_group
+                      FROM replies r
+                      WHERE feed_id = 1
+                        AND parent_reply_id) AS t1
+                UNION ALL
+                (SELECT r2.id,
+                        r2.status,
+                        r2.user_id,
+                        r2.feed_id,
+                        r2.comment,
+                        r2.parent_reply_id,
+                        r2.created_at,
+                        r2.parent_reply_id AS rnk,
+                        r2.id              AS reply_group
+                 FROM replies r2
+                 WHERE r2.feed_id = 1
+                   AND r2.parent_reply_id = 0
+                 ORDER BY r2.id ASC)) AS t2
+                   INNER JOIN users u ON
+              t2.user_id = u.id
+          ORDER BY reply_group,
+                   rnk
+                ${pagenation}
+    `,
+      [pagenation]
     )
     .then(value => {
       let ret = value
@@ -50,10 +70,24 @@ const getListOfRepliesByFeed = async (feed_id: number) => {
           e.reply = [];
           return e;
         });
+
+      // value
+      //   .filter((e: any) => e.parent_reply_id !== 0)
+      //   .map((e: any) => {
+      //     const result = ret.find((re: any) => re.id === e.parent_reply_id);
+      //     console.log('result =', result);
+      //     if (!result) {
+      //       let createObject = { id: e.parent_reply_id };
+      //       e = Object.create(createObject);
+      //     }
+      //     e.rerply = [];
+      //     e.reply.push(e);
+      //   });
+
       value
         .filter((e: any) => e.parent_reply_id !== 0)
         .forEach((e: any) =>
-          ret.find((re: any) => re.id === e.parent_reply_id).reply.unshift(e)
+          ret.find((re: any) => re.id === e.parent_reply_id).reply.push(e)
         );
       return ret;
     });
@@ -152,6 +186,7 @@ const deleteReply = async (reply_id: number) => {
   );
 };
 export default {
+  getCountOfAllComments,
   getListOfRepliesByFeed,
   createReply,
   findReply,

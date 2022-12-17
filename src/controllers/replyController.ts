@@ -3,9 +3,15 @@ import { Request, Response } from 'express';
 import { checkRequireKeys } from '../utils/util';
 
 const getListOfRepliesByFeed = async (req: Request, res: Response) => {
+  let user_id: number = req.userInfo.id;
   let feed_id: number = Number(req.params.feed_id);
-  const result = await replyService.getListOfRepliesByFeed(feed_id);
+  let page: number = Number(req.query.page);
 
+  const result = await replyService.getListOfRepliesByFeed(
+    user_id,
+    feed_id,
+    page
+  );
   res.status(200).json(result);
 };
 

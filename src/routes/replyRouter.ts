@@ -21,6 +21,7 @@ router.delete(
 );
 router.get(
   '/:feed_id',
+  catchMiddleware(authMiddleware),
   catchMiddleware(replyController.getListOfRepliesByFeed)
 );
 
