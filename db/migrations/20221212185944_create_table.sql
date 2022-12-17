@@ -81,12 +81,12 @@ CREATE TABLE IF NOT EXISTS `branch_location` (
                                    `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
-CREATE TABLE IF NOT EXISTS `comments` (
+CREATE TABLE IF NOT EXISTS `replies` (
                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                             `user_id` int NOT NULL,
                             `feed_id` int NOT NULL,
                             `comment` varchar(1000) NOT NULL,
-                            `reply_id` int,
+                            `parent_reply_id` int,
                             `status` boolean NOT NULL DEFAULT (true),
                             `created_at` datetime NOT NULL DEFAULT (now()),
                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
@@ -129,11 +129,11 @@ ALTER TABLE `branch_location` ADD FOREIGN KEY (`location_id`) REFERENCES `locati
 
 ALTER TABLE `branch_location` ADD FOREIGN KEY (`branch_id`) REFERENCES `branch` (`id`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
+ALTER TABLE `replies` ADD FOREIGN KEY (`user_id`) REFERENCES `users` (`id`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`);
+ALTER TABLE `replies` ADD FOREIGN KEY (`feed_id`) REFERENCES `feeds` (`id`);
 
-ALTER TABLE `comments` ADD FOREIGN KEY (`reply_id`) REFERENCES `comments` (`id`);
+ALTER TABLE `replies` ADD FOREIGN KEY (`parent_reply_id`) REFERENCES `replies` (`id`);
 
 ALTER TABLE `category` ADD FOREIGN KEY (`parent_category_id`) REFERENCES `category` (`id`);
 
@@ -153,7 +153,7 @@ DROP TABLE feeds_main_fields;
 DROP TABLE branch;
 DROP TABLE location;
 DROP TABLE branch_location;
-DROP TABLE comments;
+DROP TABLE replies;
 DROP TABLE category;
 DROP TABLE company_file;
 
