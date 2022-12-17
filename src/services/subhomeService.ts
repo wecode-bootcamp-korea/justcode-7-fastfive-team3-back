@@ -4,12 +4,12 @@ const getSubhomeList = async () => {
   return await subhomeDao.getSubhomeList();
 };
 
-const getSubhome2List = async (category_id?: [number]) => {
+const getSubhome2List = async (category_id?: string) => {
   const randomNumber = Math.floor(Math.random() * 10 + 1);
   const randomCategoryId = `
     AND f.category_id = ${randomNumber}
     `;
-  const categoryArr = (category_id: [number]) => {
+  const categoryArr = (category_id: string) => {
     let result = `
     AND f.category_id = '${category_id[0]}'
     `;

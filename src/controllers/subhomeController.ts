@@ -8,9 +8,8 @@ const getSubhomeList = async (req: Request, res: Response) => {
 };
 
 const getSubhome2List = async (req: Request, res: Response) => {
-  const { category_id } = req.query;
+  let category_id: string = String(req.query.category_id);
   if (category_id) {
-    // FIXME QueryString.ParseQs 오류 해결
     const result = await subhomeService.getSubhome2List(category_id);
     res.status(200).json(result);
   } else {

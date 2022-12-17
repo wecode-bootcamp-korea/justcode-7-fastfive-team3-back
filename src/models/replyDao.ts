@@ -45,15 +45,15 @@ const getListOfRepliesByFeed = async (feed_id: number) => {
     )
     .then(value => {
       let ret = value
-        .filter(e => e.parent_reply_id === 0)
-        .map(e => {
+        .filter((e: any) => e.parent_reply_id === 0)
+        .map((e: any) => {
           e.reply = [];
           return e;
         });
       value
-        .filter(e => e.parent_reply_id !== 0)
-        .forEach(e =>
-          ret.find(re => re.id === e.parent_reply_id).reply.unshift(e)
+        .filter((e: any) => e.parent_reply_id !== 0)
+        .forEach((e: any) =>
+          ret.find((re: any) => re.id === e.parent_reply_id).reply.unshift(e)
         );
       return ret;
     });
