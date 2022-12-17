@@ -5,9 +5,9 @@ const getFeedList = async (selectFilters: string | null) => {
     `
         WITH tables AS (SELECT f.id     AS feed_id,
                                count(*) AS comment_cnt
-                        FROM comments c
+                        FROM replies r
                                  JOIN feeds f ON
-                            f.id = c.feed_id
+                            f.id = r.feed_id
                         GROUP BY f.id)
         SELECT f.id AS feed_id,
                u.company_name,
