@@ -112,7 +112,7 @@ const foreignKeySetOne = async () => {
 };
 
 const findMainFieldId = async (mainFieldArray: string[]) => {
-  const mainFieldIdArray: number[] = [];
+  let mainFieldIdArray: (number | null)[] = [null, null, null, null, null];
 
   for (let i = 0; i < mainFieldArray.length; i++) {
     const [mainFieldId] = await myDataSource.query(`
@@ -123,7 +123,7 @@ const findMainFieldId = async (mainFieldArray: string[]) => {
       WHERE
           field_name = '${mainFieldArray[i]}'
     `);
-    mainFieldIdArray.push(mainFieldId.id);
+    mainFieldIdArray[i] = mainFieldId.id;
   }
 
   return mainFieldIdArray;
@@ -135,7 +135,7 @@ const insertMainFieldId = async (feedId: number, mainFieldId: number[]) => {
       INSERT INTO feeds_main_fields
           (feeds_id, main_field_id)
       VALUES
-          ('${feedId}', '${mainFieldId[i]}')
+          (${feedId}, ${mainFieldId[i]})
     `);
   }
 };
