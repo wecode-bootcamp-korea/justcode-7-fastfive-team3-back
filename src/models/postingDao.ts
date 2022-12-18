@@ -77,20 +77,6 @@ const createFeed = async (
   `);
 };
 
-const findFeedId = async (title: string) => {
-  let [feedId] = await myDataSource.query(`
-    SELECT
-        id
-    FROM
-        feeds
-    WHERE
-        title = '${title}'
-  `);
-
-  feedId = feedId.id;
-  return feedId;
-};
-
 const insertMainField = async (mainFieldArray: string[]) => {
   for (let i = 0; i < mainFieldArray.length; i++) {
     await myDataSource.query(`
@@ -207,6 +193,20 @@ const updateMainFieldId = async (feedId: number, mainFieldId: number[]) => {
   }
 };
 
+const findFeedId = async (userId: number) => {
+  let [feedId] = await myDataSource.query(`
+    SELECT
+        id
+    FROM
+        feeds
+    WHERE
+        user_id = '${userId}'
+  `);
+
+  feedId = feedId.id;
+  return feedId;
+};
+
 const updateFile = async (feedId: number, fileName: string, file: string) => {
   await myDataSource.query(`
     UPDATE company_file
@@ -297,7 +297,6 @@ export default {
   findBranchId,
   findCategoryId,
   createFeed,
-  findFeedId,
   insertMainField,
   foreignKeySetZero,
   deleteOverlapMainField,
@@ -306,6 +305,7 @@ export default {
   insertMainFieldId,
   insertFile,
   updateFeed,
+  findFeedId,
   updateMainFieldId,
   updateFile,
   findtitle,

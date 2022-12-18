@@ -76,7 +76,7 @@ const createFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await postingDao.findFeedId(title);
+  const feedId: number = await postingDao.findFeedId(userId);
   await postingDao.insertMainField(mainFieldArray);
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();
@@ -155,7 +155,7 @@ const updateFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await postingDao.findFeedId(title);
+  const feedId: number = await postingDao.findFeedId(userId);
   await postingDao.insertMainField(mainFieldArray);
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();
@@ -168,8 +168,7 @@ const updateFeed = async (
 };
 
 const getFeed = async (userId: number) => {
-  const title: string = await postingDao.findtitle(userId);
-  const feedId: number = await postingDao.findFeedId(title);
+  const feedId: number = await postingDao.findFeedId(userId);
   const result: any = await postingDao.getFeed(feedId);
   return result;
 };
