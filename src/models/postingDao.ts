@@ -129,7 +129,10 @@ const findMainFieldId = async (mainFieldArray: string[]) => {
   return mainFieldIdArray;
 };
 
-const insertMainFieldId = async (feedId: number, mainFieldId: number[]) => {
+const insertMainFieldId = async (
+  feedId: number,
+  mainFieldId: (number | null)[]
+) => {
   for (let i = 0; i < mainFieldId.length; i++) {
     await myDataSource.query(`
       INSERT INTO feeds_main_fields
@@ -180,15 +183,45 @@ const updateFeed = async (
   `);
 };
 
-const updateMainFieldId = async (feedId: number, mainFieldId: number[]) => {
-  for (let i = 0; i < mainFieldId.length; i++) {
+const findfeedsMainFieldId = async (feedId: number) => {
+  const feedsMainFieldId = await myDataSource.query(`
+    SELECT
+        id
+    FROM
+        feeds_main_fields
+    WHERE
+        feeds_id = '${feedId}'
+  `);
+
+  return feedsMainFieldId;
+};
+
+const setNull = async (feedId: number, feedsMainFieldArray: number[]) => {
+  for (let i = 0; i < feedsMainFieldArray.length; i++) {
     await myDataSource.query(`
       UPDATE feeds_main_fields
       SET
           feeds_id = '${feedId}',
-          main_field_id = '${mainFieldId[i]}'
+          main_field_id = null
       WHERE
-          feeds_id = '${feedId}'
+          id = '${feedsMainFieldArray[i]}'
+    `);
+  }
+};
+
+const updateMainFieldId = async (
+  feedId: number,
+  mainFieldId: number[],
+  feedsMainFieldArray: number[]
+) => {
+  for (let i = 0; i < mainFieldId.length; i++) {
+    await myDataSource.query(`
+      UPDATE feeds_main_fields
+      SET
+          feeds_id = ${feedId},
+          main_field_id = ${mainFieldId[i]}
+      WHERE
+          id = ${feedsMainFieldArray[i]}
     `);
   }
 };
@@ -306,6 +339,8 @@ export default {
   insertFile,
   updateFeed,
   findFeedId,
+  findfeedsMainFieldId,
+  setNull,
   updateMainFieldId,
   updateFile,
   findtitle,

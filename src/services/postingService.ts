@@ -81,7 +81,7 @@ const createFeed = async (
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();
   await postingDao.foreignKeySetOne();
-  const mainFieldId: number[] = await postingDao.findMainFieldId(
+  const mainFieldId: (number | null)[] = await postingDao.findMainFieldId(
     mainFieldArray
   );
   await postingDao.insertMainFieldId(feedId, mainFieldId);
@@ -163,7 +163,13 @@ const updateFeed = async (
   const mainFieldId: number[] = await postingDao.findMainFieldId(
     mainFieldArray
   );
-  await postingDao.updateMainFieldId(feedId, mainFieldId);
+  const feedsMainFieldId = await postingDao.findfeedsMainFieldId(feedId);
+  const feedsMainFieldArray: number[] = [];
+  for (let i = 0; i < feedsMainFieldId.length; i++) {
+    feedsMainFieldArray.push(feedsMainFieldId[i].id);
+  }
+  await postingDao.setNull(feedId, feedsMainFieldArray);
+  await postingDao.updateMainFieldId(feedId, mainFieldId, feedsMainFieldArray);
   await postingDao.updateFile(feedId, fileName, file);
 };
 
