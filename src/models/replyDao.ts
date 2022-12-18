@@ -19,13 +19,16 @@ const getListOfRepliesByFeed = async (
   return await myDataSource
     .query(
       `
-          SELECT t2.id,
+          SELECT t2.id                           AS reply_id,
+                 t2.feed_id,
+                 u2.id                           AS feed_user_id,
                  t2.is_private,
-                 t2.user_id,
                  t2.comment,
                  t2.parent_reply_id,
+                 u3.id                           AS parent_user_id,
                  t2.reply_group,
                  t2.rnk,
+                 u.id                            AS reply_user_id,
                  u.company_name,
                  u.nickname,
                  u.email,
@@ -46,7 +49,7 @@ const getListOfRepliesByFeed = async (
                                      id ASC)   AS rnk,
                              r.parent_reply_id AS reply_group
                       FROM replies r
-                      WHERE feed_id = 1
+                      WHERE feed_id = ?
                         AND parent_reply_id) AS t1
                 UNION ALL
                 (SELECT r2.id,
@@ -59,16 +62,22 @@ const getListOfRepliesByFeed = async (
                         r2.parent_reply_id AS rnk,
                         r2.id              AS reply_group
                  FROM replies r2
-                 WHERE r2.feed_id = 1
+                 WHERE r2.feed_id = ?
                    AND r2.parent_reply_id = 0
                  ORDER BY r2.id ASC)) AS t2
                    INNER JOIN users u ON
               t2.user_id = u.id
+                   LEFT JOIN replies r3 ON
+              r3.id = t2.parent_reply_id
+                   LEFT JOIN users u3 ON
+              u3.id = r3.user_id
+                   LEFT JOIN feeds f ON f.id = t2.feed_id
+                   LEFT JOIN users u2 ON f.user_id = u2.id
           ORDER BY reply_group,
                    rnk
                 ${pagenation}
     `,
-      [pagenation]
+      [feed_id, feed_id, pagenation]
     )
     .then(value => {
       let ret = value
@@ -88,18 +97,22 @@ const getListOfRepliesByFeed = async (
       //       let createObject = { id: e.parent_reply_id };
       //       e = Object.create(createObject);
       //     }
-      //     e.rerply = [];
+      //     e.reply = [];
       //     e.reply.push(e);
       //   });
 
       value
         .filter((e: any) => e.parent_reply_id !== 0)
         .forEach((e: any) =>
-          ret.find((re: any) => re.id === e.parent_reply_id).reply.push(e)
+          ret.find((re: any) => re.reply_id === e.parent_reply_id).reply.push(e)
         );
 
       value
-        .filter((e: any) => e.is_private === 1 && e.user_id !== user_id)
+        .filter(
+          (e: any) =>
+            e.is_private === 1 &&
+            (e.user_id || e.parent_user_id || e.feed_user_id) !== user_id
+        )
         .map((e: any) => {
           e.comment = false;
           return e;

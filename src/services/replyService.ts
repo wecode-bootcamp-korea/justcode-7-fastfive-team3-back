@@ -5,7 +5,7 @@ const getListOfRepliesByFeed = async (
   feed_id: number,
   page: number
 ) => {
-  let limit = 20; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
+  let limit = 300; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 
   if (!page) {
     page = 1;
