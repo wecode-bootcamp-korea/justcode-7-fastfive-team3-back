@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import feedService from '../services/feedService';
+import postingService from '../services/postingService';
 import { checkRequireKeys } from '../utils/util';
 import { Feed } from '../types/feed';
 
@@ -38,7 +38,7 @@ const createFeed = async (req: Request, res: Response) => {
   ];
   checkRequireKeys(REQUIRE_KEYS);
 
-  await feedService.createFeed(
+  await postingService.createFeed(
     userId,
     category,
     title,
@@ -94,7 +94,7 @@ const updateFeed = async (req: Request, res: Response) => {
   ];
   checkRequireKeys(REQUIRE_KEYS);
 
-  await feedService.updateFeed(
+  await postingService.updateFeed(
     userId,
     category,
     title,
@@ -117,7 +117,7 @@ const updateFeed = async (req: Request, res: Response) => {
 
 const getFeed = async (req: Request, res: Response) => {
   const userId: number = req.userInfo.id;
-  const result = await feedService.getFeed(userId);
+  const result = await postingService.getFeed(userId);
 
   res.status(200).json(result);
 };

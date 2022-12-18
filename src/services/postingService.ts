@@ -1,4 +1,4 @@
-import feedDao from '../models/feedDao';
+import postingDao from '../models/postingDao';
 
 const createFeed = async (
   userId: number,
@@ -18,7 +18,7 @@ const createFeed = async (
   fileSize?: number
 ) => {
   const userAuth: { userSortId: number; userAdminId: number } =
-    await feedDao.findUserAuth(userId);
+    await postingDao.findUserAuth(userId);
 
   if (
     !(
@@ -32,7 +32,7 @@ const createFeed = async (
     throw error;
   }
 
-  const existFeed = await feedDao.isExistFeed(userId);
+  const existFeed = await postingDao.isExistFeed(userId);
 
   if (existFeed.length === 1) {
     const error = new Error(' Exist User Feed! ');
@@ -61,10 +61,10 @@ const createFeed = async (
   }
   const categoryName = categoryNameArray[0];
   const mainFieldArray = main_field.split(',');
-  const branchId: number = await feedDao.findBranchId(branch);
-  const categoryId: number = await feedDao.findCategoryId(categoryName);
+  const branchId: number = await postingDao.findBranchId(branch);
+  const categoryId: number = await postingDao.findCategoryId(categoryName);
 
-  await feedDao.createFeed(
+  await postingDao.createFeed(
     userId,
     categoryId,
     title,
@@ -76,14 +76,16 @@ const createFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await feedDao.findFeedId(title);
-  await feedDao.insertMainField(mainFieldArray);
-  await feedDao.foreignKeySetZero();
-  await feedDao.deleteOverlapMainField();
-  await feedDao.foreignKeySetOne();
-  const mainFieldId: number[] = await feedDao.findMainFieldId(mainFieldArray);
-  await feedDao.insertMainFieldId(feedId, mainFieldId);
-  await feedDao.insertFile(feedId, fileName, file);
+  const feedId: number = await postingDao.findFeedId(title);
+  await postingDao.insertMainField(mainFieldArray);
+  await postingDao.foreignKeySetZero();
+  await postingDao.deleteOverlapMainField();
+  await postingDao.foreignKeySetOne();
+  const mainFieldId: number[] = await postingDao.findMainFieldId(
+    mainFieldArray
+  );
+  await postingDao.insertMainFieldId(feedId, mainFieldId);
+  await postingDao.insertFile(feedId, fileName, file);
 };
 
 const updateFeed = async (
@@ -104,7 +106,7 @@ const updateFeed = async (
   fileSize?: number
 ) => {
   const userAuth: { userSortId: number; userAdminId: number } =
-    await feedDao.findUserAuth(userId);
+    await postingDao.findUserAuth(userId);
 
   if (
     !(
@@ -139,9 +141,9 @@ const updateFeed = async (
   }
   const categoryName = categoryNameArray[0];
   const mainFieldArray = main_field.split(',');
-  const branchId: number = await feedDao.findBranchId(branch);
-  const categoryId: number = await feedDao.findCategoryId(categoryName);
-  await feedDao.updateFeed(
+  const branchId: number = await postingDao.findBranchId(branch);
+  const categoryId: number = await postingDao.findCategoryId(categoryName);
+  await postingDao.updateFeed(
     userId,
     categoryId,
     title,
@@ -153,20 +155,22 @@ const updateFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await feedDao.findFeedId(title);
-  await feedDao.insertMainField(mainFieldArray);
-  await feedDao.foreignKeySetZero();
-  await feedDao.deleteOverlapMainField();
-  await feedDao.foreignKeySetOne();
-  const mainFieldId: number[] = await feedDao.findMainFieldId(mainFieldArray);
-  await feedDao.updateMainFieldId(feedId, mainFieldId);
-  await feedDao.updateFile(feedId, fileName, file);
+  const feedId: number = await postingDao.findFeedId(title);
+  await postingDao.insertMainField(mainFieldArray);
+  await postingDao.foreignKeySetZero();
+  await postingDao.deleteOverlapMainField();
+  await postingDao.foreignKeySetOne();
+  const mainFieldId: number[] = await postingDao.findMainFieldId(
+    mainFieldArray
+  );
+  await postingDao.updateMainFieldId(feedId, mainFieldId);
+  await postingDao.updateFile(feedId, fileName, file);
 };
 
 const getFeed = async (userId: number) => {
-  const title: string = await feedDao.findtitle(userId);
-  const feedId: number = await feedDao.findFeedId(title);
-  const result: any = await feedDao.getFeed(feedId);
+  const title: string = await postingDao.findtitle(userId);
+  const feedId: number = await postingDao.findFeedId(title);
+  const result: any = await postingDao.getFeed(feedId);
   return result;
 };
 
