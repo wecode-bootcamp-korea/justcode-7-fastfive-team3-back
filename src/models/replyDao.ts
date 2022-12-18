@@ -35,7 +35,15 @@ const getListOfRepliesByFeed = async (
                  u.position_name,
                  u.group_id,
                  u.is_admin,
-                 SUBSTRING(t2.created_at, 1, 16) AS created_at
+                 CASE
+                     WHEN instr(DATE_FORMAT(t2.created_at, '%Y년 %m월 %d일 %p %h:%i'), 'PM') > 0
+                         THEN
+                         REPLACE(DATE_FORMAT(t2.created_at, '%Y년 %m월 %d일 %p %h:%i'),
+                                 'PM',
+                                 '오후')
+                     ELSE
+                         REPLACE(DATE_FORMAT(t2.created_at, '%Y년 %m월 %d일 %p %h:%i'), 'AM', '오전')
+                     END AS created_at
           FROM (SELECT *
                 FROM (SELECT r.id,
                              r.is_private,
