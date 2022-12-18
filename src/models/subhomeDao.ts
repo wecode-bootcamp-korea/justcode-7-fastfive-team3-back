@@ -30,6 +30,7 @@ const getSubhome2List = async (category_id: string) => {
             f.user_id = u.id
         WHERE c.parent_category_id IS NULL
             ${category_id}
+        ORDER BY feed_id DESC
     `
   );
 };

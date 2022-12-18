@@ -31,6 +31,7 @@ const getFeedList = async (selectFilters: string | null) => {
                  LEFT JOIN tables t1 ON
             t1.feed_id = f.id
             ${selectFilters}
+        ORDER BY feed_id DESC
     `
   );
 };
