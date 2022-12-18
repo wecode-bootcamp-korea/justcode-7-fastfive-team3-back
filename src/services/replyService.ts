@@ -5,7 +5,7 @@ const getListOfRepliesByFeed = async (
   feed_id: number,
   page: number
 ) => {
-  let limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
+  let limit = 20; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 
   if (!page) {
     page = 1;
@@ -41,10 +41,10 @@ const crateReply = async (
 const updateReply = async (
   user_id: number,
   reply_id: number,
-  comment: string
+  comment: string,
+  status?: boolean
 ) => {
   const [isReply] = await replyDao.findReply(reply_id);
-  console.log('isReply =', isReply);
   if (!isReply) {
     throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
     return;
@@ -55,11 +55,18 @@ const updateReply = async (
     return;
   }
 
-  if (isReply.comment === comment) {
+  if (isReply.comment === comment && isReply.status === status) {
     throw { status: 400, message: 'NO_CHANGE' };
   }
 
-  return await replyDao.updateReply(reply_id, comment);
+  if (status === undefined) {
+    status = true;
+  }
+  const statusValue = `, status = ${status}`;
+
+  console.log('statusValue =', statusValue);
+
+  return await replyDao.updateReply(reply_id, comment, statusValue);
 };
 
 const deleteReply = async (user_id: number, reply_id: number) => {

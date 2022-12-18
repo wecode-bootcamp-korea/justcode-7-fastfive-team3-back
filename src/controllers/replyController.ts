@@ -47,6 +47,7 @@ const updateReply = async (req: Request, res: Response) => {
   let user_id: number = req.userInfo.id;
   let reply_id: number = Number(req.body.reply_id);
   let comment: string = String(req.body.comment);
+  let status: boolean = Boolean(req.body.status);
 
   const REQUIRED_KEYS: requireKeys = {
     reply_id,
@@ -55,7 +56,14 @@ const updateReply = async (req: Request, res: Response) => {
 
   checkRequireKeys(REQUIRED_KEYS);
 
-  const result = await replyService.updateReply(user_id, reply_id, comment);
+  console.log('status =', status);
+
+  const result = await replyService.updateReply(
+    user_id,
+    reply_id,
+    comment,
+    status
+  );
 
   res.status(200).json(result);
 };

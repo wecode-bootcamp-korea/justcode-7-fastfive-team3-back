@@ -19,13 +19,20 @@ const getListOfRepliesByFeed = async (
   return await myDataSource
     .query(
       `
-          SELECT t2.*,
+          SELECT t2.id,
+                 t2.status,
+                 t2.user_id,
+                 t2.comment,
+                 t2.parent_reply_id,
+                 t2.reply_group,
+                 t2.rnk,
                  u.company_name,
                  u.nickname,
                  u.email,
                  u.position_name,
                  u.group_id,
-                 u.is_admin
+                 u.is_admin,
+                 SUBSTRING(t2.created_at, 1, 16) AS created_at
           FROM (SELECT *
                 FROM (SELECT r.id,
                              r.status,
@@ -71,6 +78,7 @@ const getListOfRepliesByFeed = async (
           return e;
         });
 
+      // TODO 페이지네이션 후 첫 객체가 대댓글일때 상위댓글 객체 생성 처리
       // value
       //   .filter((e: any) => e.parent_reply_id !== 0)
       //   .map((e: any) => {
@@ -89,6 +97,13 @@ const getListOfRepliesByFeed = async (
         .forEach((e: any) =>
           ret.find((re: any) => re.id === e.parent_reply_id).reply.push(e)
         );
+
+      value
+        .filter((e: any) => e.status === 0 && e.user_id !== user_id)
+        .map((e: any) => {
+          e.comment = '비공개 덧글입니다';
+          return e;
+        });
       return ret;
     });
 };
@@ -143,12 +158,17 @@ const findReply = async (reply_id: number) => {
     [reply_id]
   );
 };
-const updateReply = async (reply_id: number, comment: string) => {
+const updateReply = async (
+  reply_id: number,
+  comment: string,
+  status?: string
+) => {
   await myDataSource.query(
     `
     UPDATE
       replies SET
       comment = '${comment}'
+      ${status}
     WHERE
       id = ${reply_id}
     `

@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `replies` (
                                          `feed_id` int NOT NULL,
                                          `comment` varchar(1000) NOT NULL,
                                          `parent_reply_id` int DEFAULT (0),
-                                         `status` boolean NOT NULL DEFAULT (true),
+                                         `private` boolean NOT NULL DEFAULT (false),
                                          `created_at` datetime NOT NULL DEFAULT (now()),
                                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
