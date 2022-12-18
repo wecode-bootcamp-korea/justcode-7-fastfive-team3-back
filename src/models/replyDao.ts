@@ -20,7 +20,7 @@ const getListOfRepliesByFeed = async (
     .query(
       `
           SELECT t2.id,
-                 t2.status,
+                 t2.is_private,
                  t2.user_id,
                  t2.comment,
                  t2.parent_reply_id,
@@ -35,7 +35,7 @@ const getListOfRepliesByFeed = async (
                  SUBSTRING(t2.created_at, 1, 16) AS created_at
           FROM (SELECT *
                 FROM (SELECT r.id,
-                             r.status,
+                             r.is_private,
                              r.user_id,
                              r.feed_id,
                              r.comment,
@@ -50,7 +50,7 @@ const getListOfRepliesByFeed = async (
                         AND parent_reply_id) AS t1
                 UNION ALL
                 (SELECT r2.id,
-                        r2.status,
+                        r2.is_private,
                         r2.user_id,
                         r2.feed_id,
                         r2.comment,
@@ -99,9 +99,9 @@ const getListOfRepliesByFeed = async (
         );
 
       value
-        .filter((e: any) => e.status === 0 && e.user_id !== user_id)
+        .filter((e: any) => e.is_private === 1 && e.user_id !== user_id)
         .map((e: any) => {
-          e.comment = '비공개 덧글입니다';
+          e.comment = false;
           return e;
         });
       return ret;
@@ -112,7 +112,8 @@ const createReply = async (
   user_id: number,
   feed_id: number,
   comment: string,
-  parent_reply_id?: number
+  parent_reply_id: number,
+  is_private: boolean
 ) => {
   await myDataSource.query(
     `
@@ -121,12 +122,14 @@ const createReply = async (
       user_id = ${user_id},
       feed_id = ${feed_id},
       comment = '${comment}',
-      parent_reply_id = ${parent_reply_id}
+      parent_reply_id = ${parent_reply_id},
+      is_private = ${is_private}
     `
   );
   return await myDataSource.query(
     `
         SELECT r.id,
+               r.is_private,
                r.user_id,
                u.company_name,
                u.nickname,
@@ -135,7 +138,6 @@ const createReply = async (
                r.feed_id,
                r.comment,
                r.parent_reply_id,
-               r.status,
                SUBSTRING(r.created_at, 1, 16) AS created_at
         FROM replies r
                  JOIN users u ON
@@ -161,14 +163,14 @@ const findReply = async (reply_id: number) => {
 const updateReply = async (
   reply_id: number,
   comment: string,
-  status?: string
+  is_private?: string
 ) => {
   await myDataSource.query(
     `
     UPDATE
       replies SET
       comment = '${comment}'
-      ${status}
+      ${is_private}
     WHERE
       id = ${reply_id}
     `
@@ -176,6 +178,7 @@ const updateReply = async (
   return await myDataSource.query(
     `
         SELECT r.id,
+               r.is_private,
                r.user_id,
                u.company_name,
                u.nickname,
@@ -184,7 +187,6 @@ const updateReply = async (
                r.feed_id,
                r.comment,
                r.parent_reply_id,
-               r.status,
                SUBSTRING(r.created_at, 1, 16) AS created_at
         FROM replies r
                  JOIN users u ON

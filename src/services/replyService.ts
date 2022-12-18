@@ -30,19 +30,29 @@ const crateReply = async (
   user_id: number,
   feed_id: number,
   comment: string,
-  parent_reply_id?: number
+  parent_reply_id?: number,
+  is_private?: boolean
 ) => {
   if (!parent_reply_id) {
     parent_reply_id = 0;
   }
-  return await replyDao.createReply(user_id, feed_id, comment, parent_reply_id);
+
+  is_private = is_private ?? false;
+
+  return await replyDao.createReply(
+    user_id,
+    feed_id,
+    comment,
+    parent_reply_id,
+    is_private
+  );
 };
 
 const updateReply = async (
   user_id: number,
   reply_id: number,
   comment: string,
-  status?: boolean
+  is_private?: boolean
 ) => {
   const [isReply] = await replyDao.findReply(reply_id);
   if (!isReply) {
@@ -55,14 +65,12 @@ const updateReply = async (
     return;
   }
 
-  if (isReply.comment === comment && isReply.status === status) {
+  if (isReply.comment === comment && isReply.private === is_private) {
     throw { status: 400, message: 'NO_CHANGE' };
   }
 
-  if (status === undefined) {
-    status = true;
-  }
-  const statusValue = `, status = ${status}`;
+  is_private = is_private ?? false;
+  const statusValue = `, is_private = ${is_private}`;
 
   console.log('statusValue =', statusValue);
 
