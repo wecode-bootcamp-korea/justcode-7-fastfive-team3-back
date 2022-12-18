@@ -52,7 +52,7 @@ const createFeed = async (
     throw error;
   }
 
-  const categoryArray = category.split(',');
+  const categoryArray = category.replace(/ /g, '').split(',');
   const categoryNameArray: string[] = [];
   if (categoryArray.length === 1) {
     categoryNameArray.push(categoryArray[0]);
@@ -60,7 +60,7 @@ const createFeed = async (
     categoryNameArray.push(categoryArray[1]);
   }
   const categoryName = categoryNameArray[0];
-  const mainFieldArray = main_field.split(',');
+  const mainFieldArray = main_field.replace(/ /g, '').split(',');
   const branchId: number = await postingDao.findBranchId(branch);
   const categoryId: number = await postingDao.findCategoryId(categoryName);
 
@@ -132,7 +132,7 @@ const updateFeed = async (
     throw error;
   }
 
-  const categoryArray = category.split(',');
+  const categoryArray = category.replace(/ /g, '').split(',');
   const categoryNameArray: string[] = [];
   if (categoryArray.length === 1) {
     categoryNameArray.push(categoryArray[0]);
@@ -140,7 +140,7 @@ const updateFeed = async (
     categoryNameArray.push(categoryArray[1]);
   }
   const categoryName = categoryNameArray[0];
-  const mainFieldArray = main_field.split(',');
+  const mainFieldArray = main_field.replace(/ /g, '').split(',');
   const branchId: number = await postingDao.findBranchId(branch);
   const categoryId: number = await postingDao.findCategoryId(categoryName);
   await postingDao.updateFeed(
