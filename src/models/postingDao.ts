@@ -176,7 +176,7 @@ const updateFeed = async (
         use_branch_id = '${branchId}',
         status_id = '1'
     WHERE
-        id = '${userId}'
+        user_id = '${userId}'
   `);
 };
 
