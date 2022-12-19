@@ -11,6 +11,11 @@ type requireKeys = {
   is_admin?: number;
 };
 
+const checkUserPermission = async (req: Request, res: Response) => {
+  let user_id: number = req.userInfo.id;
+  const result = await usersService.checkUserPermission(user_id);
+  res.status(200).json(result);
+};
 const signUp = async (req: Request, res: Response) => {
   const { nickname, password, email, company_name, sort_id, is_admin } =
     req.body;
@@ -47,4 +52,4 @@ const login = async (req: Request, res: Response) => {
   res.status(200).json(token);
 };
 
-export default { signUp, login };
+export default { signUp, login, checkUserPermission };

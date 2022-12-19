@@ -4,6 +4,11 @@ import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.SECRET_KEY;
 
+const checkUserPermission = async (user_id: number) => {
+  // TODO 유저 회사의 입주상태에 따른 에러메세지 처리 추가하기
+  return await usersDao.checkUserPermission(user_id);
+};
+
 const signUp = async (
   nickname: string,
   password: string,
@@ -50,4 +55,4 @@ const logIn = async (email: string, password: string) => {
   return { authInfo };
 };
 
-export default { signUp, logIn };
+export default { signUp, logIn, checkUserPermission };

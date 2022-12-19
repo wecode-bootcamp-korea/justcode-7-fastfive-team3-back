@@ -1,5 +1,30 @@
 import myDataSource from './index';
 
+const checkUserPermission = async (user_id: number) => {
+  return await myDataSource
+    .query(
+      `
+        SELECT id,
+               is_admin,
+               company_name,
+               nickname,
+               email,
+               position_name,
+               group_id
+        FROM users u
+        WHERE id = ?
+    `,
+      [user_id]
+    )
+    .then(value => {
+      const [item] = value;
+      return {
+        ...item,
+        is_admin: item.is_admin === 1,
+      };
+    });
+};
+
 const signUp = async (
   nickname: string,
   hashedPw: string,
@@ -29,4 +54,4 @@ const logIn = async (email: string) => {
   return result;
 };
 
-export default { signUp, logIn };
+export default { signUp, logIn, checkUserPermission };
