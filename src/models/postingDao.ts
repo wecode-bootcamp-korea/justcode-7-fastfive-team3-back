@@ -16,19 +16,6 @@ const findUserAuth = async (userId: number) => {
   return userAuth;
 };
 
-const isExistFeed = async (userId: number) => {
-  let feed = await myDataSource.query(`
-  SELECT
-      id
-  FROM
-      feeds
-  WHERE
-      user_id = '${userId}' AND status_id = 1
-  `);
-
-  return feed;
-};
-
 const isExistTemporarySaveFeed = async (userId: number) => {
   let TemporarySaveFeed = await myDataSource.query(`
   SELECT
@@ -344,7 +331,6 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
 
 export default {
   findUserAuth,
-  isExistFeed,
   isExistTemporarySaveFeed,
   findBranchId,
   createTemporarySaveFeed,
