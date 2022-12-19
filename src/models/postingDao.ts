@@ -43,20 +43,6 @@ const findBranchId = async (branch: string) => {
   return branchId;
 };
 
-const findCategoryId = async (category: string) => {
-  let [categoryId] = await myDataSource.query(`
-    SELECT
-        id
-    FROM
-        category
-    WHERE
-        category = '${category}'
-  `);
-
-  categoryId = categoryId.id;
-  return categoryId;
-};
-
 const createFeed = async (
   userId: number,
   categoryId: number,
@@ -328,7 +314,6 @@ export default {
   findUserAuth,
   isExistFeed,
   findBranchId,
-  findCategoryId,
   createFeed,
   insertMainField,
   foreignKeySetZero,
