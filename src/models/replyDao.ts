@@ -19,18 +19,18 @@ const getListOfRepliesByFeed = async (
   let result = await myDataSource
     .query(
       `
-          SELECT t2.id                           AS reply_id,
+          SELECT t2.id   AS reply_id,
                  t2.feed_id,
-                 u2.id                           AS feed_user_id,
+                 u2.id   AS feed_user_id,
                  t2.is_private,
                  t2.is_deleted,
                  t2.comment,
                  t2.parent_reply_id,
-                 u3.id                           AS parent_user_id,
+                 u3.id   AS parent_user_id,
                  t2.reply_group,
                  t2.rnk,
-                 u.id                            AS reply_user_id,
-                 u.company_name,
+                 u.id    AS reply_user_id,
+                 ug.company_name,
                  u.nickname,
                  u.email,
                  u.position_name,
@@ -59,7 +59,7 @@ const getListOfRepliesByFeed = async (
                                      id ASC)   AS rnk,
                              r.parent_reply_id AS reply_group
                       FROM replies r
-                      WHERE feed_id = ?
+                      WHERE feed_id = 1
                         AND parent_reply_id) AS t1
                 UNION ALL
                 (SELECT r2.id,
@@ -73,7 +73,7 @@ const getListOfRepliesByFeed = async (
                         r2.parent_reply_id AS rnk,
                         r2.id              AS reply_group
                  FROM replies r2
-                 WHERE r2.feed_id = ?
+                 WHERE r2.feed_id = 1
                    AND r2.parent_reply_id = 0
                  ORDER BY r2.id ASC)) AS t2
                    INNER JOIN users u ON
@@ -82,8 +82,12 @@ const getListOfRepliesByFeed = async (
               r3.id = t2.parent_reply_id
                    LEFT JOIN users u3 ON
               u3.id = r3.user_id
-                   LEFT JOIN feeds f ON f.id = t2.feed_id
-                   LEFT JOIN users u2 ON f.user_id = u2.id
+                   LEFT JOIN user_group ug ON
+              ug.id = u.group_id
+                   LEFT JOIN feeds f ON
+              f.id = t2.feed_id
+                   LEFT JOIN users u2 ON
+              f.user_id = u2.id
           ORDER BY reply_group,
                    rnk
                 ${pagenation}
@@ -165,7 +169,7 @@ const createReply = async (
         SELECT r.id,
                r.is_private,
                r.user_id,
-               u.company_name,
+               ug.company_name,
                u.nickname,
                u.email,
                u.position_name,
@@ -176,6 +180,8 @@ const createReply = async (
         FROM replies r
                  JOIN users u ON
             r.user_id = u.id
+                LEFT JOIN user_group ug ON
+            ug.id = u.group_id
         WHERE r.user_id = ? AND r.feed_id = ?
         ORDER BY created_at DESC
         LIMIT 1
@@ -214,7 +220,7 @@ const updateReply = async (
         SELECT r.id,
                r.is_private,
                r.user_id,
-               u.company_name,
+               ug.company_name,
                u.nickname,
                u.email,
                u.position_name,
@@ -225,6 +231,8 @@ const updateReply = async (
         FROM replies r
                  JOIN users u ON
             r.user_id = u.id
+                LEFT JOIN user_group ug ON 
+            ug.id = u.group_id
         WHERE r.id = ${reply_id}
     `,
     [reply_id]

@@ -26,16 +26,16 @@ CREATE TABLE IF NOT EXISTS `user_group` (
 CREATE TABLE IF NOT EXISTS `feeds` (
                                        `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                        `user_id` int NOT NULL,
-                                       `category_id` int NOT NULL,
-                                       `title` varchar(100) NOT NULL,
-                                       `logo_img` varchar(100) NOT NULL,
-                                       `introduction` varchar(100) NOT NULL,
+                                       `category_id` int,
+                                       `title` varchar(100),
+                                       `logo_img` varchar(100),
+                                       `introduction` varchar(100),
                                        `website_url` varchar(250),
                                        `detail_introduction` varchar(1000),
                                        `member_benefit` varchar(100),
-                                       `contact` varchar(50) NOT NULL,
-                                       `use_branch_id` int NOT NULL,
-                                       `status_id` int NOT NULL DEFAULT (1),
+                                       `contact` varchar(50),
+                                       `use_branch_id` int,
+                                       `status_id` int DEFAULT (1),
                                        `created_at` datetime NOT NULL DEFAULT (now()),
                                        `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
