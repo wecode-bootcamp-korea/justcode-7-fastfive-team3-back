@@ -88,6 +88,7 @@ CREATE TABLE IF NOT EXISTS `replies` (
                                          `comment` varchar(1000) NOT NULL,
                                          `parent_reply_id` int DEFAULT (0),
                                          `is_private` boolean NOT NULL DEFAULT (false),
+                                         `is_deleted` boolean DEFAULT (false),
                                          `created_at` datetime NOT NULL DEFAULT (now()),
                                          `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );

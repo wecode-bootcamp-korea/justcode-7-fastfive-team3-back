@@ -23,6 +23,7 @@ const getListOfRepliesByFeed = async (
                  t2.feed_id,
                  u2.id                           AS feed_user_id,
                  t2.is_private,
+                 t2.is_deleted,
                  t2.comment,
                  t2.parent_reply_id,
                  u3.id                           AS parent_user_id,
@@ -47,6 +48,7 @@ const getListOfRepliesByFeed = async (
           FROM (SELECT *
                 FROM (SELECT r.id,
                              r.is_private,
+                             r.is_deleted,
                              r.user_id,
                              r.feed_id,
                              r.comment,
@@ -62,6 +64,7 @@ const getListOfRepliesByFeed = async (
                 UNION ALL
                 (SELECT r2.id,
                         r2.is_private,
+                        r2.is_deleted,
                         r2.user_id,
                         r2.feed_id,
                         r2.comment,
@@ -92,6 +95,8 @@ const getListOfRepliesByFeed = async (
         return {
           ...item,
           is_private: item.is_private === 1,
+          is_deleted: item.is_deleted === 1,
+          comment: item.comment === '0' ? false : item.comment,
         };
       });
 
@@ -229,9 +234,12 @@ const updateReply = async (
 const deleteReply = async (reply_id: number) => {
   return await myDataSource.query(
     `
-        DELETE
-        FROM replies
-        WHERE id = ?
+        UPDATE
+            replies
+        SET comment = FALSE,
+            is_deleted = TRUE
+        WHERE
+            id = ?
     `,
     [reply_id]
   );
