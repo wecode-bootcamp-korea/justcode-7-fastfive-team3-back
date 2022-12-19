@@ -16,7 +16,7 @@ const getListOfRepliesByFeed = async (
   feed_id: number,
   pagenation?: string
 ) => {
-  return await myDataSource
+  let result = await myDataSource
     .query(
       `
           SELECT t2.id                           AS reply_id,
@@ -88,6 +88,13 @@ const getListOfRepliesByFeed = async (
       [feed_id, feed_id, pagenation]
     )
     .then(value => {
+      value = [...value].map(item => {
+        return {
+          ...item,
+          is_private: item.is_private === 1,
+        };
+      });
+
       let ret = value
         .filter((e: any) => e.parent_reply_id === 0)
         .map((e: any) => {
@@ -127,6 +134,7 @@ const getListOfRepliesByFeed = async (
         });
       return ret;
     });
+  return result;
 };
 
 const createReply = async (
