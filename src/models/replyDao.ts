@@ -16,7 +16,7 @@ const getListOfRepliesByFeed = async (
   feed_id: number,
   pagenation?: string
 ) => {
-  let result = await myDataSource
+  return await myDataSource
     .query(
       `
           SELECT t2.id   AS reply_id,
@@ -34,7 +34,6 @@ const getListOfRepliesByFeed = async (
                  u.nickname,
                  u.email,
                  u.position_name,
-                 u.group_id,
                  u.is_admin,
                  CASE
                      WHEN instr(DATE_FORMAT(t2.created_at, '%Y년 %m월 %d일 %p %h:%i'), 'PM') > 0
@@ -95,55 +94,46 @@ const getListOfRepliesByFeed = async (
       [feed_id, feed_id, pagenation]
     )
     .then(value => {
+      // // TODO 페이지네이션 후 첫 객체가 대댓글일때 상위댓글 객체 생성 처리
+      value.map((e: any) => {
+        if (value[0].parent_reply_id !== 0) {
+          let temporary = { reply_id: e.parent_reply_id, parent_reply_id: 0 };
+          value.unshift(temporary);
+        }
+        return value;
+      });
+
       value = [...value].map(item => {
         return {
           ...item,
           is_private: item.is_private === 1,
           is_deleted: item.is_deleted === 1,
           comment: item.comment === '0' ? false : item.comment,
+          reply: [],
         };
       });
-
-      let ret = value
-        .filter((e: any) => e.parent_reply_id === 0)
-        .map((e: any) => {
-          e.reply = [];
-          return e;
-        });
-
-      // TODO 페이지네이션 후 첫 객체가 대댓글일때 상위댓글 객체 생성 처리
-      // value
-      //   .filter((e: any) => e.parent_reply_id !== 0)
-      //   .map((e: any) => {
-      //     const result = ret.find((re: any) => re.id === e.parent_reply_id);
-      //     console.log('result =', result);
-      //     if (!result) {
-      //       let createObject = { id: e.parent_reply_id };
-      //       e = Object.create(createObject);
-      //     }
-      //     e.reply = [];
-      //     e.reply.push(e);
-      //   });
-
-      value
-        .filter((e: any) => e.parent_reply_id !== 0)
-        .forEach((e: any) =>
-          ret.find((re: any) => re.reply_id === e.parent_reply_id).reply.push(e)
-        );
 
       value
         .filter(
           (e: any) =>
-            e.is_private === 1 &&
+            e.is_private === true &&
             (e.user_id || e.parent_user_id || e.feed_user_id) !== user_id
         )
         .map((e: any) => {
           e.comment = false;
           return e;
         });
-      return ret;
+
+      value
+        .filter((e: any) => e.parent_reply_id !== 0)
+        .forEach((e: any) =>
+          value
+            .find((re: any) => re.reply_id === e.parent_reply_id)
+            .reply.push(e)
+        );
+
+      return value.filter((e: any) => e.parent_reply_id === 0);
     });
-  return result;
 };
 
 const createReply = async (
