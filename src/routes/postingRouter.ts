@@ -4,22 +4,26 @@ import uplad from '../middlewares/multer';
 import { catchMiddleware } from '../middlewares/middleware';
 import { authMiddleware } from '../middlewares/middleware';
 
-import feedController from '../controllers/feedController';
+import postingController from '../controllers/postingController';
 
 router.post(
-  '/upload',
+  '/posting',
   authMiddleware,
   uplad.array('file', 4),
-  catchMiddleware(feedController.createFeed)
+  catchMiddleware(postingController.createFeed)
 );
 
 router.put(
-  '/upload',
+  '/posting',
   authMiddleware,
   uplad.array('file', 4),
-  catchMiddleware(feedController.updateFeed)
+  catchMiddleware(postingController.updateFeed)
 );
 
-router.get('/upload', authMiddleware, catchMiddleware(feedController.getFeed));
+router.get(
+  '/posting',
+  authMiddleware,
+  catchMiddleware(postingController.getFeed)
+);
 
 export default router;
