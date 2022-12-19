@@ -23,7 +23,7 @@ const isExistFeed = async (userId: number) => {
   FROM
       feeds
   WHERE
-      user_id = '${userId}'
+      user_id = '${userId}' AND status_id = 1
   `);
 
   return feed;
@@ -55,7 +55,119 @@ const findBranchId = async (branch: string) => {
   return branchId;
 };
 
-const createFeed = async (
+const createTemporarySaveFeed = async (
+  userId: number,
+  categoryId: number | null,
+  title: string | null,
+  image: string | null,
+  introduction: string | null,
+  hompage: string | null,
+  detail_introduction: string | null,
+  member_benefit: string | null,
+  contact: string | null,
+  branchId: number | null
+) => {
+  await myDataSource.query(`
+    INSERT INTO feeds
+        (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
+    VALUES
+        ('${userId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}, 3)
+  `);
+};
+
+const getFeed = async (feedId: number) => {
+  let feeds = await myDataSource.query(`
+    SELECT
+        f.id AS feed_id,
+        c.id AS category_id,
+        c.category,
+        c3.parent_category_id AS parent_category_id,
+        c3.category AS parent_category,
+        f.title,
+        f.logo_img,
+        f.introduction,
+        f.website_url,
+        fi.field_name,
+        f.detail_introduction,
+        f.member_benefit,
+        f.contact,
+        cf.file_name,
+        cf.file_link,
+        b.branch_name,
+        f.updated_at
+    FROM
+        feeds AS f
+            LEFT JOIN
+        category AS c ON c.id = f.category_id
+            LEFT JOIN
+        (SELECT
+            c1.id, c1.category AS detail, c2.category, c2.id as parent_category_id
+        FROM
+            category AS c1
+        INNER JOIN category AS c2 ON c2.id = c1.parent_category_id) AS c3 ON c3.id = c.id
+            LEFT JOIN
+        (SELECT
+            feeds_id,
+                JSON_ARRAYAGG(JSON_OBJECT('id', main_field.id, 'main_field', main_field.field_name)) AS field_name
+        FROM
+            feeds_main_fields
+        JOIN main_field ON feeds_main_fields.main_field_id = main_field.id
+        GROUP BY feeds_id) AS fi ON fi.feeds_id = f.id
+            LEFT JOIN
+        (SELECT
+            feed_id, file_name, file_link
+        FROM
+            company_file) AS cf ON cf.feed_id = f.id
+            LEFT JOIN
+        (SELECT
+            id, branch_name
+        FROM
+            branch) AS b ON b.id = f.use_branch_id
+        WHERE f.id = '${feedId}';
+  `);
+
+  feeds = [...feeds].map(item => {
+    return {
+      ...item,
+      field_name: JSON.parse(item.field_name),
+    };
+  });
+
+  return feeds;
+};
+
+const updateTemporarySaveFeed = async (
+  userId: number,
+  categoryId: number | null,
+  title: string | null,
+  image: string | null,
+  introduction: string | null,
+  hompage: string | null,
+  detail_introduction: string | null,
+  member_benefit: string | null,
+  contact: string | null,
+  branchId: number | null
+) => {
+  await myDataSource.query(`
+    UPDATE feeds
+    SET
+        user_id = '${userId}',
+        category_id = ${categoryId},
+        title = '${title}',
+        logo_img = '${image}',
+        introduction = '${introduction}',
+        website_url = '${hompage}',
+        detail_introduction = '${detail_introduction}',
+        member_benefit = '${member_benefit}',
+        contact = '${contact}',
+        use_branch_id = ${branchId},
+        status_id = '3'
+    WHERE
+        user_id = '${userId}'
+  `);
+};
+
+const updateFeed = async (
   userId: number,
   categoryId: number,
   title: string,
@@ -68,11 +180,36 @@ const createFeed = async (
   branchId: number
 ) => {
   await myDataSource.query(`
-    INSERT INTO feeds
-        (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
-    VALUES
-        ('${userId}', '${categoryId}', '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', '${branchId}', '1')
+    UPDATE feeds
+    SET
+        user_id = '${userId}',
+        category_id = '${categoryId}',
+        title = '${title}',
+        logo_img = '${image}',
+        introduction = '${introduction}',
+        website_url = '${hompage}',
+        detail_introduction = '${detail_introduction}',
+        member_benefit = '${member_benefit}',
+        contact = '${contact}',
+        use_branch_id = '${branchId}',
+        status_id = '1'
+    WHERE
+        user_id = '${userId}'
   `);
+};
+
+const findFeedId = async (userId: number) => {
+  let [feedId] = await myDataSource.query(`
+    SELECT
+        id
+    FROM
+        feeds
+    WHERE
+        user_id = '${userId}'
+  `);
+
+  feedId = feedId.id;
+  return feedId;
 };
 
 const insertMainField = async (mainFieldArray: string[]) => {
@@ -150,37 +287,6 @@ const insertFile = async (feedId: number, fileName: string, file: string) => {
   `);
 };
 
-const updateFeed = async (
-  userId: number,
-  categoryId: number,
-  title: string,
-  image: string,
-  introduction: string,
-  hompage: string,
-  detail_introduction: string,
-  member_benefit: string | string[],
-  contact: string | string[],
-  branchId: number
-) => {
-  await myDataSource.query(`
-    UPDATE feeds
-    SET
-        user_id = '${userId}',
-        category_id = '${categoryId}',
-        title = '${title}',
-        logo_img = '${image}',
-        introduction = '${introduction}',
-        website_url = '${hompage}',
-        detail_introduction = '${detail_introduction}',
-        member_benefit = '${member_benefit}',
-        contact = '${contact}',
-        use_branch_id = '${branchId}',
-        status_id = '1'
-    WHERE
-        user_id = '${userId}'
-  `);
-};
-
 const findfeedsMainFieldId = async (feedId: number) => {
   const feedsMainFieldId = await myDataSource.query(`
     SELECT
@@ -224,20 +330,6 @@ const updateMainFieldId = async (
   }
 };
 
-const findFeedId = async (userId: number) => {
-  let [feedId] = await myDataSource.query(`
-    SELECT
-        id
-    FROM
-        feeds
-    WHERE
-        user_id = '${userId}'
-  `);
-
-  feedId = feedId.id;
-  return feedId;
-};
-
 const updateFile = async (feedId: number, fileName: string, file: string) => {
   await myDataSource.query(`
     UPDATE company_file
@@ -250,137 +342,16 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
   `);
 };
 
-const findtitle = async (userId: number) => {
-  let [feedTitle] = await myDataSource.query(`
-    SELECT
-        title
-    FROM
-        feeds
-    WHERE
-        user_id = '${userId}'
-  `);
-
-  feedTitle = feedTitle.title;
-  return feedTitle;
-};
-
-const getFeed = async (feedId: number) => {
-  let feeds = await myDataSource.query(`
-    SELECT
-        f.id AS feed_id,
-        c.id AS category_id,
-        c.category,
-        c3.parent_category_id AS parent_category_id,
-        c3.category AS parent_category,
-        f.title,
-        f.logo_img,
-        f.introduction,
-        f.website_url,
-        fi.field_name,
-        f.detail_introduction,
-        f.member_benefit,
-        f.contact,
-        cf.file_name,
-        cf.file_link,
-        b.branch_name
-    FROM
-        feeds AS f
-            LEFT JOIN
-        category AS c ON c.id = f.category_id
-            LEFT JOIN
-        (SELECT
-            c1.id, c1.category AS detail, c2.category, c2.id as parent_category_id
-        FROM
-            category AS c1
-        INNER JOIN category AS c2 ON c2.id = c1.parent_category_id) AS c3 ON c3.id = c.id
-            LEFT JOIN
-        (SELECT
-            feeds_id,
-                JSON_ARRAYAGG(JSON_OBJECT('id', main_field.id, 'main_field', main_field.field_name)) AS field_name
-        FROM
-            feeds_main_fields
-        JOIN main_field ON feeds_main_fields.main_field_id = main_field.id
-        GROUP BY feeds_id) AS fi ON fi.feeds_id = f.id
-            LEFT JOIN
-        (SELECT
-            feed_id, file_name, file_link
-        FROM
-            company_file) AS cf ON cf.feed_id = f.id
-            LEFT JOIN
-        (SELECT
-            id, branch_name
-        FROM
-            branch) AS b ON b.id = f.use_branch_id
-        WHERE f.id = '${feedId}';
-  `);
-
-  feeds = [...feeds].map(item => {
-    return {
-      ...item,
-      field_name: JSON.parse(item.field_name),
-    };
-  });
-
-  return feeds;
-};
-
-const createTemporarySaveFeed = async (
-  userId: number,
-  categoryId: number | null,
-  title: string | null,
-  image: string | null,
-  introduction: string | null,
-  hompage: string | null,
-  detail_introduction: string | null,
-  member_benefit: string | null,
-  contact: string | null,
-  branchId: number | null
-) => {
-  await myDataSource.query(`
-    INSERT INTO feeds
-        (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
-    VALUES
-        ('${userId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}, 3)
-  `);
-};
-
-const updateTemporarySaveFeed = async (
-  userId: number,
-  categoryId: number | null,
-  title: string | null,
-  image: string | null,
-  introduction: string | null,
-  hompage: string | null,
-  detail_introduction: string | null,
-  member_benefit: string | null,
-  contact: string | null,
-  branchId: number | null
-) => {
-  await myDataSource.query(`
-    UPDATE feeds
-    SET
-        user_id = '${userId}',
-        category_id = ${categoryId},
-        title = '${title}',
-        logo_img = '${image}',
-        introduction = '${introduction}',
-        website_url = '${hompage}',
-        detail_introduction = '${detail_introduction}',
-        member_benefit = '${member_benefit}',
-        contact = '${contact}',
-        use_branch_id = ${branchId},
-        status_id = '3'
-    WHERE
-        user_id = '${userId}'
-  `);
-};
-
 export default {
   findUserAuth,
   isExistFeed,
   isExistTemporarySaveFeed,
   findBranchId,
-  createFeed,
+  createTemporarySaveFeed,
+  getFeed,
+  updateTemporarySaveFeed,
+  updateFeed,
+  findFeedId,
   insertMainField,
   foreignKeySetZero,
   deleteOverlapMainField,
@@ -388,14 +359,8 @@ export default {
   findMainFieldId,
   insertMainFieldId,
   insertFile,
-  updateFeed,
-  findFeedId,
   findfeedsMainFieldId,
   setNull,
   updateMainFieldId,
   updateFile,
-  findtitle,
-  getFeed,
-  createTemporarySaveFeed,
-  updateTemporarySaveFeed,
 };

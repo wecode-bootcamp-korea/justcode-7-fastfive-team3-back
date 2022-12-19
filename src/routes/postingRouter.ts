@@ -7,17 +7,10 @@ import { authMiddleware } from '../middlewares/middleware';
 import postingController from '../controllers/postingController';
 
 router.post(
-  '/posting',
+  '/posting/temporarysave',
   authMiddleware,
   uplad.array('file', 4),
-  catchMiddleware(postingController.createFeed)
-);
-
-router.put(
-  '/posting',
-  authMiddleware,
-  uplad.array('file', 4),
-  catchMiddleware(postingController.updateFeed)
+  catchMiddleware(postingController.createTemporarySaveFeed)
 );
 
 router.get(
@@ -26,18 +19,18 @@ router.get(
   catchMiddleware(postingController.getFeed)
 );
 
-router.post(
-  '/posting/temporarysave',
-  authMiddleware,
-  uplad.array('file', 4),
-  catchMiddleware(postingController.createTemporarySaveFeed)
-);
-
 router.put(
   '/posting/temporarysave',
   authMiddleware,
   uplad.array('file', 4),
   catchMiddleware(postingController.updateTemporarySaveFeed)
+);
+
+router.put(
+  '/posting',
+  authMiddleware,
+  uplad.array('file', 4),
+  catchMiddleware(postingController.updateFeed)
 );
 
 export default router;
