@@ -33,4 +33,11 @@ router.post(
   catchMiddleware(postingController.createTemporarySaveFeed)
 );
 
+router.put(
+  '/posting/temporarysave',
+  authMiddleware,
+  uplad.array('file', 4),
+  catchMiddleware(postingController.updateTemporarySaveFeed)
+);
+
 export default router;
