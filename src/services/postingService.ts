@@ -2,7 +2,7 @@ import postingDao from '../models/postingDao';
 
 const createFeed = async (
   userId: number,
-  category: string,
+  categoryId: number,
   title: string,
   logo: string,
   logoSize: number,
@@ -52,17 +52,8 @@ const createFeed = async (
     throw error;
   }
 
-  const categoryArray = category.replace(/ /g, '').split(',');
-  const categoryNameArray: string[] = [];
-  if (categoryArray.length === 1) {
-    categoryNameArray.push(categoryArray[0]);
-  } else {
-    categoryNameArray.push(categoryArray[1]);
-  }
-  const categoryName = categoryNameArray[0];
   const mainFieldArray = main_field.replace(/ /g, '').split(',');
   const branchId: number = await postingDao.findBranchId(branch);
-  const categoryId: number = await postingDao.findCategoryId(categoryName);
 
   await postingDao.createFeed(
     userId,
@@ -90,7 +81,7 @@ const createFeed = async (
 
 const updateFeed = async (
   userId: number,
-  category: string,
+  categoryId: number,
   title: string,
   logo: string,
   logoSize: number,
@@ -132,17 +123,9 @@ const updateFeed = async (
     throw error;
   }
 
-  const categoryArray = category.replace(/ /g, '').split(',');
-  const categoryNameArray: string[] = [];
-  if (categoryArray.length === 1) {
-    categoryNameArray.push(categoryArray[0]);
-  } else {
-    categoryNameArray.push(categoryArray[1]);
-  }
-  const categoryName = categoryNameArray[0];
   const mainFieldArray = main_field.replace(/ /g, '').split(',');
   const branchId: number = await postingDao.findBranchId(branch);
-  const categoryId: number = await postingDao.findCategoryId(categoryName);
+
   await postingDao.updateFeed(
     userId,
     categoryId,

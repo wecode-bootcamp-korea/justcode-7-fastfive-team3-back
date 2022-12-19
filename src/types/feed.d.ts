@@ -1,5 +1,5 @@
 export type Feed = {
-  category: string;
+  categoryId: number;
   title: string;
   introduction: string;
   main_field: string;

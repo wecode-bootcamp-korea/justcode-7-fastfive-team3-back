@@ -16,7 +16,7 @@ const createFeed = async (req: Request, res: Response) => {
   const fileSize = sizePath[1];
 
   const {
-    category,
+    categoryId,
     title,
     introduction,
     main_field,
@@ -28,7 +28,7 @@ const createFeed = async (req: Request, res: Response) => {
   }: Feed = req.body;
 
   const REQUIRE_KEYS = [
-    category,
+    categoryId,
     title,
     logo,
     introduction,
@@ -40,7 +40,7 @@ const createFeed = async (req: Request, res: Response) => {
 
   await postingService.createFeed(
     userId,
-    category,
+    categoryId,
     title,
     logo,
     logoSize,
@@ -72,7 +72,7 @@ const updateFeed = async (req: Request, res: Response) => {
   const fileSize = sizePath[1];
 
   const {
-    category,
+    categoryId,
     title,
     introduction,
     main_field,
@@ -84,7 +84,7 @@ const updateFeed = async (req: Request, res: Response) => {
   }: Feed = req.body;
 
   const REQUIRE_KEYS = [
-    category,
+    categoryId,
     title,
     logo,
     introduction,
@@ -96,7 +96,7 @@ const updateFeed = async (req: Request, res: Response) => {
 
   await postingService.updateFeed(
     userId,
-    category,
+    categoryId,
     title,
     logo,
     logoSize,
