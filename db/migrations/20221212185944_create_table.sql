@@ -2,20 +2,23 @@
 
 CREATE TABLE IF NOT EXISTS `users` (
                                        `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                                       `company_name` varchar(50) NOT NULL,
                                        `nickname` varchar(50) NOT NULL,
                                        `password` varchar(100) NOT NULL,
                                        `email` varchar(50) UNIQUE NOT NULL,
                                        `position_name` varchar(50) NOT NULL,
                                        `group_id` int NOT NULL DEFAULT (2),
                                        `is_admin` tinyint NOT NULL DEFAULT (0),
+                                       `is_deleted` boolean DEFAULT (false),
                                        `created_at` datetime NOT NULL DEFAULT (now()),
                                        `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
 
 CREATE TABLE IF NOT EXISTS `user_group` (
                                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                                            `sort` varchar(250) NOT NULL,
+                                            `company_name` varchar(50) NOT NULL,
+                                            `start_date` datetime,
+                                            `end_date` datetime,
+                                            `is_deleted` boolean DEFAULT (false),
                                             `created_at` datetime NOT NULL DEFAULT (now()),
                                             `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
