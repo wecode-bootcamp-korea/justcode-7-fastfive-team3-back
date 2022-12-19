@@ -29,6 +29,19 @@ const isExistFeed = async (userId: number) => {
   return feed;
 };
 
+const isExistTemporarySaveFeed = async (userId: number) => {
+  let TemporarySaveFeed = await myDataSource.query(`
+  SELECT
+      id
+  FROM
+      feeds
+  WHERE
+      user_id = '${userId}' AND status_id = 3
+  `);
+
+  return TemporarySaveFeed;
+};
+
 const findBranchId = async (branch: string) => {
   let [branchId] = await myDataSource.query(`
     SELECT
@@ -39,7 +52,6 @@ const findBranchId = async (branch: string) => {
         branch_name = '${branch}'
   `);
 
-  branchId = branchId.id;
   return branchId;
 };
 
@@ -312,9 +324,30 @@ const getFeed = async (feedId: number) => {
   return feeds;
 };
 
+const createTemporarySaveFeed = async (
+  userId: number,
+  categoryId: number | null,
+  title: string | null,
+  image: string | null,
+  introduction: string | null,
+  hompage: string | null,
+  detail_introduction: string | null,
+  member_benefit: string | null,
+  contact: string | null,
+  branchId: number | null
+) => {
+  await myDataSource.query(`
+    INSERT INTO feeds
+        (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
+    VALUES
+        ('${userId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}', 3)
+  `);
+};
+
 export default {
   findUserAuth,
   isExistFeed,
+  isExistTemporarySaveFeed,
   findBranchId,
   createFeed,
   insertMainField,
@@ -332,4 +365,5 @@ export default {
   updateFile,
   findtitle,
   getFeed,
+  createTemporarySaveFeed,
 };
