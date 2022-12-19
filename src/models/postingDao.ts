@@ -255,8 +255,10 @@ const findtitle = async (userId: number) => {
 const getFeed = async (feedId: number) => {
   let feeds = await myDataSource.query(`
     SELECT
-        f.id,
+        f.id AS feed_id,
+        c.id AS category_id,
         c.category,
+        c3.parent_category_id AS parent_category_id,
         c3.category AS parent_category,
         f.title,
         f.logo_img,
@@ -275,7 +277,7 @@ const getFeed = async (feedId: number) => {
         category AS c ON c.id = f.category_id
             LEFT JOIN
         (SELECT
-            c1.id, c1.category AS detail, c2.category
+            c1.id, c1.category AS detail, c2.category, c2.id as parent_category_id
         FROM
             category AS c1
         INNER JOIN category AS c2 ON c2.id = c1.parent_category_id) AS c3 ON c3.id = c.id
