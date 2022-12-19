@@ -13,7 +13,7 @@ table users as u {
 
 table user_group as us {
   id int [pk, increment, not null]
-  company_name varchar(50) [not null]
+  company_name varchar(50) [not null, unique]
   start_date datetime
   end_date datetime
   is_deleted boolean [default: `false`]

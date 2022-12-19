@@ -13,18 +13,43 @@ const signUp = async (
   nickname: string,
   password: string,
   email: string,
+  position_name: string,
   company_name: string,
-  sort_id: number,
-  is_admin: number
+  start_date?: string,
+  end_date?: string,
+  is_admin?: boolean
 ) => {
   const salt = await bcrypt.genSalt();
   const hashedPw = bcrypt.hashSync(password, salt);
-  await usersDao.signUp(
+
+  is_admin = is_admin ? true : false;
+  console.log('is_admin =', is_admin);
+  let groupId = await usersDao.findGroupId(company_name);
+
+  let residencePeriod = ``;
+
+  if (!groupId) {
+    if (start_date && end_date) {
+      residencePeriod = `
+      ,
+      start_date = "${start_date}",
+      end_date = "${end_date}"
+      `;
+    }
+
+    await usersDao.createCompanyGroup(company_name, residencePeriod);
+
+    const result = await usersDao.findGroupId(company_name);
+    groupId = result;
+  }
+  groupId = groupId.id;
+  console.log('groupId =', groupId);
+  return await usersDao.signUp(
     nickname,
     hashedPw,
     email,
-    company_name,
-    sort_id,
+    position_name,
+    groupId,
     is_admin
   );
 };

@@ -15,7 +15,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 
 CREATE TABLE IF NOT EXISTS `user_group` (
                                             `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
-                                            `company_name` varchar(50) NOT NULL,
+                                            `company_name` varchar(50) UNIQUE NOT NULL,
                                             `start_date` datetime,
                                             `end_date` datetime,
                                             `is_deleted` boolean DEFAULT (false),

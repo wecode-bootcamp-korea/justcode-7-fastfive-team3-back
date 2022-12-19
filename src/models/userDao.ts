@@ -25,20 +25,47 @@ const checkUserPermission = async (user_id: number) => {
     });
 };
 
+const findGroupId = async (company_name: string) => {
+  const [result] = await myDataSource.query(
+    `
+        SELECT id
+        FROM user_group
+        WHERE company_name = ?
+    `,
+    [company_name]
+  );
+  return result;
+};
+
+const createCompanyGroup = async (
+  company_name: string,
+  residencePeriod: string
+) => {
+  return await myDataSource.query(
+    `
+        INSERT
+          user_group 
+          SET
+          company_name = "${company_name}"
+          ${residencePeriod}
+    `
+  );
+};
+
 const signUp = async (
   nickname: string,
   hashedPw: string,
   email: string,
-  company_name: string,
-  sort_id: number,
-  is_admin: number
+  position_name: string,
+  group_id: number,
+  is_admin?: boolean
 ) => {
   await myDataSource.query(
     `
-        INSERT INTO users (nickname, password, email, company_name, sort_id, is_admin)
+        INSERT INTO users (nickname, password, email, position_name, group_id, is_admin)
         VALUES (?, ?, ?, ?, ?, ?)
     `,
-    [nickname, hashedPw, email, company_name, sort_id, is_admin]
+    [nickname, hashedPw, email, position_name, group_id, is_admin]
   );
 };
 
@@ -54,4 +81,10 @@ const logIn = async (email: string) => {
   return result;
 };
 
-export default { signUp, logIn, checkUserPermission };
+export default {
+  signUp,
+  logIn,
+  checkUserPermission,
+  findGroupId,
+  createCompanyGroup,
+};

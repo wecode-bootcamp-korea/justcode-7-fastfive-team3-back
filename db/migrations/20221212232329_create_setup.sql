@@ -1,9 +1,4 @@
 -- migrate:up
-insert into user_group (id, sort) values (1,'admin');
-insert into user_group (id, sort) values (2, 'normal member');
-insert into user_group (id, sort) values (3, 'resident member');
-insert into user_group (id, sort) values (4, 'exit member');
-
 insert into feed_status (id, status) values (1,'open');
 insert into feed_status (id, status) values (2, 'close');
 insert into feed_status (id, status) values (3, 'temporary');
