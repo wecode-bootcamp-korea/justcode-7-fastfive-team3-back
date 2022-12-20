@@ -11,15 +11,8 @@ const getCountOfAllComments = async (feed_id: number) => {
   );
 };
 
-const getListOfRepliesByFeed = async (
-  user_id: number,
-  feed_id: number,
-  pagenation?: string
-) => {
-  return await myDataSource
-    .query(
-      `
-          SELECT t2.id   AS reply_id,
+const queryForGetListOfRepliesByFeed = `
+       SELECT t2.id   AS reply_id,
                  t2.feed_id,
                  u2.id   AS feed_user_id,
                  t2.is_private,
@@ -58,7 +51,7 @@ const getListOfRepliesByFeed = async (
                                      id ASC)   AS rnk,
                              r.parent_reply_id AS reply_group
                       FROM replies r
-                      WHERE feed_id = 1
+                      WHERE feed_id = ?
                         AND parent_reply_id) AS t1
                 UNION ALL
                 (SELECT r2.id,
@@ -72,7 +65,7 @@ const getListOfRepliesByFeed = async (
                         r2.parent_reply_id AS rnk,
                         r2.id              AS reply_group
                  FROM replies r2
-                 WHERE r2.feed_id = 1
+                 WHERE r2.feed_id = ?
                    AND r2.parent_reply_id = 0
                  ORDER BY r2.id ASC)) AS t2
                    INNER JOIN users u ON
@@ -89,7 +82,29 @@ const getListOfRepliesByFeed = async (
               f.user_id = u2.id
           ORDER BY reply_group,
                    rnk
-                ${pagenation}
+`;
+const findReplyIndex = async (reply_id: number, feed_id: number) => {
+  return await myDataSource
+    .query(
+      `
+    ${queryForGetListOfRepliesByFeed}
+    `,
+      [feed_id, feed_id]
+    )
+    .then(value => {
+      return value.findIndex((e: any) => e.reply_id === reply_id);
+    });
+};
+const getListOfRepliesByFeed = async (
+  user_id: number,
+  feed_id: number,
+  pagenation?: string
+) => {
+  return await myDataSource
+    .query(
+      `
+    ${queryForGetListOfRepliesByFeed}
+    ${pagenation}
     `,
       [feed_id, feed_id, pagenation]
     )
@@ -272,4 +287,5 @@ export default {
   findReply,
   updateReply,
   deleteReply,
+  findReplyIndex,
 };

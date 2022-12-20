@@ -25,7 +25,6 @@ const createReply = async (req: Request, res: Response) => {
   let user_id: number = req.userInfo.id;
   let feed_id: number = Number(req.body.feed_id);
   let comment: string = String(req.body.comment);
-  let page: number = Number(req.body.page);
   let parent_reply_id: number = Number(req.body.parent_reply_id);
   let is_private: boolean = Boolean(req.body.is_private);
 
@@ -40,7 +39,6 @@ const createReply = async (req: Request, res: Response) => {
     user_id,
     feed_id,
     comment,
-    page,
     parent_reply_id,
     is_private
   );
@@ -56,10 +54,8 @@ const createReply = async (req: Request, res: Response) => {
 
 const updateReply = async (req: Request, res: Response) => {
   let user_id: number = req.userInfo.id;
-  let feed_id: number = req.body.feed_id;
   let reply_id: number = Number(req.body.reply_id);
   let comment: string = String(req.body.comment);
-  let page: number = Number(req.body.page);
   let is_private: boolean = Boolean(req.body.is_private);
 
   const REQUIRED_KEYS: requireKeys = {
@@ -69,14 +65,10 @@ const updateReply = async (req: Request, res: Response) => {
 
   checkRequireKeys(REQUIRED_KEYS);
 
-  console.log('is_private =', is_private);
-
   const result = await replyService.updateReply(
     user_id,
-    feed_id,
     reply_id,
     comment,
-    page,
     is_private
   );
 

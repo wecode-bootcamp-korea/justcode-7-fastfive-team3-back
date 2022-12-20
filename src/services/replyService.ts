@@ -1,12 +1,11 @@
 import replyDao from '../models/replyDao';
 
+const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 const getListOfRepliesByFeed = async (
   user_id: number,
   feed_id: number,
   page: number
 ) => {
-  const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
-
   if (!page) {
     page = 1;
   }
@@ -30,7 +29,6 @@ const crateReply = async (
   user_id: number,
   feed_id: number,
   comment: string,
-  page: number,
   parent_reply_id?: number,
   is_private?: boolean
 ) => {
@@ -48,6 +46,9 @@ const crateReply = async (
     is_private
   );
 
+  const newReplyId: number = createdNewComment[0].id;
+  const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feed_id);
+  const page = Math.ceil(findReplyArrIndex / limit);
   const result = await getListOfRepliesByFeed(user_id, feed_id, page);
 
   const replyIdForFindReply: number = createdNewComment[0].id;
@@ -75,10 +76,8 @@ const crateReply = async (
 
 const updateReply = async (
   user_id: number,
-  feed_id: number,
   reply_id: number,
   comment: string,
-  page: number,
   is_private?: boolean
 ) => {
   const [isReply] = await replyDao.findReply(reply_id);
@@ -99,22 +98,24 @@ const updateReply = async (
   is_private = is_private ?? false;
   const statusValue = `, is_private = ${is_private}`;
 
-  console.log('statusValue =', statusValue);
-
   const createdNewComment = await replyDao.updateReply(
     reply_id,
     comment,
     statusValue
   );
 
-  const result = await getListOfRepliesByFeed(user_id, feed_id, page);
+  const newReplyId: number = createdNewComment[0].id;
+  const feedId: number = createdNewComment[0].feed_id;
+  const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
+  const page = Math.ceil(findReplyArrIndex / limit);
+
+  const result = await getListOfRepliesByFeed(user_id, feedId, page);
 
   return { createdNewComment, result };
 };
 
 const deleteReply = async (user_id: number, reply_id: number) => {
   const [isReply] = await replyDao.findReply(reply_id);
-  console.log('isReply =', isReply);
   if (!isReply) {
     throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
     return;

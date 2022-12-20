@@ -1,6 +1,6 @@
 import nodemailer from 'nodemailer';
 
-const sendMailForNewReply = async (
+const sendMailForNewReply = (
   receiverMail: string,
   receiverName: string,
   senderName: string,
@@ -17,7 +17,7 @@ const sendMailForNewReply = async (
     },
   });
 
-  await transporter.sendMail({
+  transporter.sendMail({
     from: `"millie.service Team" <${process.env.NODEMAILER_USER}>`,
     to: `${receiverMail}`,
     subject: '[FastFive] 새로운 덧글이 등록되었습니다. ',
