@@ -30,6 +30,7 @@ const crateReply = async (
   user_id: number,
   feed_id: number,
   comment: string,
+  page: number,
   parent_reply_id?: number,
   is_private?: boolean
 ) => {
@@ -39,7 +40,7 @@ const crateReply = async (
 
   is_private = is_private ?? false;
 
-  const result = await replyDao.createReply(
+  const createdNewComment = await replyDao.createReply(
     user_id,
     feed_id,
     comment,
@@ -47,7 +48,9 @@ const crateReply = async (
     is_private
   );
 
-  const replyIdForFindReply: number = result[0].id;
+  const result = await getListOfRepliesByFeed(user_id, feed_id, page);
+
+  const replyIdForFindReply: number = createdNewComment[0].id;
   const [mailInfoSrc] = await replyDao.findReply(replyIdForFindReply);
   const replyUser: string = mailInfoSrc.reply_user;
   const feedUser: string = mailInfoSrc.feed_user;
@@ -67,13 +70,15 @@ const crateReply = async (
   };
 
   const mailInfo = parentReplyUserMail ? parentReplyMailInfo : feedUserMailInfo;
-  return { result, mailInfo };
+  return { createdNewComment, result, mailInfo };
 };
 
 const updateReply = async (
   user_id: number,
+  feed_id: number,
   reply_id: number,
   comment: string,
+  page: number,
   is_private?: boolean
 ) => {
   const [isReply] = await replyDao.findReply(reply_id);
@@ -96,7 +101,15 @@ const updateReply = async (
 
   console.log('statusValue =', statusValue);
 
-  return await replyDao.updateReply(reply_id, comment, statusValue);
+  const createdNewComment = await replyDao.updateReply(
+    reply_id,
+    comment,
+    statusValue
+  );
+
+  const result = await getListOfRepliesByFeed(user_id, feed_id, page);
+
+  return { createdNewComment, result };
 };
 
 const deleteReply = async (user_id: number, reply_id: number) => {

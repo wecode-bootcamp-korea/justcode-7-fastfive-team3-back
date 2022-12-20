@@ -94,10 +94,13 @@ const getListOfRepliesByFeed = async (
       [feed_id, feed_id, pagenation]
     )
     .then(value => {
-      // // TODO 페이지네이션 후 첫 객체가 대댓글일때 상위댓글 객체 생성 처리
       value.map((e: any) => {
         if (value[0].parent_reply_id !== 0) {
-          let temporary = { reply_id: e.parent_reply_id, parent_reply_id: 0 };
+          let temporary = {
+            reply_id: e.parent_reply_id,
+            parent_reply_id: 0,
+            is_fake: true,
+          };
           value.unshift(temporary);
         }
         return value;
@@ -154,6 +157,7 @@ const createReply = async (
       is_private = ${is_private}
     `
   );
+
   return await myDataSource.query(
     `
         SELECT r.id,
