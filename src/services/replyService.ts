@@ -1,4 +1,5 @@
 import replyDao from '../models/replyDao';
+import userDao from '../models/userDao';
 
 const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 const getListOfRepliesByFeed = async (
@@ -32,6 +33,12 @@ const crateReply = async (
   parent_reply_id?: number,
   is_private?: boolean
 ) => {
+  const userPermission = await userDao.checkUserPermission(user_id);
+  if (!userPermission.is_admin) {
+    throw { status: 400, message: 'ADMIN_ONLY' };
+    return;
+  }
+
   if (!parent_reply_id) {
     parent_reply_id = 0;
   }
