@@ -183,9 +183,28 @@ const createReply = async (
 const findReply = async (reply_id: number) => {
   return await myDataSource.query(
     `
-        SELECT *
+        SELECT r.id,
+               r.user_id,
+               u.nickname                     AS reply_user,
+               r.is_private,
+               r.comment,
+               u2.nickname                    AS parent_reply_user,
+               u2.email                       AS parent_reply_user_mail,
+               u3.nickname                    AS feed_user,
+               u3.email                       AS feed_user_email,
+               SUBSTRING(r.created_at, 1, 16) AS created_at
         FROM replies r
-        WHERE id = ?
+                 LEFT JOIN replies r2 ON
+            r2.id = r.parent_reply_id
+                 LEFT JOIN users u ON
+            u.id = r.user_id
+                 LEFT JOIN users u2 ON
+            u2.id = r2.user_id
+                 LEFT JOIN feeds f ON
+            f.id = r.feed_id
+                 LEFT JOIN users u3 ON
+            u3.id = f.user_id
+        WHERE r.id = ?
     `,
     [reply_id]
   );

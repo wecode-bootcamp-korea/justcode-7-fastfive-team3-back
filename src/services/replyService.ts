@@ -5,7 +5,7 @@ const getListOfRepliesByFeed = async (
   feed_id: number,
   page: number
 ) => {
-  const limit = 3; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
+  const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 
   if (!page) {
     page = 1;
@@ -39,13 +39,35 @@ const crateReply = async (
 
   is_private = is_private ?? false;
 
-  return await replyDao.createReply(
+  const result = await replyDao.createReply(
     user_id,
     feed_id,
     comment,
     parent_reply_id,
     is_private
   );
+
+  const replyIdForFindReply: number = result[0].id;
+  const [mailInfoSrc] = await replyDao.findReply(replyIdForFindReply);
+  const replyUser: string = mailInfoSrc.reply_user;
+  const feedUser: string = mailInfoSrc.feed_user;
+  const feedUserMail: string = mailInfoSrc.feed_user_email;
+  const parentReplyUser: string = mailInfoSrc.parent_reply_user;
+  const parentReplyUserMail: string = mailInfoSrc.parent_reply_user_mail;
+
+  const parentReplyMailInfo = {
+    replyUser: replyUser,
+    userName: parentReplyUser,
+    userMail: parentReplyUserMail,
+  };
+  const feedUserMailInfo = {
+    replyUser: replyUser,
+    userName: feedUser,
+    userMail: feedUserMail,
+  };
+
+  const mailInfo = parentReplyUserMail ? parentReplyMailInfo : feedUserMailInfo;
+  return { result, mailInfo };
 };
 
 const updateReply = async (
