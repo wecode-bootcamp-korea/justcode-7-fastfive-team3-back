@@ -9,13 +9,13 @@ const getSubhomeList = async (req: Request, res: Response) => {
 };
 
 const getSubhome2List = async (req: Request, res: Response) => {
-  const category_id: any = req.query.category_id;
+  const categoryId: any = req.query.category_id;
 
-  if (!category_id) {
+  if (!categoryId) {
     const result = await subhomeService.getSubhome2List();
     res.status(200).json(result);
-  } else if (category_id) {
-    const result = await subhomeService.getSubhome2List(category_id);
+  } else if (categoryId) {
+    const result = await subhomeService.getSubhome2List(categoryId);
     res.status(200).json(result);
   }
 };

@@ -16,7 +16,7 @@ const getSubhomeList = async (lastCursorId: number) => {
   ); // TODO 배포 전 limit 수를 8로 수정하기!
 };
 
-const getSubhome2List = async (category_id: string) => {
+const getSubhome2List = async (categoryId: string) => {
   return await myDataSource.query(
     `
         SELECT f.id                           AS feed_id,
@@ -33,7 +33,7 @@ const getSubhome2List = async (category_id: string) => {
                  LEFT JOIN user_group ug ON
             ug.id = u.group_id
         WHERE c.parent_category_id IS NULL
-            ${category_id}
+            ${categoryId}
         ORDER BY feed_id DESC
     `
   );

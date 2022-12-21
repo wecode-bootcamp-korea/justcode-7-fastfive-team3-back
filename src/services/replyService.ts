@@ -3,8 +3,8 @@ import userDao from '../models/userDao';
 
 const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
 const getListOfRepliesByFeed = async (
-  user_id: number,
-  feed_id: number,
+  userId: number,
+  feedId: number,
   page: number
 ) => {
   if (!page) {
@@ -15,11 +15,11 @@ const getListOfRepliesByFeed = async (
   LIMIT ${pageOffset}, ${limit}
   `;
 
-  const [replyCnt] = await replyDao.getCountOfAllComments(feed_id);
+  const [replyCnt] = await replyDao.getCountOfAllComments(feedId);
   const replyPageCnt = Math.ceil(replyCnt.reply_cnt / limit);
   const result = await replyDao.getListOfRepliesByFeed(
-    user_id,
-    feed_id,
+    userId,
+    feedId,
     pagenation
   );
 
@@ -27,36 +27,36 @@ const getListOfRepliesByFeed = async (
 };
 
 const crateReply = async (
-  user_id: number,
-  feed_id: number,
+  userId: number,
+  feedId: number,
   comment: string,
-  parent_reply_id?: number,
-  is_private?: boolean
+  parentReplyId?: number,
+  isPrivate?: boolean
 ) => {
-  const userPermission = await userDao.checkUserPermission(user_id);
+  const userPermission = await userDao.checkUserPermission(userId);
   if (!userPermission.is_admin) {
     throw { status: 400, message: 'ADMIN_ONLY' };
     return;
   }
 
-  if (!parent_reply_id) {
-    parent_reply_id = 0;
+  if (!parentReplyId) {
+    parentReplyId = 0;
   }
 
-  is_private = is_private ?? false;
+  isPrivate = isPrivate ?? false;
 
   const createdNewComment = await replyDao.createReply(
-    user_id,
-    feed_id,
+    userId,
+    feedId,
     comment,
-    parent_reply_id,
-    is_private
+    parentReplyId,
+    isPrivate
   );
 
   const newReplyId: number = createdNewComment[0].id;
-  const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feed_id);
+  const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
   const page = Math.ceil(findReplyArrIndex / limit);
-  const result = await getListOfRepliesByFeed(user_id, feed_id, page);
+  const result = await getListOfRepliesByFeed(userId, feedId, page);
 
   const replyIdForFindReply: number = createdNewComment[0].id;
   const [mailInfoSrc] = await replyDao.findReply(replyIdForFindReply);
@@ -82,31 +82,31 @@ const crateReply = async (
 };
 
 const updateReply = async (
-  user_id: number,
-  reply_id: number,
+  userId: number,
+  replyId: number,
   comment: string,
-  is_private?: boolean
+  isPrivate?: boolean
 ) => {
-  const [isReply] = await replyDao.findReply(reply_id);
+  const [isReply] = await replyDao.findReply(replyId);
   if (!isReply) {
     throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
     return;
   }
 
-  if (isReply.user_id !== user_id) {
+  if (isReply.user_id !== userId) {
     throw { status: 400, message: 'ONLY_WRITER_CAN_UPDATE' };
     return;
   }
 
-  if (isReply.comment === comment && isReply.private === is_private) {
+  if (isReply.comment === comment && isReply.private === isPrivate) {
     throw { status: 400, message: 'NO_CHANGE' };
   }
 
-  is_private = is_private ?? false;
-  const statusValue = `, is_private = ${is_private}`;
+  isPrivate = isPrivate ?? false;
+  const statusValue = `, is_private = ${isPrivate}`;
 
   const createdNewComment = await replyDao.updateReply(
-    reply_id,
+    replyId,
     comment,
     statusValue
   );
@@ -116,7 +116,7 @@ const updateReply = async (
   const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
   const page = Math.ceil(findReplyArrIndex / limit);
 
-  const result = await getListOfRepliesByFeed(user_id, feedId, page);
+  const result = await getListOfRepliesByFeed(userId, feedId, page);
 
   return { createdNewComment, result };
 };
