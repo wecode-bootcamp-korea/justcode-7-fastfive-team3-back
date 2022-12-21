@@ -20,6 +20,7 @@ const checkUserPermission = async (user_id: number) => {
                      ELSE '일반가입자'
                      END
                      ) AS member_type,
+                 ug.id AS group_id,
                  ug.company_name,
                  u.nickname,
                  u.email,

@@ -1,4 +1,5 @@
 import postingDao from '../models/postingDao';
+import userDao from '../models/userDao';
 
 const createTemporarySaveFeed = async (
   userId: number,
@@ -17,23 +18,18 @@ const createTemporarySaveFeed = async (
   fileName?: string | null,
   fileSize?: number | null
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const groupId = findGroupId.group_id;
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;
   }
 
   const existTemporarySaveFeed = await postingDao.isExistTemporarySaveFeed(
-    userId
+    groupId
   );
 
   if (existTemporarySaveFeed.length === 1) {
@@ -70,7 +66,7 @@ const createTemporarySaveFeed = async (
   }
 
   await postingDao.createTemporarySaveFeed(
-    userId,
+    groupId,
     categoryId,
     title,
     logo,
@@ -81,7 +77,7 @@ const createTemporarySaveFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await postingDao.findFeedId(userId);
+  const feedId: number = await postingDao.findFeedId(groupId);
   await postingDao.insertMainField(mainFieldArray);
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();
@@ -94,7 +90,9 @@ const createTemporarySaveFeed = async (
 };
 
 const getFeed = async (userId: number) => {
-  const feedId: number = await postingDao.findFeedId(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const groupId = findGroupId.group_id;
+  const feedId: number = await postingDao.findFeedId(groupId);
   const result: any = await postingDao.getFeed(feedId);
   return result;
 };
@@ -116,16 +114,11 @@ const updateTemporarySaveFeed = async (
   fileName?: string | null,
   fileSize?: number | null
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const groupId = findGroupId.group_id;
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;
@@ -159,7 +152,7 @@ const updateTemporarySaveFeed = async (
   }
 
   await postingDao.updateTemporarySaveFeed(
-    userId,
+    groupId,
     categoryId,
     title,
     logo,
@@ -170,7 +163,7 @@ const updateTemporarySaveFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await postingDao.findFeedId(userId);
+  const feedId: number = await postingDao.findFeedId(groupId);
   await postingDao.insertMainField(mainFieldArray);
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();
@@ -206,16 +199,11 @@ const updateFeed = async (
   fileName?: string,
   fileSize?: number
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const groupId = findGroupId.group_id;
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;
@@ -243,7 +231,7 @@ const updateFeed = async (
   }
 
   await postingDao.updateFeed(
-    userId,
+    groupId,
     categoryId,
     title,
     logo,
@@ -254,7 +242,7 @@ const updateFeed = async (
     contact,
     branchId
   );
-  const feedId: number = await postingDao.findFeedId(userId);
+  const feedId: number = await postingDao.findFeedId(groupId);
   await postingDao.insertMainField(mainFieldArray);
   await postingDao.foreignKeySetZero();
   await postingDao.deleteOverlapMainField();

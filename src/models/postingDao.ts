@@ -1,29 +1,29 @@
 import myDataSource from './index';
 
-const findUserAuth = async (userId: number) => {
-  let [userAuth] = await myDataSource.query(`
-    SELECT
-        sort_id, is_admin
-    FROM
-        users
-    WHERE
-        id = '${userId}'
-  `);
+// const findUserAuth = async (userId: number) => {
+//   let [userAuth] = await myDataSource.query(`
+//     SELECT
+//         group_id, is_admin
+//     FROM
+//         users
+//     WHERE
+//         id = '${userId}'
+//   `);
+//
+//   const userGroupId = userAuth.group_id;
+//   const userAdminId = userAuth.is_admin;
+//   userAuth = { userSortId: userGroupId, userAdminId };
+//   return userAuth;
+// };
 
-  const userSortId = userAuth.sort_id;
-  const userAdminId = userAuth.is_admin;
-  userAuth = { userSortId, userAdminId };
-  return userAuth;
-};
-
-const isExistTemporarySaveFeed = async (userId: number) => {
+const isExistTemporarySaveFeed = async (groupId: number) => {
   let TemporarySaveFeed = await myDataSource.query(`
   SELECT
       id
   FROM
       feeds
   WHERE
-      user_id = '${userId}' AND status_id = 3
+      group_id = '${groupId}' AND status_id = 3
   `);
 
   return TemporarySaveFeed;
@@ -43,7 +43,7 @@ const findBranchId = async (branch: string) => {
 };
 
 const createTemporarySaveFeed = async (
-  userId: number,
+  groupId: number,
   categoryId: number | null,
   title: string | null,
   image: string | null,
@@ -58,7 +58,7 @@ const createTemporarySaveFeed = async (
     INSERT INTO feeds
         (group_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
     VALUES
-        ('${userId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}, 3)
+        ('${groupId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}, 3)
   `);
 };
 
@@ -124,7 +124,7 @@ const getFeed = async (feedId: number) => {
 };
 
 const updateTemporarySaveFeed = async (
-  userId: number,
+  groupId: number,
   categoryId: number | null,
   title: string | null,
   image: string | null,
@@ -138,7 +138,7 @@ const updateTemporarySaveFeed = async (
   await myDataSource.query(`
     UPDATE feeds
     SET
-        group_id = '${userId}',
+        group_id = '${groupId}',
         category_id = ${categoryId},
         title = '${title}',
         logo_img = '${image}',
@@ -150,12 +150,12 @@ const updateTemporarySaveFeed = async (
         use_branch_id = ${branchId},
         status_id = '3'
     WHERE
-        group_id = '${userId}'
+        group_id = '${groupId}'
   `);
 };
 
 const updateFeed = async (
-  userId: number,
+  groupId: number,
   categoryId: number,
   title: string,
   image: string,
@@ -169,7 +169,7 @@ const updateFeed = async (
   await myDataSource.query(`
     UPDATE feeds
     SET
-        group_id = '${userId}',
+        group_id = '${groupId}',
         category_id = '${categoryId}',
         title = '${title}',
         logo_img = '${image}',
@@ -181,18 +181,18 @@ const updateFeed = async (
         use_branch_id = '${branchId}',
         status_id = '1'
     WHERE
-        group_id = '${userId}'
+        group_id = '${groupId}'
   `);
 };
 
-const findFeedId = async (userId: number) => {
+const findFeedId = async (groupId: number) => {
   let [feedId] = await myDataSource.query(`
     SELECT
-        id
+        id, group_id
     FROM
         feeds
     WHERE
-        group_id = '${userId}'
+        group_id = '${groupId}'
   `);
 
   feedId = feedId.id;
@@ -330,7 +330,6 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
 };
 
 export default {
-  findUserAuth,
   isExistTemporarySaveFeed,
   findBranchId,
   createTemporarySaveFeed,

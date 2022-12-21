@@ -15,7 +15,6 @@ const getFeedList = async (
   const pagenation = `
   LIMIT ${pageOffset}, ${limit}
   `;
-
   let selectFilters: string;
   if (location_id && category_id && sub_category_id) {
     selectFilters = `
