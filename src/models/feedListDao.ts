@@ -1,6 +1,9 @@
 import myDataSource from './index';
 
-const getFeedList = async (selectFilters: string | null) => {
+const getFeedList = async (
+  selectFilters: string | null,
+  pagenation: string
+) => {
   return await myDataSource.query(
     `
         WITH tables AS (SELECT f.id     AS feed_id,
@@ -35,6 +38,7 @@ const getFeedList = async (selectFilters: string | null) => {
             t1.feed_id = f.id
             ${selectFilters}
         ORDER BY feed_id DESC
+            ${pagenation}
     `
   );
 };

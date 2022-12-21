@@ -1,7 +1,10 @@
 import subhomeDao from '../models/subhomeDao';
 
-const getSubhomeList = async () => {
-  return await subhomeDao.getSubhomeList();
+const getSubhomeList = async (cursorId: number | null) => {
+  if (!cursorId || cursorId === 1) {
+    cursorId = 0;
+  }
+  return await subhomeDao.getSubhomeList(cursorId);
 };
 
 const getSubhome2List = async (category_id?: String) => {
