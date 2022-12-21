@@ -19,7 +19,7 @@ const getFeedList = async (
   let selectFilters: string;
   if (locationId && categoryId && subCategoryId) {
     selectFilters = `
-      WHERE l.id = ${locationId}
+      AND l.id = ${locationId}
       AND ca.id =  ${subCategoryId}
     `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
@@ -27,7 +27,7 @@ const getFeedList = async (
 
   if (locationId && categoryId) {
     selectFilters = `
-      WHERE l.id = ${locationId}
+      AND l.id = ${locationId}
       AND (ca.id = ${categoryId} OR ca.parent_category_id = ${categoryId})
       `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
@@ -35,7 +35,7 @@ const getFeedList = async (
 
   if (locationId) {
     selectFilters = `
-      WHERE l.id = ${locationId}
+      AND l.id = ${locationId}
       `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
   }

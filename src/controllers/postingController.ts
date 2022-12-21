@@ -232,9 +232,21 @@ const updateFeed = async (req: Request, res: Response) => {
   res.status(200).json({ message: 'Update Feed!', locationPath });
 };
 
+const deleteFeed = async (req: Request, res: Response) => {
+  const userId: number = req.userInfo.id;
+  const feedId: number = Number(req.body.feed_id);
+
+  console.log('userId =', userId);
+  console.log('feedId =', feedId);
+
+  await postingService.deleteFeed(userId, feedId);
+
+  res.status(200).json({ message: 'FEED_IS_DELETED' });
+};
 export default {
   createTemporarySaveFeed,
   getFeed,
   updateTemporarySaveFeed,
   updateFeed,
+  deleteFeed,
 };

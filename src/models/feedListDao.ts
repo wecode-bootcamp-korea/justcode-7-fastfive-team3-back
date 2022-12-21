@@ -19,6 +19,7 @@ const getFeedList = async (
                t1.comment_cnt,
                l.id AS location_id,
                l.location,
+               ca.id AS category_id,
                ca.category
         FROM feeds f
                  LEFT JOIN users u ON
@@ -36,6 +37,7 @@ const getFeedList = async (
             f.category_id = ca.id
                  LEFT JOIN tables t1 ON
             t1.feed_id = f.id
+        WHERE f.status_id = 1
             ${selectFilters}
         ORDER BY f.updated_at DESC
             ${pagenation}
@@ -53,6 +55,7 @@ const getFeedDetail = async (feedId: number) => {
         c3.parent_category_id AS parent_category_id,
         c3.category AS parent_category,
         f.title AS company_name,
+        u.group_id,
         f.logo_img,
         f.introduction,
         fi.field_name,
@@ -94,7 +97,7 @@ const getFeedDetail = async (feedId: number) => {
             id, branch_name
         FROM
             branch) AS b ON b.id = f.use_branch_id
-        WHERE f.id = ?
+        WHERE status_id = 1 AND f.id = ?
     `,
     [feedId]
   );

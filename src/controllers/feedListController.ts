@@ -2,7 +2,7 @@ import feedListService from '../services/feedListService';
 import { Request, Response } from 'express';
 
 const getFeedList = async (req: Request, res: Response) => {
-  let locationId: number = Number(req.query.locattion_id);
+  let locationId: number = Number(req.query.location_id);
   let categoryId: number = Number(req.query.category_id);
   let subCategoryId: number = Number(req.query.sub_category_id);
   let page: number = Number(req.query.page);

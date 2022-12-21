@@ -33,7 +33,7 @@ const getSubhome2List = async (categoryId: string) => {
             f.user_id = u.id
                  LEFT JOIN user_group ug ON
             ug.id = u.group_id
-        WHERE c.parent_category_id IS NULL
+        WHERE f.status_id = 1 AND c.parent_category_id IS NULL
             ${categoryId}
         ORDER BY updated_at DESC
     `
