@@ -14,11 +14,11 @@ const getSubhomeList = async () => {
   );
 };
 
-const getSubhome2List = async (category_id: number) => {
+const getSubhome2List = async (category_id: string) => {
   return await myDataSource.query(
     `
-        SELECT f.id AS feed_id,
-               u.company_name,
+        SELECT f.id                           AS feed_id,
+               ug.company_name,
                f.logo_img,
                f.introduction,
                c.category,
@@ -28,8 +28,11 @@ const getSubhome2List = async (category_id: number) => {
             f.category_id = c.id
                  LEFT JOIN users AS u ON
             f.user_id = u.id
+                 LEFT JOIN user_group ug ON
+            ug.id = u.group_id
         WHERE c.parent_category_id IS NULL
             ${category_id}
+        ORDER BY feed_id DESC
     `
   );
 };
