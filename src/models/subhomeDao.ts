@@ -1,6 +1,6 @@
 import myDataSource from './index';
 
-const getSubhomeList = async () => {
+const getSubhomeList = async (lastCursorId: number) => {
   return await myDataSource.query(
     `
         SELECT id AS category_id,
@@ -9,9 +9,11 @@ const getSubhomeList = async () => {
                category_img_url,
                IFNULL(parent_category_id, "상위 카테고리") AS parent_category_id
         FROM category c
-        WHERE parent_category_id IS NULL
-    `
-  );
+        WHERE parent_category_id IS NULL AND id > ?
+        LIMIT 2
+    `,
+    [lastCursorId]
+  ); // TODO 배포 전 limit 수를 8로 수정하기!
 };
 
 const getSubhome2List = async (category_id: string) => {

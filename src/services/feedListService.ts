@@ -6,7 +6,7 @@ const getFeedList = async (
   sub_category_id?: number,
   page?: number
 ) => {
-  const limit = 4;
+  const limit = 4; // TODO 최종 배포 전 limit = 8 로 고치기!
 
   if (!page) {
     page = 1;
