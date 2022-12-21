@@ -21,6 +21,7 @@ const checkUserPermission = async (userId: number) => {
                      END
                      ) AS member_type,
                  ug.company_name,
+                 u.group_id,
                  u.nickname,
                  u.email,
                  u.position_name,

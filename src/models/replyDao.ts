@@ -135,7 +135,7 @@ const getListOfRepliesByFeed = async (
         .filter(
           (e: any) =>
             e.is_private === true &&
-            (e.user_id || e.parent_user_id || e.feed_user_id) !== userId
+            (e.reply_user_id || e.parent_user_id || e.feed_user_id) !== userId
         )
         .map((e: any) => {
           e.comment = false;

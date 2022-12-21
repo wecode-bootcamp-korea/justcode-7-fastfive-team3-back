@@ -329,6 +329,25 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
   `);
 };
 
+const deleteFeed = async (feedId: number) => {
+  return await myDataSource.query(
+    `
+        UPDATE
+            feeds
+        SET status_id           = 3,
+            title               = NULL,
+            logo_img            = NULL,
+            introduction        = NULL,
+            website_url         = NULL,
+            detail_introduction = NULL,
+            member_benefit      = NULL,
+            contact             = NULL,
+            use_branch_id       = NULL
+        WHERE id = ?
+    `,
+    [feedId]
+  );
+};
 export default {
   isExistTemporarySaveFeed,
   findBranchId,
@@ -348,4 +367,5 @@ export default {
   setNull,
   updateMainFieldId,
   updateFile,
+  deleteFeed,
 };
