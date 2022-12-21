@@ -23,7 +23,7 @@ table user_group as us {
 
 table feeds as f {
   id int [pk, increment, not null]
-  user_id int [not null, ref: > u.id]
+  group_id int [not null, ref: - us.id]
   category_id int [ref: > ca.id]
   title varchar (100)
   logo_img varchar(100)

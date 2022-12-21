@@ -28,10 +28,8 @@ const getSubhome2List = async (category_id: string) => {
         FROM feeds AS f
                  LEFT JOIN category AS c ON
             f.category_id = c.id
-                 LEFT JOIN users AS u ON
-            f.user_id = u.id
-                 LEFT JOIN user_group ug ON
-            ug.id = u.group_id
+                 LEFT JOIN user_group AS ug ON
+            f.group_id = ug.id
         WHERE c.parent_category_id IS NULL
             ${category_id}
         ORDER BY feed_id DESC

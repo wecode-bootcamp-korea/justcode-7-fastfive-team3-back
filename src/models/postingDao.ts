@@ -56,7 +56,7 @@ const createTemporarySaveFeed = async (
 ) => {
   await myDataSource.query(`
     INSERT INTO feeds
-        (user_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
+        (group_id, category_id, title, logo_img, introduction, website_url, detail_introduction, member_benefit, contact, use_branch_id, status_id)
     VALUES
         ('${userId}', ${categoryId}, '${title}', '${image}', '${introduction}', '${hompage}', '${detail_introduction}', '${member_benefit}', '${contact}', ${branchId}, 3)
   `);
@@ -138,7 +138,7 @@ const updateTemporarySaveFeed = async (
   await myDataSource.query(`
     UPDATE feeds
     SET
-        user_id = '${userId}',
+        group_id = '${userId}',
         category_id = ${categoryId},
         title = '${title}',
         logo_img = '${image}',
@@ -150,7 +150,7 @@ const updateTemporarySaveFeed = async (
         use_branch_id = ${branchId},
         status_id = '3'
     WHERE
-        user_id = '${userId}'
+        group_id = '${userId}'
   `);
 };
 
@@ -169,7 +169,7 @@ const updateFeed = async (
   await myDataSource.query(`
     UPDATE feeds
     SET
-        user_id = '${userId}',
+        group_id = '${userId}',
         category_id = '${categoryId}',
         title = '${title}',
         logo_img = '${image}',
@@ -181,7 +181,7 @@ const updateFeed = async (
         use_branch_id = '${branchId}',
         status_id = '1'
     WHERE
-        user_id = '${userId}'
+        group_id = '${userId}'
   `);
 };
 
@@ -192,7 +192,7 @@ const findFeedId = async (userId: number) => {
     FROM
         feeds
     WHERE
-        user_id = '${userId}'
+        group_id = '${userId}'
   `);
 
   feedId = feedId.id;

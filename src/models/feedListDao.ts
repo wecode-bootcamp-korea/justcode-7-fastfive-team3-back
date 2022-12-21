@@ -21,11 +21,8 @@ const getFeedList = async (
                l.location,
                ca.category
         FROM feeds f
-                 LEFT JOIN users u ON
-            f.user_id = u.id
-                 LEFT JOIN user_group ug
-                           ON
-            u.group_id = ug.id
+                 LEFT JOIN user_group ug ON
+            f.group_id = ug.id
                  LEFT JOIN branch b ON
             b.id = f.use_branch_id
                  LEFT JOIN branch_location bl ON
