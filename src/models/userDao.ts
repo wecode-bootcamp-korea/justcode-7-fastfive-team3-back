@@ -1,6 +1,6 @@
 import myDataSource from './index';
 
-const checkUserPermission = async (user_id: number) => {
+const checkUserPermission = async (userId: number) => {
   return await myDataSource
     .query(
       `
@@ -32,7 +32,7 @@ const checkUserPermission = async (user_id: number) => {
               ug.id = u.group_id
           WHERE u.id = ?
     `,
-      [user_id]
+      [userId]
     )
     .then(value => {
       const [item] = value;
@@ -44,20 +44,20 @@ const checkUserPermission = async (user_id: number) => {
     });
 };
 
-const findGroupId = async (company_name: string) => {
+const findGroupId = async (companyName: string) => {
   const [result] = await myDataSource.query(
     `
         SELECT id
         FROM user_group
         WHERE company_name = ?
     `,
-    [company_name]
+    [companyName]
   );
   return result;
 };
 
 const createCompanyGroup = async (
-  company_name: string,
+  companyName: string,
   residencePeriod: string
 ) => {
   return await myDataSource.query(
@@ -65,7 +65,7 @@ const createCompanyGroup = async (
         INSERT
           user_group 
           SET
-          company_name = "${company_name}"
+          company_name = "${companyName}"
           ${residencePeriod}
     `
   );
@@ -75,16 +75,16 @@ const signUp = async (
   nickname: string,
   hashedPw: string,
   email: string,
-  position_name: string,
-  group_id: number,
-  is_admin?: boolean
+  positionName: string,
+  groupId: number,
+  isAdmin?: boolean
 ) => {
   await myDataSource.query(
     `
         INSERT INTO users (nickname, password, email, position_name, group_id, is_admin)
         VALUES (?, ?, ?, ?, ?, ?)
     `,
-    [nickname, hashedPw, email, position_name, group_id, is_admin]
+    [nickname, hashedPw, email, positionName, groupId, isAdmin]
   );
 };
 

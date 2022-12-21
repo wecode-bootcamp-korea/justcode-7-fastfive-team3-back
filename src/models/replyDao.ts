@@ -1,13 +1,13 @@
 import myDataSource from './index';
 
-const getCountOfAllComments = async (feed_id: number) => {
+const getCountOfAllComments = async (feedId: number) => {
   return await myDataSource.query(
     `
         SELECT COUNT(*) AS reply_cnt
         FROM replies r
         WHERE feed_id = ?
     `,
-    [feed_id]
+    [feedId]
   );
 };
 
@@ -83,21 +83,21 @@ const queryForGetListOfRepliesByFeed = `
           ORDER BY reply_group,
                    rnk
 `;
-const findReplyIndex = async (reply_id: number, feed_id: number) => {
+const findReplyIndex = async (replyId: number, feedId: number) => {
   return await myDataSource
     .query(
       `
     ${queryForGetListOfRepliesByFeed}
     `,
-      [feed_id, feed_id]
+      [feedId, feedId]
     )
     .then(value => {
-      return value.findIndex((e: any) => e.reply_id === reply_id);
+      return value.findIndex((e: any) => e.reply_id === replyId);
     });
 };
 const getListOfRepliesByFeed = async (
-  user_id: number,
-  feed_id: number,
+  userId: number,
+  feedId: number,
   pagenation?: string
 ) => {
   return await myDataSource
@@ -106,7 +106,7 @@ const getListOfRepliesByFeed = async (
     ${queryForGetListOfRepliesByFeed}
     ${pagenation}
     `,
-      [feed_id, feed_id, pagenation]
+      [feedId, feedId, pagenation]
     )
     .then(value => {
       value.map((e: any) => {
@@ -135,7 +135,7 @@ const getListOfRepliesByFeed = async (
         .filter(
           (e: any) =>
             e.is_private === true &&
-            (e.user_id || e.parent_user_id || e.feed_user_id) !== user_id
+            (e.user_id || e.parent_user_id || e.feed_user_id) !== userId
         )
         .map((e: any) => {
           e.comment = false;
@@ -155,21 +155,21 @@ const getListOfRepliesByFeed = async (
 };
 
 const createReply = async (
-  user_id: number,
-  feed_id: number,
+  userId: number,
+  feedId: number,
   comment: string,
-  parent_reply_id: number,
-  is_private: boolean
+  parentReplyId: number,
+  isPrivate: boolean
 ) => {
   await myDataSource.query(
     `
     INSERT
       replies SET
-      user_id = ${user_id},
-      feed_id = ${feed_id},
+      user_id = ${userId},
+      feed_id = ${feedId},
       comment = '${comment}',
-      parent_reply_id = ${parent_reply_id},
-      is_private = ${is_private}
+      parent_reply_id = ${parentReplyId},
+      is_private = ${isPrivate}
     `
   );
 
@@ -195,11 +195,11 @@ const createReply = async (
         ORDER BY created_at DESC
         LIMIT 1
     `,
-    [user_id, feed_id]
+    [userId, feedId]
   );
 };
 
-const findReply = async (reply_id: number) => {
+const findReply = async (replyId: number) => {
   return await myDataSource.query(
     `
         SELECT r.id,
@@ -225,22 +225,22 @@ const findReply = async (reply_id: number) => {
             u3.id = f.user_id
         WHERE r.id = ?
     `,
-    [reply_id]
+    [replyId]
   );
 };
 const updateReply = async (
-  reply_id: number,
+  replyId: number,
   comment: string,
-  is_private?: string
+  isPrivate?: string
 ) => {
   await myDataSource.query(
     `
     UPDATE
       replies SET
       comment = '${comment}'
-      ${is_private}
+      ${isPrivate}
     WHERE
-      id = ${reply_id}
+      id = ${replyId}
     `
   );
   return await myDataSource.query(
@@ -261,13 +261,13 @@ const updateReply = async (
             r.user_id = u.id
                 LEFT JOIN user_group ug ON 
             ug.id = u.group_id
-        WHERE r.id = ${reply_id}
+        WHERE r.id = ${replyId}
     `,
-    [reply_id]
+    [replyId]
   );
 };
 
-const deleteReply = async (reply_id: number) => {
+const deleteReply = async (replyId: number) => {
   return await myDataSource.query(
     `
         UPDATE
@@ -277,7 +277,7 @@ const deleteReply = async (reply_id: number) => {
         WHERE
             id = ?
     `,
-    [reply_id]
+    [replyId]
   );
 };
 export default {
