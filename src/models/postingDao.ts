@@ -1,20 +1,20 @@
 import myDataSource from './index';
 
-const findUserAuth = async (userId: number) => {
-  let [userAuth] = await myDataSource.query(`
-    SELECT
-        sort_id, is_admin
-    FROM
-        users
-    WHERE
-        id = '${userId}'
-  `);
-
-  const userSortId = userAuth.sort_id;
-  const userAdminId = userAuth.is_admin;
-  userAuth = { userSortId, userAdminId };
-  return userAuth;
-};
+// const findUserAuth = async (userId: number) => {
+//   let [userAuth] = await myDataSource.query(`
+//     SELECT
+//         sort_id, is_admin
+//     FROM
+//         users
+//     WHERE
+//         id = '${userId}'
+//   `);
+//
+//   const userSortId = userAuth.sort_id;
+//   const userAdminId = userAuth.is_admin;
+//   userAuth = { userSortId, userAdminId };
+//   return userAuth;
+// };
 
 const isExistTemporarySaveFeed = async (userId: number) => {
   let TemporarySaveFeed = await myDataSource.query(`
@@ -330,7 +330,6 @@ const updateFile = async (feedId: number, fileName: string, file: string) => {
 };
 
 export default {
-  findUserAuth,
   isExistTemporarySaveFeed,
   findBranchId,
   createTemporarySaveFeed,

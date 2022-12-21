@@ -1,4 +1,5 @@
 import postingDao from '../models/postingDao';
+import userDao from '../models/userDao';
 
 const createTemporarySaveFeed = async (
   userId: number,
@@ -17,16 +18,10 @@ const createTemporarySaveFeed = async (
   fileName?: string | null,
   fileSize?: number | null
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;
@@ -116,16 +111,10 @@ const updateTemporarySaveFeed = async (
   fileName?: string | null,
   fileSize?: number | null
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;
@@ -206,16 +195,10 @@ const updateFeed = async (
   fileName?: string,
   fileSize?: number
 ) => {
-  const userAuth: { userSortId: number; userAdminId: number } =
-    await postingDao.findUserAuth(userId);
+  const findGroupId = await userDao.checkUserPermission(userId);
+  const userPermission = findGroupId.write_permission;
 
-  if (
-    !(
-      userAuth.userSortId === 1 ||
-      userAuth.userSortId === 3 ||
-      userAuth.userAdminId === 1
-    )
-  ) {
+  if (!userPermission) {
     const error = new Error(' Your Not Authorization! ');
     error.status = 403;
     throw error;

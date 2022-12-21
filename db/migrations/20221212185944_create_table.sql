@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `main_field` (
 CREATE TABLE IF NOT EXISTS `feeds_main_fields` (
                                                    `id` int PRIMARY KEY NOT NULL AUTO_INCREMENT,
                                                    `feeds_id` int NOT NULL,
-                                                   `main_field_id` int NOT NULL,
+                                                   `main_field_id` int,
                                                    `created_at` datetime NOT NULL DEFAULT (now()),
                                                    `updated_at` datetime default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP NOT NULL COMMENT 'update time'
 );
