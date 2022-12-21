@@ -1,9 +1,9 @@
 import feedListDao from '../models/feedListDao';
 
 const getFeedList = async (
-  location_id?: number,
-  category_id?: number,
-  sub_category_id?: number,
+  locationId?: number,
+  categoryId?: number,
+  subCategoryId?: number,
   page?: number
 ) => {
   const limit = 4; // TODO 최종 배포 전 limit = 8 로 고치기!
@@ -17,25 +17,25 @@ const getFeedList = async (
   `;
 
   let selectFilters: string;
-  if (location_id && category_id && sub_category_id) {
+  if (locationId && categoryId && subCategoryId) {
     selectFilters = `
-      WHERE l.id = ${location_id}
-      AND ca.id =  ${sub_category_id}
+      WHERE l.id = ${locationId}
+      AND ca.id =  ${subCategoryId}
     `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
   }
 
-  if (location_id && category_id) {
+  if (locationId && categoryId) {
     selectFilters = `
-      WHERE l.id = ${location_id}
-      AND (ca.id = ${category_id} OR ca.parent_category_id = ${category_id})
+      WHERE l.id = ${locationId}
+      AND (ca.id = ${categoryId} OR ca.parent_category_id = ${categoryId})
       `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
   }
 
-  if (location_id) {
+  if (locationId) {
     selectFilters = `
-      WHERE l.id = ${location_id}
+      WHERE l.id = ${locationId}
       `;
     return await feedListDao.getFeedList(selectFilters, pagenation);
   }
@@ -43,4 +43,8 @@ const getFeedList = async (
   return await feedListDao.getFeedList(selectFilters, pagenation);
 };
 
-export default { getFeedList };
+const getFeedDetail = async (feedId: number) => {
+  return await feedListDao.getFeedDetail(feedId);
+};
+
+export default { getFeedList, getFeedDetail };

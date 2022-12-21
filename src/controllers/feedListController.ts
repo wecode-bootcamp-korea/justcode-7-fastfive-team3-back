@@ -16,4 +16,10 @@ const getFeedList = async (req: Request, res: Response) => {
   res.status(200).json(result);
 };
 
-export default { getFeedList };
+const getFeedDetail = async (req: Request, res: Response) => {
+  let feedId: number = Number(req.params.feed_id);
+  const result = await feedListService.getFeedDetail(feedId);
+
+  res.status(200).json(result);
+};
+export default { getFeedList, getFeedDetail };
