@@ -4,13 +4,13 @@ import { checkRequireKeys } from '../utils/util';
 import { sendMailForNewReply } from '../utils/sendMailForNewReply';
 
 const getListOfRepliesByFeed = async (req: Request, res: Response) => {
-  let user_id: number = req.userInfo.id;
-  let feed_id: number = Number(req.params.feed_id);
+  let userId: number = req.userInfo.id;
+  let feedId: number = Number(req.params.feed_id);
   let page: number = Number(req.query.page);
 
   const result = await replyService.getListOfRepliesByFeed(
-    user_id,
-    feed_id,
+    userId,
+    feedId,
     page
   );
   res.status(200).json(result);
@@ -22,25 +22,25 @@ type requireKeys = {
   reply_id?: number;
 };
 const createReply = async (req: Request, res: Response) => {
-  let user_id: number = req.userInfo.id;
-  let feed_id: number = Number(req.body.feed_id);
+  let userId: number = req.userInfo.id;
+  let feedId: number = Number(req.body.feed_id);
   let comment: string = String(req.body.comment);
-  let parent_reply_id: number = Number(req.body.parent_reply_id);
-  let is_private: boolean = Boolean(req.body.is_private);
+  let parentReplyId: number = Number(req.body.parent_reply_id);
+  let isPrivate: boolean = Boolean(req.body.is_private);
 
   const REQUIRED_KEYS: requireKeys = {
-    feed_id,
+    feed_id: feedId,
     comment,
   };
 
   checkRequireKeys(REQUIRED_KEYS);
 
   const result = await replyService.crateReply(
-    user_id,
-    feed_id,
+    userId,
+    feedId,
     comment,
-    parent_reply_id,
-    is_private
+    parentReplyId,
+    isPrivate
   );
 
   const receiverName = result.mailInfo.userName;
