@@ -1,5 +1,6 @@
 import postingDao from '../models/postingDao';
 import userDao from '../models/userDao';
+import feedListDao from '../models/feedListDao';
 
 const createTemporarySaveFeed = async (
   userId: number,
@@ -255,9 +256,29 @@ const updateFeed = async (
   await postingDao.updateFile(feedId, fileName, file);
 };
 
+const deleteFeed = async (userId: number, feedId: number) => {
+  const [checkFeed] = await feedListDao.getFeedDetail(feedId);
+  console.log('checkFeed = ', checkFeed);
+  if (!checkFeed) {
+    throw { status: 400, message: 'FEED_IS_NOT_EXIST' };
+    return;
+  }
+
+  const userPermission = await userDao.checkUserPermission(userId);
+  if (!userPermission.is_admin) {
+    throw { status: 400, message: 'ADMIN_ONLY' };
+    return;
+  }
+  if (userPermission.group_id !== checkFeed.group_id) {
+    throw { status: 400, message: 'GROUP_ADMIN_ONLY' };
+    return;
+  }
+  return await postingDao.deleteFeed(feedId);
+};
 export default {
   createTemporarySaveFeed,
   getFeed,
   updateTemporarySaveFeed,
   updateFeed,
+  deleteFeed,
 };

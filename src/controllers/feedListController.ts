@@ -2,18 +2,24 @@ import feedListService from '../services/feedListService';
 import { Request, Response } from 'express';
 
 const getFeedList = async (req: Request, res: Response) => {
-  let location_id: number = Number(req.query.location_id);
-  let category_id: number = Number(req.query.category_id);
-  let sub_category_id: number = Number(req.query.sub_category_id);
+  let locationId: number = Number(req.query.location_id);
+  let categoryId: number = Number(req.query.category_id);
+  let subCategoryId: number = Number(req.query.sub_category_id);
   let page: number = Number(req.query.page);
 
   const result = await feedListService.getFeedList(
-    location_id,
-    category_id,
-    sub_category_id,
+    locationId,
+    categoryId,
+    subCategoryId,
     page
   );
   res.status(200).json(result);
 };
 
-export default { getFeedList };
+const getFeedDetail = async (req: Request, res: Response) => {
+  let feedId: number = Number(req.params.feed_id);
+  const result = await feedListService.getFeedDetail(feedId);
+
+  res.status(200).json(result);
+};
+export default { getFeedList, getFeedDetail };

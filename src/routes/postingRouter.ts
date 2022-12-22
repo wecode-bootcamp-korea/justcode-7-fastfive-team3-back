@@ -33,4 +33,10 @@ router.put(
   catchMiddleware(postingController.updateFeed)
 );
 
+router.delete(
+  '/posting',
+  catchMiddleware(authMiddleware),
+  catchMiddleware(postingController.deleteFeed)
+);
+
 export default router;

@@ -16,7 +16,7 @@ const getSubhomeList = async (lastCursorId: number) => {
   ); // TODO 배포 전 limit 수를 8로 수정하기!
 };
 
-const getSubhome2List = async (category_id: string) => {
+const getSubhome2List = async (categoryId: string) => {
   return await myDataSource.query(
     `
         SELECT f.id                           AS feed_id,
@@ -24,7 +24,8 @@ const getSubhome2List = async (category_id: string) => {
                f.logo_img,
                f.introduction,
                c.category,
-               SUBSTRING(f.created_at, 1, 16) AS created_at
+               SUBSTRING(f.created_at, 1, 16) AS created_at,
+               SUBSTRING(f.updated_at, 1, 16) AS updated_at
         FROM feeds AS f
                  LEFT JOIN category AS c ON
             f.category_id = c.id
@@ -32,9 +33,9 @@ const getSubhome2List = async (category_id: string) => {
             f.user_id = u.id
                  LEFT JOIN user_group ug ON
             ug.id = u.group_id
-        WHERE c.parent_category_id IS NULL
-            ${category_id}
-        ORDER BY feed_id DESC
+        WHERE f.status_id = 1 AND c.parent_category_id IS NULL
+            ${categoryId}
+        ORDER BY updated_at DESC
     `
   );
 };

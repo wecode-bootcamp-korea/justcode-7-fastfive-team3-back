@@ -13,7 +13,7 @@ const getParentCategoryList = async () => {
   );
 };
 
-const findChildCategoryList = async (category_id: number) => {
+const findChildCategoryList = async (categoryId: number) => {
   return await myDataSource.query(
     `
         SELECT id,
@@ -23,7 +23,7 @@ const findChildCategoryList = async (category_id: number) => {
         FROM category c
         WHERE parent_category_id = ?
     `,
-    [category_id]
+    [categoryId]
   );
 };
 
