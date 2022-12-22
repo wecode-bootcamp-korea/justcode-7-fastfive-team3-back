@@ -8,7 +8,6 @@ function catchMiddleware(controller: RequestHandler | any) {
 }
 
 async function authMiddleware(req: Request, _: any, next: NextFunction) {
-  // FIXME 'Bearer' string이 없을때 오류없는지 확인해봐야 함
   let token = req.headers.authorization;
   token = token.includes('Bearer') ? token.replace(/^Bearer\s+/, '') : token;
   let decodedToken: any;
