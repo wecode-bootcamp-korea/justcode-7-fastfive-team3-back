@@ -11,14 +11,17 @@ const getSubhome2List = async (categoryId?: String) => {
   const randomNumber = Math.floor(Math.random() * 10 + 1);
   const randomCategoryId = `
     AND f.category_id = ${randomNumber}
+    OR c2.id = ${randomNumber}
     `;
   const categoryArr = (categoryId?: String) => {
     let result = `
     AND f.category_id = '${categoryId[0]}'
+    OR c2.id = '${categoryId[0]}'
     `;
     for (let i = 1; i < categoryId.length; i++) {
       let addCategoryId = `
       OR f.category_id = '${categoryId[i]}'
+      OR c2.id = '${categoryId[i]}'
       `;
       result += `${addCategoryId}`;
     }

@@ -10,10 +10,10 @@ const getSubhomeList = async (lastCursorId: number) => {
                IFNULL(parent_category_id, "상위 카테고리") AS parent_category_id
         FROM category c
         WHERE parent_category_id IS NULL AND id > ?
-        LIMIT 2
+        LIMIT 8
     `,
     [lastCursorId]
-  ); // TODO 배포 전 limit 수를 8로 수정하기!
+  );
 };
 
 const getSubhome2List = async (categoryId: string) => {
@@ -29,12 +29,14 @@ const getSubhome2List = async (categoryId: string) => {
         FROM feeds AS f
                  LEFT JOIN category AS c ON
             f.category_id = c.id
+                 LEFT JOIN category c2 ON
+            c.parent_category_id = c2.id
                  LEFT JOIN users AS u ON
             f.user_id = u.id
-                 LEFT JOIN user_group ug ON
+                 LEFT JOIN user_group AS ug ON
             ug.id = u.group_id
-        WHERE f.status_id = 1 AND c.parent_category_id IS NULL
-            ${categoryId}
+        WHERE f.status_id = 1 
+           ${categoryId}
         ORDER BY updated_at DESC
     `
   );
