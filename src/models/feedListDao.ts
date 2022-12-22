@@ -97,6 +97,7 @@ const getFeedDetail = async (feedId: number) => {
         f.contact,
         cf.file_name,
         cf.file_link,
+        u.id AS user_id,
         concat(u.nickname, ' ', u.position_name) AS user_title,
         b.branch_name,
         SUBSTRING(f.updated_at, 1, 16) AS updated_at

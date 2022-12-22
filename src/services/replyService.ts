@@ -1,7 +1,7 @@
 import replyDao from '../models/replyDao';
 import userDao from '../models/userDao';
 
-const limit = 5; // TODO 테스트용으로 5 설정, 추후 mockdata  교체시 20으로 전환
+const limit = 20;
 const getListOfRepliesByFeed = async (
   userId: number,
   feedId: number,
