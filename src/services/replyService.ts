@@ -1,5 +1,4 @@
 import replyDao from '../models/replyDao';
-import userDao from '../models/userDao';
 
 const limit = 20;
 const getListOfRepliesByFeed = async (
@@ -33,12 +32,6 @@ const crateReply = async (
   parentReplyId?: number,
   isPrivate?: boolean
 ) => {
-  const userPermission = await userDao.checkUserPermission(userId);
-  if (userPermission.member_type === '입주자') {
-    throw { status: 400, message: 'CURRENT_RESIDENT_ONLY' };
-    return;
-  }
-
   if (!parentReplyId) {
     parentReplyId = 0;
   }

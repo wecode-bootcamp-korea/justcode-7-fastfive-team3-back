@@ -15,8 +15,9 @@ const checkUserPermission = async (userId: number) => {
                  u.is_admin,
                  (CASE
                       WHEN date (ug.start_date) <= date (now())
-                     AND date (ug.end_date) >= date (now()) THEN '입주멤버'
-                     WHEN date (ug.end_date) < date (now()) THEN '퇴주멤버'
+                     AND date (ug.end_date) >= date (now()) THEN '입주자'
+                     WHEN date (ug.end_date) < date (now()) THEN '퇴주자'
+                     WHEN date (ug.start_date) > date (now()) THEN '입주예정자'
                      ELSE '일반가입자'
                      END
                      ) AS member_type,

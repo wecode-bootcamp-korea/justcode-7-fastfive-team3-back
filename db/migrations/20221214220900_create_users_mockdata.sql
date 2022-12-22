@@ -4,7 +4,7 @@ INSERT INTO user_group (company_name, start_date, end_date) VALUES ('justcode', 
 INSERT INTO user_group (company_name, start_date, end_date) VALUES ('lg', '2022-01-01', '2022-12-31');
 INSERT INTO user_group (company_name, start_date, end_date) VALUES ('samsung', '2022-01-01', '2022-12-31');
 INSERT INTO user_group (company_name, start_date, end_date) VALUES ('google', '2022-01-01', '2022-12-31');
-INSERT INTO user_group (company_name, start_date, end_date) VALUES ('amazon', '2022-12-23', '2023-01-31');
+INSERT INTO user_group (company_name, start_date, end_date) VALUES ('amazon', '2022-12-25', '2023-01-31');
 INSERT INTO user_group (company_name, start_date, end_date) VALUES ('naver', '2021-01-01', '2021-12-31');
 INSERT INTO user_group (company_name) VALUES ('daum');
 
