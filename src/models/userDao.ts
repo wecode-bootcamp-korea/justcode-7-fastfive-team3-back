@@ -6,8 +6,7 @@ const checkUserPermission = async (userId: number) => {
       `
           SELECT u.id AS user_id,
                  (CASE
-                      WHEN date (ug.start_date) <= date (now())
-                     AND date (ug.end_date) >= date (now())
+                      WHEN date (ug.end_date) >= date (now())
                      AND u.is_admin = TRUE THEN TRUE
                      ELSE FALSE
                      END
