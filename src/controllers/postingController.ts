@@ -243,6 +243,7 @@ const deleteFeed = async (req: Request, res: Response) => {
 
   res.status(200).json({ message: 'FEED_IS_DELETED' });
 };
+
 export default {
   createTemporarySaveFeed,
   getFeed,
