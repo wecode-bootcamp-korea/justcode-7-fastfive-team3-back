@@ -49,7 +49,7 @@ const createReply = async (req: Request, res: Response) => {
 
   sendMailForNewReply(receiverMail, receiverName, senderName, comment);
 
-  res.status(200).json(result);
+  res.status(200).json(result.result);
 };
 
 const updateReply = async (req: Request, res: Response) => {
@@ -85,9 +85,9 @@ const deleteReply = async (req: Request, res: Response) => {
 
   checkRequireKeys(REQUIRED_KEYS);
 
-  await replyService.deleteReply(user_id, reply_id);
+  const result = await replyService.deleteReply(user_id, reply_id);
 
-  res.status(200).json({ message: 'SUCCESSFULLY_DELETED_REPLY' });
+  res.status(200).json(result);
 };
 export default {
   getListOfRepliesByFeed,

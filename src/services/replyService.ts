@@ -34,8 +34,8 @@ const crateReply = async (
   isPrivate?: boolean
 ) => {
   const userPermission = await userDao.checkUserPermission(userId);
-  if (!userPermission.is_admin) {
-    throw { status: 400, message: 'ADMIN_ONLY' };
+  if (userPermission.member_type === '입주자') {
+    throw { status: 400, message: 'CURRENT_RESIDENT_ONLY' };
     return;
   }
 
@@ -56,7 +56,7 @@ const crateReply = async (
   const newReplyId: number = createdNewComment[0].id;
   const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
   const page = Math.ceil(findReplyArrIndex / limit);
-  const result = await getListOfRepliesByFeed(userId, feedId, page);
+  let result = await getListOfRepliesByFeed(userId, feedId, page);
 
   const replyIdForFindReply: number = createdNewComment[0].id;
   const [mailInfoSrc] = await replyDao.findReply(replyIdForFindReply);
@@ -78,7 +78,18 @@ const crateReply = async (
   };
 
   const mailInfo = parentReplyUserMail ? parentReplyMailInfo : feedUserMailInfo;
-  return { createdNewComment, result, mailInfo };
+  const pageNumberOfPagenation = page;
+
+  [result] = [result].map(object => {
+    return {
+      message: 'SUCCESSFULLY_CREATED_REPLY',
+      createdNewComment: createdNewComment,
+      pageNumberOfPagenation: pageNumberOfPagenation,
+      ...object,
+    };
+  });
+
+  return { result, mailInfo };
 };
 
 const updateReply = async (
@@ -105,35 +116,64 @@ const updateReply = async (
   isPrivate = isPrivate ?? false;
   const statusValue = `, is_private = ${isPrivate}`;
 
-  const createdNewComment = await replyDao.updateReply(
+  const updatedComment = await replyDao.updateReply(
     replyId,
     comment,
     statusValue
   );
 
-  const newReplyId: number = createdNewComment[0].id;
-  const feedId: number = createdNewComment[0].feed_id;
+  const newReplyId: number = updatedComment[0].id;
+  const feedId: number = updatedComment[0].feed_id;
   const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
   const page = Math.ceil(findReplyArrIndex / limit);
 
-  const result = await getListOfRepliesByFeed(userId, feedId, page);
+  let result = await getListOfRepliesByFeed(userId, feedId, page);
+  const pageNumberOfPagenation = page;
 
-  return { createdNewComment, result };
+  [result] = [result].map(object => {
+    return {
+      message: 'SUCCESSFULLY_UPDATED_REPLY',
+      updatedComment: updatedComment,
+      pageNumberOfPagenation: pageNumberOfPagenation,
+      ...object,
+    };
+  });
+
+  return result;
 };
 
-const deleteReply = async (user_id: number, reply_id: number) => {
-  const [isReply] = await replyDao.findReply(reply_id);
+const deleteReply = async (userId: number, replyId: number) => {
+  const [isReply] = await replyDao.findReply(replyId);
   if (!isReply) {
     throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
     return;
   }
 
-  if (isReply.user_id !== user_id) {
+  if (isReply.user_id !== userId) {
     throw { status: 400, message: 'ONLY_WRITER_CAN_DELETE' };
     return;
   }
 
-  return await replyDao.deleteReply(reply_id);
+  const feedId = isReply.feed_id;
+  const findReplyArrIndex = await replyDao.findReplyIndex(replyId, feedId);
+  let page = Math.ceil(findReplyArrIndex / limit);
+  if (findReplyArrIndex % limit === 1) {
+    page = page - 1;
+  }
+  const pageNumberOfPagenation = page;
+
+  await replyDao.deleteReply(replyId);
+  let result = await getListOfRepliesByFeed(userId, feedId, page);
+
+  [result] = [result].map(object => {
+    return {
+      message: 'SUCCESSFULLY_DELETED_REPLY',
+      pageNumberOfPagenation: pageNumberOfPagenation,
+      ...object,
+    };
+  });
+
+  return result;
 };
 
 export default { getListOfRepliesByFeed, crateReply, updateReply, deleteReply };
