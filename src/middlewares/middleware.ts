@@ -31,7 +31,7 @@ async function checkPermission(
     userPermission.member_type === '퇴주자' ||
     userPermission.member_type === '일반가입자'
   ) {
-    throw { status: 400, message: 'CURRENT_RESIDENT_ONLY' };
+    throw { status: 403, message: 'CURRENT_RESIDENT_ONLY' };
     return;
   }
   next();

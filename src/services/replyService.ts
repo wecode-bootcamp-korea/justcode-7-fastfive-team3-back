@@ -93,17 +93,17 @@ const updateReply = async (
 ) => {
   const [isReply] = await replyDao.findReply(replyId);
   if (!isReply) {
-    throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
+    throw { status: 404, message: 'REPLY_IS_NOT_EXIST' };
     return;
   }
 
   if (isReply.user_id !== userId) {
-    throw { status: 400, message: 'ONLY_WRITER_CAN_UPDATE' };
+    throw { status: 403, message: 'ONLY_WRITER_CAN_UPDATE' };
     return;
   }
 
   if (isReply.comment === comment && isReply.private === isPrivate) {
-    throw { status: 400, message: 'NO_CHANGE' };
+    throw { status: 409, message: 'NO_CHANGE' };
   }
 
   isPrivate = isPrivate ?? false;
@@ -138,12 +138,12 @@ const updateReply = async (
 const deleteReply = async (userId: number, replyId: number) => {
   const [isReply] = await replyDao.findReply(replyId);
   if (!isReply) {
-    throw { status: 400, message: 'REPLY_IS_NOT_EXIST' };
+    throw { status: 404, message: 'REPLY_IS_NOT_EXIST' };
     return;
   }
 
   if (isReply.user_id !== userId) {
-    throw { status: 400, message: 'ONLY_WRITER_CAN_DELETE' };
+    throw { status: 403, message: 'ONLY_WRITER_CAN_DELETE' };
     return;
   }
 

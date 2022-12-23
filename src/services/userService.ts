@@ -58,7 +58,7 @@ const logIn = async (email: string, password: string) => {
   const isSame = bcrypt.compareSync(password, userInfo.password);
   if (!isSame) {
     const error = new Error('Your password is incorrect');
-    error.status = 400;
+    error.status = 401;
     throw error;
   }
   const token = jwt.sign({ id: userInfo.id }, jwtSecret);

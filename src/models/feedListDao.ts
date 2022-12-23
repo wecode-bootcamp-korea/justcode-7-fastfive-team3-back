@@ -46,7 +46,7 @@ const getFeedList = async (
                ug.company_name,
                f.introduction,
                f.logo_img,
-               t1.comment_cnt,
+               ifnull(t1.comment_cnt, 0) as comment_cnt,
                l.id AS location_id,
                l.location,
                ca.id AS category_id,
