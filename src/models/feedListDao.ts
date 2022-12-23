@@ -29,7 +29,7 @@ const getFeedList = async (
             f.category_id = ca.id
                  LEFT JOIN tables t1 ON
             t1.feed_id = f.id
-        WHERE f.status_id = 1
+        WHERE ug.end_date >= date(now()) AND f.status_id = 1
            ${selectFilters}
     `
   );
@@ -67,7 +67,7 @@ const getFeedList = async (
             f.category_id = ca.id
                  LEFT JOIN tables t1 ON
             t1.feed_id = f.id
-        WHERE f.status_id = 1
+        WHERE ug.end_date >= date(now()) AND f.status_id = 1
             ${selectFilters}
         ORDER BY f.updated_at DESC
             ${pagenation}
