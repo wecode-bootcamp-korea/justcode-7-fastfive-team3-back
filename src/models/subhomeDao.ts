@@ -24,6 +24,7 @@ const getSubhome2List = async (categoryId: string) => {
                f.logo_img,
                f.introduction,
                c.category,
+               c.id AS category_id,
                SUBSTRING(f.created_at, 1, 16) AS created_at,
                SUBSTRING(f.updated_at, 1, 16) AS updated_at
         FROM feeds AS f

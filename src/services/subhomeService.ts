@@ -7,13 +7,16 @@ const getSubhomeList = async (cursorId: number | null) => {
   return await subhomeDao.getSubhomeList(cursorId);
 };
 
-const getSubhome2List = async (categoryId?: String) => {
+const getSubhome2List = async (categoryId: number | string) => {
   const randomNumber = Math.floor(Math.random() * 10 + 1);
-  const randomCategoryId = `
-    AND f.category_id = ${randomNumber}
-    OR c2.id = ${randomNumber}
-    `;
-  const categoryArr = (categoryId?: String) => {
+
+  categoryId = categoryId ? categoryId : randomNumber;
+  const aCategoryId = `
+  AND f.category_id = '${categoryId}'
+    OR c2.id = '${categoryId}'
+  `;
+
+  const categoryIdArr = (categoryId: number[]) => {
     let result = `
     AND f.category_id = '${categoryId[0]}'
     OR c2.id = '${categoryId[0]}'
@@ -27,8 +30,13 @@ const getSubhome2List = async (categoryId?: String) => {
     }
     return result;
   };
-  return categoryId
-    ? await subhomeDao.getSubhome2List(categoryArr(categoryId))
-    : await subhomeDao.getSubhome2List(randomCategoryId);
+
+  categoryId = Array.isArray(categoryId)
+    ? categoryIdArr(categoryId)
+    : aCategoryId;
+
+  console.log('categoryId =', categoryId);
+
+  return await subhomeDao.getSubhome2List(categoryId);
 };
 export default { getSubhomeList, getSubhome2List };
