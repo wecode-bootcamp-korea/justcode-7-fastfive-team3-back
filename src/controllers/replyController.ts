@@ -87,7 +87,7 @@ const deleteReply = async (req: Request, res: Response) => {
 
   const result = await replyService.deleteReply(user_id, reply_id);
 
-  res.status(200).json(result);
+  res.status(204).json(result);
 };
 export default {
   getListOfRepliesByFeed,

@@ -23,13 +23,6 @@ const getLocationList = async () => {
   );
 };
 
-const getParentCategoryAndLocationList = async () => {
-  const locationList = await getLocationList();
-  const categoryList = await getParentCategoryList();
-
-  return { locationList, categoryList };
-};
-
 const findChildCategoryList = async (categoryId: number) => {
   return await myDataSource.query(
     `
@@ -48,5 +41,4 @@ export default {
   getParentCategoryList,
   findChildCategoryList,
   getLocationList,
-  getParentCategoryAndLocationList,
 };
