@@ -45,6 +45,29 @@ const checkUserPermission = async (userId: number) => {
     });
 };
 
+const findGroupFeed = async (groupId: number) => {
+  return await myDataSource
+    .query(
+      `
+        SELECT EXISTS(
+                       SELECT ug.id
+                       FROM feeds f
+                                LEFT JOIN users u ON
+                           u.id = f.user_id
+                                LEFT JOIN user_group ug ON
+                           ug.id = u.group_id
+                       WHERE ug.id = ?
+                       GROUP BY ug.id) AS group_feed_exist
+    `[groupId]
+    )
+    .then(value => {
+      value.map((item: any) => {
+        group_feed_exist: item.group_feed_exist === 1 ? true : false;
+        return item;
+      });
+    });
+};
+
 const findGroupId = async (companyName: string) => {
   const [result] = await myDataSource.query(
     `
@@ -105,6 +128,7 @@ export default {
   signUp,
   logIn,
   checkUserPermission,
+  findGroupFeed,
   findGroupId,
   createCompanyGroup,
 };

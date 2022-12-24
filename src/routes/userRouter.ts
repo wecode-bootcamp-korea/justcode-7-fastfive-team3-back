@@ -11,4 +11,9 @@ router.get(
   catchMiddleware(authMiddleware),
   catchMiddleware(userController.checkUserPermission)
 );
+router.get(
+  '/group',
+  catchMiddleware(authMiddleware),
+  catchMiddleware(userController.findGroupFeed)
+);
 export default router;
