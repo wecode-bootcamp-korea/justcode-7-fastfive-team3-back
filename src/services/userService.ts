@@ -5,14 +5,13 @@ import jwt from 'jsonwebtoken';
 const jwtSecret = process.env.SECRET_KEY;
 
 const checkUserPermission = async (userId: number) => {
-  return await usersDao.checkUserPermission(userId);
-};
+  let findUserInfo = await usersDao.checkUserPermission(userId);
 
-const findGroupFeed = async (userId: number) => {
-  const findUserInfo = await usersDao.checkUserPermission(userId);
   const userGroupId = findUserInfo.group_id;
-  console.log('userGroupId =', userGroupId);
-  return await usersDao.findGroupFeed(userGroupId);
+  const findGroupFeed = await usersDao.findGroupFeed(userGroupId);
+  findUserInfo.group_feed_exist = findGroupFeed.group_feed_exist;
+
+  return findUserInfo;
 };
 
 const signUp = async (
@@ -80,4 +79,4 @@ const logIn = async (email: string, password: string) => {
   return { authInfo };
 };
 
-export default { signUp, findGroupFeed, logIn, checkUserPermission };
+export default { signUp, logIn, checkUserPermission };

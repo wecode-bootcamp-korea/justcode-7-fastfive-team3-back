@@ -17,12 +17,6 @@ const checkUserPermission = async (req: Request, res: Response) => {
   res.status(200).json(result);
 };
 
-const findGroupFeed = async (req: Request, res: Response) => {
-  const userId: number = req.userInfo.id;
-  const result = await usersService.findGroupFeed(userId);
-
-  res.status(200).json(result);
-};
 const signUp = async (req: Request, res: Response) => {
   const {
     nickname,
@@ -70,4 +64,4 @@ const login = async (req: Request, res: Response) => {
   res.status(200).json(token);
 };
 
-export default { signUp, findGroupFeed, login, checkUserPermission };
+export default { signUp, login, checkUserPermission };

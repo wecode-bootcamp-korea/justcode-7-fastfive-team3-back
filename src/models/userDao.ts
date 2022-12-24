@@ -64,7 +64,7 @@ const findGroupFeed = async (groupId: number) => {
     .then(value => {
       const [item] = value;
       return {
-        group_feed_exist: item.group_feed_exist === '1' ? true : false,
+        group_feed_exist: item.group_feed_exist === '1',
       };
     });
 };
