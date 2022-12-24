@@ -13,6 +13,7 @@ const getLocationList = async (req: Request, res: Response) => {
 const findChildCategoryList = async (req: Request, res: Response) => {
   const categoryId: number = Number(req.params.category_id);
   const result = await categoryService.findChildCategoryList(categoryId);
+
   res.status(200).json(result);
 };
 
