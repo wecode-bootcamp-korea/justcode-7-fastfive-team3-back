@@ -28,7 +28,7 @@ CREATE TABLE IF NOT EXISTS `feeds` (
                                        `user_id` int NOT NULL,
                                        `category_id` int,
                                        `title` varchar(100),
-                                       `logo_img` varchar(100),
+                                       `logo_img` varchar(250),
                                        `introduction` varchar(100),
                                        `website_url` varchar(250),
                                        `detail_introduction` varchar(1000),

@@ -22,11 +22,11 @@ type requireKeys = {
   reply_id?: number;
 };
 const createReply = async (req: Request, res: Response) => {
-  let userId: number = req.userInfo.id;
-  let feedId: number = Number(req.body.feed_id);
-  let comment: string = String(req.body.comment);
-  let parentReplyId: number = Number(req.body.parent_reply_id);
-  let isPrivate: boolean = Boolean(req.body.is_private);
+  const userId: number = req.userInfo.id;
+  const feedId: number = Number(req.body.feed_id);
+  const comment: string = String(req.body.comment);
+  const parentReplyId: number = Number(req.body.parent_reply_id);
+  const isPrivate: boolean = Boolean(req.body.is_private);
 
   const REQUIRED_KEYS: requireKeys = {
     feed_id: feedId,
@@ -49,14 +49,14 @@ const createReply = async (req: Request, res: Response) => {
 
   sendMailForNewReply(receiverMail, receiverName, senderName, comment);
 
-  res.status(200).json(result);
+  res.status(201).json(result.result);
 };
 
 const updateReply = async (req: Request, res: Response) => {
-  let user_id: number = req.userInfo.id;
-  let reply_id: number = Number(req.body.reply_id);
-  let comment: string = String(req.body.comment);
-  let is_private: boolean = Boolean(req.body.is_private);
+  const user_id: number = req.userInfo.id;
+  const reply_id: number = Number(req.body.reply_id);
+  const comment: string = String(req.body.comment);
+  const is_private: boolean = Boolean(req.body.is_private);
 
   const REQUIRED_KEYS: requireKeys = {
     reply_id,
@@ -72,12 +72,12 @@ const updateReply = async (req: Request, res: Response) => {
     is_private
   );
 
-  res.status(200).json(result);
+  res.status(201).json(result);
 };
 
 const deleteReply = async (req: Request, res: Response) => {
-  let user_id: number = req.userInfo.id;
-  let reply_id: number = Number(req.body.reply_id);
+  const user_id: number = req.userInfo.id;
+  const reply_id: number = Number(req.body.reply_id);
 
   const REQUIRED_KEYS: requireKeys = {
     reply_id,
@@ -85,9 +85,9 @@ const deleteReply = async (req: Request, res: Response) => {
 
   checkRequireKeys(REQUIRED_KEYS);
 
-  await replyService.deleteReply(user_id, reply_id);
+  const result = await replyService.deleteReply(user_id, reply_id);
 
-  res.status(200).json({ message: 'SUCCESSFULLY_DELETED_REPLY' });
+  res.status(204).json(result);
 };
 export default {
   getListOfRepliesByFeed,

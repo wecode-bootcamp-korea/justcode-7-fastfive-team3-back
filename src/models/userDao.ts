@@ -6,8 +6,7 @@ const checkUserPermission = async (userId: number) => {
       `
           SELECT u.id AS user_id,
                  (CASE
-                      WHEN date (ug.start_date) <= date (now())
-                     AND date (ug.end_date) >= date (now())
+                      WHEN date (ug.end_date) >= date (now())
                      AND u.is_admin = TRUE THEN TRUE
                      ELSE FALSE
                      END
@@ -15,8 +14,9 @@ const checkUserPermission = async (userId: number) => {
                  u.is_admin,
                  (CASE
                       WHEN date (ug.start_date) <= date (now())
-                     AND date (ug.end_date) >= date (now()) THEN '입주멤버'
-                     WHEN date (ug.end_date) < date (now()) THEN '퇴주멤버'
+                     AND date (ug.end_date) >= date (now()) THEN '입주자'
+                     WHEN date (ug.end_date) < date (now()) THEN '퇴주자'
+                     WHEN date (ug.start_date) > date (now()) THEN '입주예정자'
                      ELSE '일반가입자'
                      END
                      ) AS member_type,
@@ -41,6 +41,30 @@ const checkUserPermission = async (userId: number) => {
         ...item,
         write_permission: item.write_permission === '1',
         is_admin: item.is_admin === 1,
+      };
+    });
+};
+
+const findGroupFeed = async (groupId: number) => {
+  return await myDataSource
+    .query(
+      `
+        SELECT EXISTS(
+                       SELECT ug.id
+                       FROM feeds f
+                                LEFT JOIN users u ON
+                           u.id = f.user_id
+                                LEFT JOIN user_group ug ON
+                           ug.id = u.group_id
+                       WHERE ug.id = ?
+                       GROUP BY ug.id) AS group_feed_exist
+    `,
+      [groupId]
+    )
+    .then(value => {
+      const [item] = value;
+      return {
+        group_feed_exist: item.group_feed_exist === '1',
       };
     });
 };
@@ -105,6 +129,7 @@ export default {
   signUp,
   logIn,
   checkUserPermission,
+  findGroupFeed,
   findGroupId,
   createCompanyGroup,
 };

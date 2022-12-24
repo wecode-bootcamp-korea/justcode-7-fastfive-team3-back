@@ -12,10 +12,11 @@ type requireKeys = {
 };
 
 const checkUserPermission = async (req: Request, res: Response) => {
-  let userId: number = req.userInfo.id;
+  const userId: number = req.userInfo.id;
   const result = await usersService.checkUserPermission(userId);
   res.status(200).json(result);
 };
+
 const signUp = async (req: Request, res: Response) => {
   const {
     nickname,

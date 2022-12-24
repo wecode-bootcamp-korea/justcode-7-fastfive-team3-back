@@ -11,4 +11,5 @@ router.get(
   catchMiddleware(authMiddleware),
   catchMiddleware(userController.checkUserPermission)
 );
+
 export default router;

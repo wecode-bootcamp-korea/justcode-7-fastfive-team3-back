@@ -5,6 +5,7 @@ import { catchMiddleware } from '../middlewares/middleware';
 import categoryController from '../controllers/categoryController';
 
 router.get('', catchMiddleware(categoryController.getParentCategoryList));
+router.get('/location', catchMiddleware(categoryController.getLocationList));
 router.get(
   '/:category_id',
   catchMiddleware(categoryController.findChildCategoryList)

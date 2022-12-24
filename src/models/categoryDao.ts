@@ -13,6 +13,16 @@ const getParentCategoryList = async () => {
   );
 };
 
+const getLocationList = async () => {
+  return await myDataSource.query(
+    `
+        SELECT id,
+               location
+        FROM location l
+    `
+  );
+};
+
 const findChildCategoryList = async (categoryId: number) => {
   return await myDataSource.query(
     `
@@ -27,4 +37,8 @@ const findChildCategoryList = async (categoryId: number) => {
   );
 };
 
-export default { getParentCategoryList, findChildCategoryList };
+export default {
+  getParentCategoryList,
+  findChildCategoryList,
+  getLocationList,
+};
