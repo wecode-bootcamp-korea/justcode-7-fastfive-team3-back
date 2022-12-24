@@ -35,8 +35,6 @@ const getSubhome2List = async (categoryId: number | string) => {
     ? categoryIdArr(categoryId)
     : aCategoryId;
 
-  console.log('categoryId =', categoryId);
-
   return await subhomeDao.getSubhome2List(categoryId);
 };
 export default { getSubhomeList, getSubhome2List };
