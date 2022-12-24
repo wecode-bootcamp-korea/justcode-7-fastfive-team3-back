@@ -49,22 +49,30 @@ const findGroupFeed = async (groupId: number) => {
   return await myDataSource
     .query(
       `
-        SELECT EXISTS(
-                       SELECT ug.id
-                       FROM feeds f
-                                LEFT JOIN users u ON
-                           u.id = f.user_id
-                                LEFT JOIN user_group ug ON
-                           ug.id = u.group_id
-                       WHERE ug.id = ?
-                       GROUP BY ug.id) AS group_feed_exist
+          SELECT EXISTS(
+                         SELECT ug.id
+                         FROM feeds f
+                                  LEFT JOIN users u ON
+                             u.id = f.user_id
+                                  LEFT JOIN user_group ug ON
+                             ug.id = u.group_id
+                         WHERE ug.id = ?
+                         GROUP BY ug.id) AS group_feed_exist,
+                 IFNULL(max(f.id), "0")  AS feed_id
+          FROM feeds f
+                   LEFT JOIN users u ON
+              u.id = f.user_id
+                   LEFT JOIN user_group ug ON
+              ug.id = u.group_id
+          WHERE ug.id = ?
     `,
-      [groupId]
+      [groupId, groupId]
     )
     .then(value => {
       const [item] = value;
       return {
         group_feed_exist: item.group_feed_exist === '1',
+        feed_id: item.feed_id === '0' ? false : Number(item.feed_id),
       };
     });
 };
