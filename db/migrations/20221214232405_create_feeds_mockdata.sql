@@ -107,7 +107,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '5',
+    user_id = '10',
     category_id = '16',
     title = 'QA의 모든 것',
     logo_img = 'https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTg5fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
