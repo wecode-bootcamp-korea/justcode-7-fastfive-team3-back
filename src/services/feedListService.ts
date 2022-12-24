@@ -1,6 +1,7 @@
 import feedListDao from '../models/feedListDao';
+import userDao from '../models/userDao';
 
-const limit = 4; // TODO 최종 배포 전 limit = 8 로 고치기!
+const limit = 8;
 const getFeedList = async (
   locationId?: number,
   categoryId?: number,
@@ -46,8 +47,14 @@ const getFeedList = async (
   return { resultPageCnt, resResult };
 };
 
-const getFeedDetail = async (feedId: number) => {
-  return await feedListDao.getFeedDetail(feedId);
+const getFeedDetail = async (userId: number, feedId: number) => {
+  const userAuth = await userDao.checkUserPermission(userId);
+  let [result] = await feedListDao.getFeedDetail(feedId);
+
+  if (userAuth.member_type === '입주예정자') {
+    result.contact = false;
+  }
+  return result;
 };
 
 export default { getFeedList, getFeedDetail };

@@ -11,12 +11,7 @@ const getSubhomeList = async (req: Request, res: Response) => {
 const getSubhome2List = async (req: Request, res: Response) => {
   const categoryId: any = req.query.category_id;
 
-  if (!categoryId) {
-    const result = await subhomeService.getSubhome2List();
-    res.status(200).json(result);
-  } else if (categoryId) {
-    const result = await subhomeService.getSubhome2List(categoryId);
-    res.status(200).json(result);
-  }
+  const result = await subhomeService.getSubhome2List(categoryId);
+  res.status(200).json(result);
 };
 export default { getSubhomeList, getSubhome2List };

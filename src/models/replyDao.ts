@@ -204,6 +204,7 @@ const findReply = async (replyId: number) => {
     `
         SELECT r.id,
                r.user_id,
+               r.feed_id,
                u.nickname                     AS reply_user,
                r.is_private,
                r.comment,

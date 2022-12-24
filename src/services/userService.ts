@@ -4,9 +4,14 @@ import jwt from 'jsonwebtoken';
 
 const jwtSecret = process.env.SECRET_KEY;
 
-const checkUserPermission = async (user_id: number) => {
-  // TODO 유저 회사의 입주상태에 따른 에러메세지 처리 추가하기
-  return await usersDao.checkUserPermission(user_id);
+const checkUserPermission = async (userId: number) => {
+  let findUserInfo = await usersDao.checkUserPermission(userId);
+
+  const userGroupId = findUserInfo.group_id;
+  const findGroupFeed = await usersDao.findGroupFeed(userGroupId);
+  findUserInfo.group_feed_exist = findGroupFeed.group_feed_exist;
+
+  return findUserInfo;
 };
 
 const signUp = async (
@@ -23,9 +28,7 @@ const signUp = async (
   const hashedPw = bcrypt.hashSync(password, salt);
 
   isAdmin = isAdmin ? true : false;
-  console.log('is_admin =', isAdmin);
   let groupId = await usersDao.findGroupId(companyName);
-
   let residencePeriod = ``;
 
   if (!groupId) {
@@ -36,11 +39,8 @@ const signUp = async (
       end_date = "${endDate}"
       `;
     }
-
     await usersDao.createCompanyGroup(companyName, residencePeriod);
-
-    const result = await usersDao.findGroupId(companyName);
-    groupId = result;
+    groupId = await usersDao.findGroupId(companyName);
   }
   groupId = groupId.id;
   return await usersDao.signUp(
@@ -64,7 +64,7 @@ const logIn = async (email: string, password: string) => {
   const isSame = bcrypt.compareSync(password, userInfo.password);
   if (!isSame) {
     const error = new Error('Your password is incorrect');
-    error.status = 400;
+    error.status = 401;
     throw error;
   }
   const token = jwt.sign({ id: userInfo.id }, jwtSecret);
