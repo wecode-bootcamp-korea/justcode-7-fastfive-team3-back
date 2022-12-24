@@ -8,9 +8,13 @@ const getSubhomeList = async (cursorId: number | null) => {
 };
 
 const getSubhome2List = async (categoryId: number | string) => {
-  const randomNumber = Math.floor(Math.random() * 10 + 1);
+  // TODO 실제 사용시 subhome v2의 첫페이지는 랜덤 카테고리 페이지 반환
+  // const randomNumber = Math.floor(Math.random() * 10 + 1);
+  // categoryId = categoryId ? categoryId : randomNumber;
 
-  categoryId = categoryId ? categoryId : randomNumber;
+  // 시연용 mockdata에 맞춘 카테고리 설정값 1
+  categoryId = categoryId ? categoryId : 1;
+
   const aCategoryId = `
   AND f.category_id = '${categoryId}'
     OR c2.id = '${categoryId}'
