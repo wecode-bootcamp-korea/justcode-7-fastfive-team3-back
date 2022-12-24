@@ -58,13 +58,14 @@ const findGroupFeed = async (groupId: number) => {
                            ug.id = u.group_id
                        WHERE ug.id = ?
                        GROUP BY ug.id) AS group_feed_exist
-    `[groupId]
+    `,
+      [groupId]
     )
     .then(value => {
-      value.map((item: any) => {
-        group_feed_exist: item.group_feed_exist === 1 ? true : false;
-        return item;
-      });
+      const [item] = value;
+      return {
+        group_feed_exist: item.group_feed_exist === '1' ? true : false,
+      };
     });
 };
 

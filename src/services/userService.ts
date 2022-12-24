@@ -11,6 +11,7 @@ const checkUserPermission = async (userId: number) => {
 const findGroupFeed = async (userId: number) => {
   const findUserInfo = await usersDao.checkUserPermission(userId);
   const userGroupId = findUserInfo.group_id;
+  console.log('userGroupId =', userGroupId);
   return await usersDao.findGroupFeed(userGroupId);
 };
 
