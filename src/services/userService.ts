@@ -8,9 +8,21 @@ const checkUserPermission = async (userId: number) => {
   let findUserInfo = await usersDao.checkUserPermission(userId);
 
   const userGroupId = findUserInfo.group_id;
-  const findGroupFeed = await usersDao.findGroupFeed(userGroupId);
-  findUserInfo.group_feed_exist = findGroupFeed.group_feed_exist;
 
+  console.log('userGroupId =', userGroupId);
+  console.log('findUserInfo', findUserInfo);
+
+  let findGroupFeed = await usersDao.findGroupFeed(userGroupId);
+
+  // if (!findGroupFeed) {
+  //   (findGroupFeed.group_feed_exist = false), (findGroupFeed.feed_id = false);
+  // }
+  console.log('findGroupFeed =', findGroupFeed);
+
+  findUserInfo.group_feed_exist = findGroupFeed.group_feed_exist;
+  findUserInfo.feed_id = findGroupFeed.feed_id;
+
+  console.log('findUserInfo =', findUserInfo);
   return findUserInfo;
 };
 
