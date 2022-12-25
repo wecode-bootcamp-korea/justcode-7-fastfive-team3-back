@@ -56,7 +56,7 @@ const updateReply = async (req: Request, res: Response) => {
   const user_id: number = req.userInfo.id;
   const reply_id: number = Number(req.body.reply_id);
   const comment: string = String(req.body.comment);
-  const is_private: boolean = Boolean(req.body.is_private);
+  const is_private: boolean = req.body.is_private;
 
   const REQUIRED_KEYS: requireKeys = {
     reply_id,
@@ -87,7 +87,7 @@ const deleteReply = async (req: Request, res: Response) => {
 
   const result = await replyService.deleteReply(user_id, reply_id);
 
-  res.status(204).json(result);
+  res.status(200).json(result);
 };
 export default {
   getListOfRepliesByFeed,

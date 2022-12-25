@@ -49,6 +49,7 @@ const crateReply = async (
   const newReplyId: number = createdNewComment[0].id;
   const findReplyArrIndex = await replyDao.findReplyIndex(newReplyId, feedId);
   const page = Math.ceil(findReplyArrIndex / limit);
+
   let result = await getListOfRepliesByFeed(userId, feedId, page);
 
   const replyIdForFindReply: number = createdNewComment[0].id;
@@ -102,11 +103,11 @@ const updateReply = async (
     return;
   }
 
-  if (isReply.comment === comment && isReply.private === isPrivate) {
+  isPrivate = isPrivate ?? isReply.is_private;
+  if (isReply.comment === comment && isReply.is_private === isPrivate) {
     throw { status: 409, message: 'NO_CHANGE' };
   }
 
-  isPrivate = isPrivate ?? false;
   const statusValue = `, is_private = ${isPrivate}`;
 
   const updatedComment = await replyDao.updateReply(
@@ -121,13 +122,12 @@ const updateReply = async (
   const page = Math.ceil(findReplyArrIndex / limit);
 
   let result = await getListOfRepliesByFeed(userId, feedId, page);
-  const pageNumberOfPagenation = page;
 
   [result] = [result].map(object => {
     return {
       message: 'SUCCESSFULLY_UPDATED_REPLY',
       updatedComment: updatedComment,
-      pageNumberOfPagenation: pageNumberOfPagenation,
+      pageNumberOfPagenation: page,
       ...object,
     };
   });
@@ -142,6 +142,11 @@ const deleteReply = async (userId: number, replyId: number) => {
     return;
   }
 
+  if (isReply.is_deleted === true) {
+    throw { status: 404, message: 'REPLY_IS_ALREADY_DELETED' };
+    return;
+  }
+
   if (isReply.user_id !== userId) {
     throw { status: 403, message: 'ONLY_WRITER_CAN_DELETE' };
     return;
@@ -153,7 +158,7 @@ const deleteReply = async (userId: number, replyId: number) => {
   if (findReplyArrIndex % limit === 1) {
     page = page - 1;
   }
-  const pageNumberOfPagenation = page;
+  page = page === 0 ? 1 : page;
 
   await replyDao.deleteReply(replyId);
   let result = await getListOfRepliesByFeed(userId, feedId, page);
@@ -161,7 +166,7 @@ const deleteReply = async (userId: number, replyId: number) => {
   [result] = [result].map(object => {
     return {
       message: 'SUCCESSFULLY_DELETED_REPLY',
-      pageNumberOfPagenation: pageNumberOfPagenation,
+      pageNumberOfPagenation: page,
       ...object,
     };
   });
