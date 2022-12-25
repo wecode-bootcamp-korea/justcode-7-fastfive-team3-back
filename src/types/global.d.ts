@@ -7,6 +7,7 @@ declare global {
       TYPEORM_CONNECTION: 'mysql' | 'mariadb';
       TYPEORM_PORT: number;
       SECRET_KEY: string;
+      TYPEORM_LOGGING: boolean;
     }
   }
   namespace Express {

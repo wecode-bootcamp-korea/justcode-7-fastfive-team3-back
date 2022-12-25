@@ -13,7 +13,7 @@ SET
 사람의 단순 반복적인 일은 둘레에이아이의 AI솔루션이 맡아서 하며, 이와 반대로 사람들은 복잡하면서도 가치있는 일을 할 수 있게 만들 것입니다.
 엔지니어가 일하고 싶은 직장을 만들고, 하고 싶은 일을 할 수 있게 하는 회사를 만들고 있습니다.',
     member_benefit = '제휴사 물건 가격 5퍼센트 할인',
-    contact = '010-1234-5678',
+    contact = 'member2@test.com',
     use_branch_id = '1',
     status_id = '1';
 
@@ -46,7 +46,7 @@ SET
     detail_introduction = 'IT성능관리·빅데이터·클라우드 전문 순양 개발입니다.
 순양 개발은 대한민국 IT 인프라의 발전을 이끌고 있으며, 데이터베이스를 비롯한 시스템 전 구간 성능 관리에서 빅데이터, 클라우드에 이르기까지 폭넓은 기술력으로 대한민국을 대표하는 IT기업으로 성장할 것입니다.',
     member_benefit = '자사 제품 10퍼센트 할인',
-    contact = '010-3456-5678',
+    contact = 'member3@test.com',
     use_branch_id = '2',
     status_id = '1';
 
@@ -81,7 +81,7 @@ SET
 대영 솔루션은 영상합성 딥러닝 기반기술을 보유중이며, 음성합성 기술을 연구 중에 있습니다.
 이러한 자금력과 기술력을 바탕으로 글로벌 시장에 도전하여 성공적인 비즈니스 모델을 만들어 최고의 유니콘 기업이 되려 합니다.',
     member_benefit = '자사 제휴 회사 제품 3퍼센트 할인',
-    contact = '010-3456-6784',
+    contact = 'member4@test.com, 010-3456-6784',
     use_branch_id = '3',
     status_id = '1';
 
@@ -107,7 +107,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '10',
+    user_id = '6',
     category_id = '16',
     title = 'QA의 모든 것',
     logo_img = 'https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTg5fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -141,7 +141,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '6',
+    user_id = '7',
     category_id = '17',
     title = 'DG & TY',
     logo_img = 'https://images.unsplash.com/photo-1497366616365-e78dd380d3dd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTM4fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -150,7 +150,7 @@ SET
     detail_introduction = 'DG & TY는 설립 이후로 IT/서버 관련 산업에 주력하며 지속적인 도약을 거듭해온 IT 토탈 솔루션 기업 입니다.
 주요 고객사는 클라우드/클러스터 등을 구축하려고 하는 기업 (IT, IT 통신, 제조, 일반 등)과 연구소/대학교, 그 외에도 방송 분야에서도 다양한 목적의 서버 및 솔루션을 제공하고 있습니다.',
     member_benefit = '서버 솔루션 계약 진행 시 계약금 일부 할인 혜택 드립니다.',
-    contact = '010-3346-6564',
+    contact = 'member6@test.com',
     use_branch_id = '1',
     status_id = '1';
 
@@ -173,7 +173,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '7',
+    user_id = '8',
     category_id = '18',
     title = 'SHIELD',
     logo_img = 'https://images.unsplash.com/photo-1507904953637-96429a46671a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTk0fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -181,7 +181,7 @@ SET
     website_url = 'https://delightful-gambler-8e8.notion.site/SHIELD-e58059f0c35648c288ac9d6ba17186e1',
     detail_introduction = 'SHIELD는 다수의 벤처 투자사으로부터 80억 이상의 누적투자를 받았으며 ‘아기 유니콘’기업으로 선정되었습니다. 2022년 손익 분기점을 통과하였으며 매출은 1.2배 성장하였습니다. 앞으로 꾸준히 성장하는 회사입니다.',
     member_benefit = '데이터 분석을 원하면 연락주시면 무료 상담해드립니다!',
-    contact = '010-3346-6464',
+    contact = 'member7@test.com',
     use_branch_id = '2',
     status_id = '1';
 
@@ -208,7 +208,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '8',
+    user_id = '9',
     category_id = '13',
     title = '세탁 상태',
     logo_img = 'https://images.unsplash.com/photo-1582641547274-2770615179ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjkzfHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -217,7 +217,7 @@ SET
     detail_introduction = '코인 세탁기 시설을 운영하고 있으며, 어플을 통해 자신과 가까운 지역의 코인 세탁소를 확인할 수 있으며, 세탁기 남은 시간을 확인할 수 있습니다. 코로나의 위기를 잘 극복하고 꾸준히 성장하고 있으며,
 사용자들의 편의성을 위해 열심히 노력하고 있습니다. 이에 많은 투자사의 투자를 받아 비즈니스 모델을 인정 받고 있습니다.',
     member_benefit = '코인 세탁 무료로 할 수 있는 쿠폰을 드립니다!',
-    contact = '010-3346-6464',
+    contact = 'member8@test.com',
     use_branch_id = '3',
     status_id = '1';
 
@@ -244,7 +244,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '9',
+    user_id = '10',
     category_id = '18',
     title = '트러스트인',
     logo_img = 'https://images.unsplash.com/photo-1558788833-5189550e2f16?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzYzfHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -254,7 +254,7 @@ SET
 IT Outsourcing 서비스, Smart Factory 솔루션, 그룹웨어 솔루션 공급 등 주요사업을 운영하고 있으며, 신 사업과 대외적 사업을 확장 중에 있습니다.
 최적의 상품과 서비스를 제공하는 전략적 파트너로서 고객과의 동반 성장을 지향하고 있습니다.',
     member_benefit = '무료 상담 및 견적을 내 드립니다.',
-    contact = '010-8888-8888',
+    contact = 'member9@test.com',
     use_branch_id = '4',
     status_id = '1';
 
