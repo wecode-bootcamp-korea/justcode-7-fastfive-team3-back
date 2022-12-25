@@ -17,11 +17,6 @@ const getListOfRepliesByFeed = async (
   const [replyCnt] = await replyDao.getCountOfAllComments(feedId);
   const totalNumberOfReplies = Number(replyCnt.reply_cnt);
   const replyPageCnt = Math.ceil(totalNumberOfReplies / limit);
-  console.log(
-    'totalNumberOfReplies =',
-    typeof totalNumberOfReplies,
-    totalNumberOfReplies
-  );
   const enableAddReply = totalNumberOfReplies < 1000;
   const result = await replyDao.getListOfRepliesByFeed(
     userId,
@@ -39,6 +34,13 @@ const crateReply = async (
   parentReplyId?: number,
   isPrivate?: boolean
 ) => {
+  const [replyCnt] = await replyDao.getCountOfAllComments(feedId);
+  const totalNumberOfReplies = Number(replyCnt.reply_cnt);
+  if (totalNumberOfReplies <= 1000) {
+    throw { status: 400, message: 'REPLIES_ARE_FULL ' };
+    return;
+  }
+
   if (!parentReplyId) {
     parentReplyId = 0;
   }
