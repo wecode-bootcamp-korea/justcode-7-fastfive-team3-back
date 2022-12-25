@@ -65,7 +65,7 @@ const getFeedList = async (
             ${pagenation}
     `
   );
-  const resultFeedsCnt = resultCnt[0].resultFeedsCnt;
+  const resultFeedsCnt = resultCnt[0].resultPageCnt;
   return { resultFeedsCnt, result };
 };
 
