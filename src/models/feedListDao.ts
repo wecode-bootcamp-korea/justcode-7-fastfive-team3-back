@@ -6,19 +6,13 @@ const getFeedList = async (
 ) => {
   const resultCnt = await myDataSource.query(
     `
-       WITH tables AS (SELECT f.id     AS feed_id,
-                               count(*) AS comment_cnt
-                        FROM replies r
-                                 JOIN feeds f ON
-                            f.id = r.feed_id
-                        GROUP BY f.id)
         SELECT count(*) AS resultPageCnt
         FROM feeds f
                  LEFT JOIN users u ON
             f.user_id = u.id
                  LEFT JOIN user_group ug
                            ON
-            u.group_id = ug.id
+                               u.group_id = ug.id
                  LEFT JOIN branch b ON
             b.id = f.use_branch_id
                  LEFT JOIN branch_location bl ON
@@ -27,8 +21,6 @@ const getFeedList = async (
             l.id = bl.location_id
                  LEFT JOIN category ca ON
             f.category_id = ca.id
-                 LEFT JOIN tables t1 ON
-            t1.feed_id = f.id
         WHERE ug.end_date >= date(now()) AND f.status_id = 1
            ${selectFilters}
     `
@@ -73,8 +65,8 @@ const getFeedList = async (
             ${pagenation}
     `
   );
-  const resultPageCnt = resultCnt[0].resultPageCnt;
-  return { resultPageCnt, result };
+  const resultFeedsCnt = resultCnt[0].resultFeedsCnt;
+  return { resultFeedsCnt, result };
 };
 
 const getFeedDetail = async (feedId: number) => {

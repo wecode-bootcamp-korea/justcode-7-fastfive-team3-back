@@ -41,7 +41,7 @@ const getFeedList = async (
   }
   selectFilters = '';
   const result = await feedListDao.getFeedList(selectFilters, pagenation);
-  const resultPageCnt = Math.ceil(result.resultPageCnt / limit);
+  const resultPageCnt = Math.ceil(result.resultFeedsCnt / limit);
   const resResult = result.result;
 
   return { resultPageCnt, resResult };

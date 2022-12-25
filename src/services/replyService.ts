@@ -15,14 +15,21 @@ const getListOfRepliesByFeed = async (
   `;
 
   const [replyCnt] = await replyDao.getCountOfAllComments(feedId);
-  const replyPageCnt = Math.ceil(replyCnt.reply_cnt / limit);
+  const totalNumberOfReplies = Number(replyCnt.reply_cnt);
+  const replyPageCnt = Math.ceil(totalNumberOfReplies / limit);
+  console.log(
+    'totalNumberOfReplies =',
+    typeof totalNumberOfReplies,
+    totalNumberOfReplies
+  );
+  const enableAddReply = totalNumberOfReplies < 1000;
   const result = await replyDao.getListOfRepliesByFeed(
     userId,
     feedId,
     pagenation
   );
 
-  return { replyPageCnt, result };
+  return { replyPageCnt, totalNumberOfReplies, enableAddReply, result };
 };
 
 const crateReply = async (
