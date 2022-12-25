@@ -200,13 +200,15 @@ const createReply = async (
 };
 
 const findReply = async (replyId: number) => {
-  return await myDataSource.query(
-    `
+  return await myDataSource
+    .query(
+      `
         SELECT r.id,
                r.user_id,
                r.feed_id,
                u.nickname                     AS reply_user,
                r.is_private,
+               r.is_deleted,
                r.comment,
                u2.nickname                    AS parent_reply_user,
                u2.email                       AS parent_reply_user_mail,
@@ -226,8 +228,18 @@ const findReply = async (replyId: number) => {
             u3.id = f.user_id
         WHERE r.id = ?
     `,
-    [replyId]
-  );
+      [replyId]
+    )
+    .then(value => {
+      value = [...value].map((item: any) => {
+        return {
+          ...item,
+          is_private: item.is_private === 1,
+          is_deleted: item.is_deleted === 1,
+        };
+      });
+      return value;
+    });
 };
 const updateReply = async (
   replyId: number,

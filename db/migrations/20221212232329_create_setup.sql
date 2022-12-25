@@ -85,7 +85,6 @@ insert into branch_location (location_id, branch_id) values (10, 32);
 insert into branch_location (location_id, branch_id) values (10, 33);
 insert into branch_location (location_id, branch_id) values (10, 34);
 
-# TODO 카테고리 소개글, img_url 제대로 넣기
 insert into category (id, category, introduction, category_img_url) values (1, 'IT', '이것은 IT 카테고리입니다.', 'http://dummyimage.com/925x443.png/ff4444/ffffff');
 insert into category (id, category, introduction, category_img_url) values (2, '광고, 마케팅', '이것은 광고, 마케팅입니다.', 'http://dummyimage.com/623x504.png/dddddd/000000');
 insert into category (id, category, introduction, category_img_url) values (3, '콘텐츠', '이것은 콘텐츠 입니다.', 'http://dummyimage.com/608x598.png/5fa2dd/ffffff');

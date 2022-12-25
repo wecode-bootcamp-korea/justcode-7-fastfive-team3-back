@@ -17,12 +17,12 @@ const getFeedList = async (
   `;
 
   let selectFilters: string;
-  if (locationId && categoryId && subCategoryId) {
+  if (locationId && subCategoryId) {
     selectFilters = `
       AND l.id = ${locationId}
       AND ca.id =  ${subCategoryId}
     `;
-    await feedListDao.getFeedList(selectFilters, pagenation);
+    return await feedListDao.getFeedList(selectFilters, pagenation);
   }
 
   if (locationId && categoryId) {
