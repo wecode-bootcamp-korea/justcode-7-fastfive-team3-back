@@ -22,7 +22,7 @@ INSERT INTO users (nickname, password, email, position_name,is_admin, group_id) 
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member1', '$2a$10$0rczKmnyiMChg5Kpm3y3y.fBrE2g4Fz8rEiRK4EgC3DBvQcvg98xG', 'member1@test.com', '대표',TRUE, 2);
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member2', '$2a$10$7yp6C9VP2eMmHxryce1CIeTtpMrn4OGgCdsTx1bUlIfxSytU6ywlO', 'member2@test.com', '과장', TRUE,3);
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member3', '$2a$10$w0aaQhzk8OPE9udI5nWTmumQ5gqVNids6vEdKeTkos50jpA7T5MD2', 'member3@test.com', '대리', TRUE, 4);
-INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member4', '$2a$10$HnYarW5RUCdMRQJzb.bWguMwL9G9yR5kUc82jifCEQhZZSl/5Fk4K', 'member4@test.com', '주임', TRUE, 4);
+INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member4', '$2a$10$HnYarW5RUCdMRQJzb.bWguMwL9G9yR5kUc82jifCEQhZZSl/5Fk4K', 'member4@test.com', '주임', FALSE, 4);
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member5', '$2a$10$HnYarW5RUCdMRQJzb.bWguMwL9G9yR5kUc82jifCEQhZZSl/5Fk4K', 'member5@test.com', '사원', TRUE, 5);
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member6', '$2a$10$lFhp6q4c0XKKN2cwR4E04OOeaV3uiFhK7V3WFO8kuPWzn.LbVOtXu', 'member6@test.com', '과장', TRUE, 6);
 INSERT INTO users (nickname, password, email, position_name, is_admin, group_id) VALUES ('member7', '$2a$10$eVDJVpLgotjdGb/ETCQjFeSV5R4g9.b/LpziylGixAmcpI0e9Zo8q', 'member7@test.com', '차장', TRUE, 7);

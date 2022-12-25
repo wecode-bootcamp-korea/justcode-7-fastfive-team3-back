@@ -107,7 +107,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '10',
+    user_id = '6',
     category_id = '16',
     title = 'QA의 모든 것',
     logo_img = 'https://images.unsplash.com/photo-1497366858526-0766cadbe8fa?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTg5fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -141,7 +141,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '6',
+    user_id = '7',
     category_id = '17',
     title = 'DG & TY',
     logo_img = 'https://images.unsplash.com/photo-1497366616365-e78dd380d3dd?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTM4fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -173,7 +173,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '7',
+    user_id = '8',
     category_id = '18',
     title = 'SHIELD',
     logo_img = 'https://images.unsplash.com/photo-1507904953637-96429a46671a?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MTk0fHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -208,7 +208,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '8',
+    user_id = '9',
     category_id = '13',
     title = '세탁 상태',
     logo_img = 'https://images.unsplash.com/photo-1582641547274-2770615179ab?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MjkzfHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
@@ -244,7 +244,7 @@ SET
 
 INSERT feeds
 SET
-    user_id = '9',
+    user_id = '10',
     category_id = '18',
     title = '트러스트인',
     logo_img = 'https://images.unsplash.com/photo-1558788833-5189550e2f16?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MzYzfHxvZmZpY2V8ZW58MHx8MHx8&auto=format&fit=crop&w=500&q=60',
