@@ -19,12 +19,17 @@ const getSubhomeList = async (lastCursorId: number) => {
 const getSubhome2List = async (categoryId: string) => {
   return await myDataSource.query(
     `
+        WITH table1 AS (SELECT feed_id,
+                               count(*) AS comment_cnt
+                        FROM replies r
+                        GROUP BY feed_id)
         SELECT f.id                           AS feed_id,
                ug.company_name,
                f.logo_img,
                f.introduction,
                c.category,
-               c.id AS category_id,
+               c.id                           AS category_id,
+               IFNULL(t.comment_cnt, 0) AS comment_cnt,
                SUBSTRING(f.created_at, 1, 16) AS created_at,
                SUBSTRING(f.updated_at, 1, 16) AS updated_at
         FROM feeds AS f
@@ -36,7 +41,10 @@ const getSubhome2List = async (categoryId: string) => {
             f.user_id = u.id
                  LEFT JOIN user_group AS ug ON
             ug.id = u.group_id
-        WHERE ug.end_date >= date(now()) AND f.status_id = 1 
+                 LEFT JOIN table1 t ON
+            t.feed_id = f.id
+        WHERE ug.end_date >= date(now())
+          AND f.status_id = 1 
            ${categoryId}
         ORDER BY updated_at DESC
     `
