@@ -36,7 +36,7 @@ const crateReply = async (
 ) => {
   const [replyCnt] = await replyDao.getCountOfAllComments(feedId);
   const totalNumberOfReplies = Number(replyCnt.reply_cnt);
-  if (totalNumberOfReplies <= 1000) {
+  if (totalNumberOfReplies >= 1000) {
     throw { status: 400, message: 'REPLIES_ARE_FULL ' };
     return;
   }
