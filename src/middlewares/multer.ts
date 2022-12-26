@@ -9,7 +9,7 @@ const upload = multer({
         accessKeyId: process.env.S3_Access_Key_Id,
         secretAccessKey: process.env.S3_Secret_AccessKey,
       },
-      region: process.env.S3_Region,
+      region: 'ap-northeast-2',
     }),
     bucket: 'fastfiveproject',
     acl: 'public-read',
