@@ -334,7 +334,7 @@ const deleteFeed = async (feedId: number) => {
     `
         UPDATE
             feeds
-        SET status_id           = 3,
+        SET status_id           = 2,
             title               = NULL,
             logo_img            = NULL,
             introduction        = NULL,
